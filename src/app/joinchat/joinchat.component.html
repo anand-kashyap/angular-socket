@@ -1,0 +1,24 @@
+<div class="row">
+  <form class="col-md-6 mx-auto mt-5 joinbox" [formGroup]="joinFormGroup" (ngSubmit)="joinRoom()">
+    <h2>Join Chat</h2>
+    <div class="form-group">
+      <label for="user">Username</label>
+      <input type="text" class="form-control" formControlName="username" id="user" placeholder="Enter Username">
+      <div class="invalid-feedback" *ngIf="joinFormGroup.get('username').invalid && joinFormGroup.get('username').dirty">
+        {{getErrors('username')}}
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="room">Room</label>
+      <select id="room" formControlName="room">
+          <option value="one">One</option>
+          <option value="two">Two</option>
+          <option value="three">Three</option>
+        </select>
+      <div class="invalid-feedback" *ngIf="joinFormGroup.get('room').invalid && joinFormGroup.get('room').dirty">
+          {{getErrors('room')}}
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>

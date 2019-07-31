@@ -1,12 +1,10 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div class="container">
-    <h1>
-      Chat Box
-    </h1>
-    <div>
-      <p *ngFor="let message of messages" [innerHTML]="message"></p>
-    </div>
-    <input #msg type="text" autofocus (keyup.enter)="sendMessage(msg)" placeholder="Enter message">
-    <button [disabled]="loading" (click)="sendMessage(msg)">Send</button>
-    <button [disabled]="loading" (click)="sendLocation()">Share Location</button>
+  <h1>
+    Chat Box
+  </h1>
+  <div>
+    <p *ngFor="let message of messages" [innerHTML]="message"></p>
   </div>
+  <input #msg type="text" autofocus (keyup.enter)="sendMessage(msg)" placeholder="Enter message">
+  <button [disabled]="loading" (click)="sendMessage(msg)">Send</button>
+  <button [disabled]="loading" (click)="sendLocation()">Share Location</button>
