@@ -1,3 +1,6 @@
+<alert type="danger" [isOpen]="error" [dismissOnTimeout]="errTimeout">
+    <span [innerHtml]="errMsg"></span>
+  </alert>
 <div class="row">
   <form class="col-md-6 mx-auto mt-5 joinbox" [formGroup]="joinFormGroup" (ngSubmit)="joinRoom()">
     <h2>Join Chat</h2>

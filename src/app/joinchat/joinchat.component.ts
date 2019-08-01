@@ -8,6 +8,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./joinchat.component.scss']
 })
 export class JoinchatComponent implements OnInit {
+  error = false;
+  errMsg = '';
+  errTimeout = '4000';
   joinFormGroup = new FormGroup({
     username: new FormControl('', [Validators.required]),
     room: new FormControl('one', [Validators.required]),
@@ -31,7 +34,11 @@ export class JoinchatComponent implements OnInit {
   constructor(private router: Router, private chatService: ChatService) { }
 
   ngOnInit() {
-
+    this.chatService.clearUser();
+    this.errMsg = this.chatService.getErrorMsg();
+    if (this.errMsg) {
+      this.error = true;
+    }
   }
 
   joinRoom() {

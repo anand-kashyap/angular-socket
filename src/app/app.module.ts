@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { AlertModule } from 'ngx-bootstrap/alert';
 import { ChatroomComponent } from './chatroom/chatroom.component';
 import { JoinchatComponent } from './joinchat/joinchat.component';
 
@@ -21,6 +22,7 @@ import { JoinchatComponent } from './joinchat/joinchat.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule, ReactiveFormsModule,
+    AlertModule.forRoot(),
     ButtonsModule.forRoot(),
     ModalModule.forRoot()
   ],

@@ -8,13 +8,17 @@ export class ChatService {
 
   constructor() { }
 
+  clearUser() {
+    localStorage.removeItem('user');
+  }
+
   setInLocal(key: string, val: any) {
     localStorage.setItem(key, JSON.stringify(val));
   }
 
   getFromLocal(key: string, json = true) {
     let item = localStorage.getItem(key);
-    if (json) {
+    if (json && item) {
       item = JSON.parse(item);
     }
     return item;
@@ -26,6 +30,14 @@ export class ChatService {
 
   setUserInfo(val) {
     return this.setInLocal('user', val);
+  }
+
+  setErrorMsg(val: string) {
+    return this.setInLocal('error', val);
+  }
+
+  getErrorMsg() {
+    return this.getFromLocal('error', false);
   }
 
   getValidationErrors(formControl: string, formGroup, validations): string {
