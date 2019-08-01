@@ -37,7 +37,9 @@ export class ChatService {
   }
 
   getErrorMsg() {
-    return this.getFromLocal('error', false);
+    const error = this.getFromLocal('error', false);
+    localStorage.removeItem('error');
+    return error;
   }
 
   getValidationErrors(formControl: string, formGroup, validations): string {

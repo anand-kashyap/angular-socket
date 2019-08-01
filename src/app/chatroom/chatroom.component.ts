@@ -20,13 +20,14 @@ export class ChatroomComponent implements OnInit {
   count: string;
   messages = [];
   chatContent = '';
+  user;
   constructor(private chatService: ChatService) {
     this.socket = io.connect(this.socketUrl);
   }
 
   ngOnInit() {
-    const user = this.chatService.getUserInfo();
-    this.socket.emit('join', user);
+    this.user = this.chatService.getUserInfo();
+    this.socket.emit('join', this.user);
     // console.log(user);
     this.subscribeSocketEvents();
   }
@@ -34,8 +35,8 @@ export class ChatroomComponent implements OnInit {
   sendMessage() {
     this.loading = true;
     const message = this.messageForm.get('message').value;
+    console.log(message);
     this.socket.emit('newMessage', message);
-    this.messageForm.reset();
     this.loading = false;
   }
 
@@ -81,14 +82,15 @@ export class ChatroomComponent implements OnInit {
     this.onNewMessage().subscribe(message => {
       console.log(message);
       this.messages.push(message);
+      this.messageForm.reset();
     });
     this.onNewClient().subscribe((mesg) => {
-      const username = mesg;
-      this.messages.push({username});
+      const joined = mesg;
+      this.messages.push({joined});
     });
     this.onClientDisconnect().subscribe((mesg) => {
-      const username = mesg;
-      this.messages.push({username});
+      const left = mesg;
+      this.messages.push({left});
     });
   }
 }

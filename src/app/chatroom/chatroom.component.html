@@ -1,15 +1,22 @@
 <!--The content below is only a placeholder and can be replaced.-->
   <h1>
     Chat Box
+    <a class="btn btn-primary" [routerLink]="'/'" >Logout</a>
   </h1>
-  <div>
-    <p *ngFor="let message of messages">
-      <strong>{{message.username}}</strong><br>
-      <span [innerHTML]="message.msg"></span>
-    </p>
+  <div class="d-flex flex-column">
+    <ng-container *ngFor="let message of messages" >
+      <p *ngIf="message.joined" class="text-success">{{message.joined}}</p>
+      <p *ngIf="message.left" class="text-danger">{{message.left}}</p>
+      <p *ngIf="message.username" [ngClass]="message.username === user.username ? 'current-user' : 'other-user'">
+        <strong class="d-block" *ngIf="message.username !== user.username">{{message.username}}</strong>
+        <span [innerHTML]="message.msg"></span>
+      </p>
+    </ng-container>
   </div>
   <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
-    <input formControlName="message" type="text" autofocus placeholder="Enter message">
-    <button [disabled]="loading">Send</button>
-    <button [disabled]="loading" type="button" (click)="sendLocation()">Share Location</button>
+    <div class="form-group">
+      <input formControlName="message" class="form-control" type="text" autofocus placeholder="Enter message">
+      <button class="btn btn-primary" [disabled]="loading">Send</button>
+      <button class="btn btn-warning" [disabled]="loading" type="button" (click)="sendLocation()">Share Location</button>
+    </div>
   </form>
