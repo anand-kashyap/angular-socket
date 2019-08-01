@@ -5,7 +5,7 @@ import { ChatroomComponent } from './chatroom/chatroom.component';
 
 const routes: Routes = [
   {path: '', component: JoinchatComponent},
-  {path: 'chat/:room', component: ChatroomComponent},
+  {path: 'chat', component: ChatroomComponent},
 ];
 
 @NgModule({

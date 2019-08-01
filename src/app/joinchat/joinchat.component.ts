@@ -37,9 +37,9 @@ export class JoinchatComponent implements OnInit {
   joinRoom() {
     if (this.joinFormGroup.valid) {
       this.chatService.setUserInfo(this.joinFormGroup.value);
-      this.router.navigate(['/']);
+      this.router.navigate(['/chat']);
     } else {
-
+      this.chatService.markFieldsAsDirty(this.joinFormGroup);
     }
 
   }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -35,5 +36,12 @@ export class ChatService {
         return errorField[i].message;
       }
     }
+  }
+
+  markFieldsAsDirty(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(formControl => {
+      const control = formGroup.get(formControl);
+      control.markAsDirty({ onlySelf: true });
+    });
   }
 }
