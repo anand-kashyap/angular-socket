@@ -5,6 +5,7 @@ import { Observable, Observer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-chatroom',
   templateUrl: './chatroom.component.html',
@@ -21,13 +22,19 @@ export class ChatroomComponent implements OnInit {
   messages = [];
   chatContent = '';
   user;
-  constructor(private chatService: ChatService) {
+  constructor(private chatService: ChatService, private router: Router) {
     this.socket = io.connect(this.socketUrl);
   }
 
   ngOnInit() {
     this.user = this.chatService.getUserInfo();
-    this.socket.emit('join', this.user);
+    this.socket.emit('join', this.user, (error) => {
+      if (error) {
+        console.log(error);
+        this.chatService.setErrorMsg(error);
+        this.router.navigate(['/']);
+      }
+    });
     // console.log(user);
     this.subscribeSocketEvents();
   }
@@ -92,5 +99,10 @@ export class ChatroomComponent implements OnInit {
       const left = mesg;
       this.messages.push({left});
     });
+  }
+
+  logout() {
+    this.socket.emit('logout');
+    this.router.navigate(['/']);
   }
 }

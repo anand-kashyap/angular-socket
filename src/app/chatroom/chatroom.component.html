@@ -1,7 +1,7 @@
 <!--The content below is only a placeholder and can be replaced.-->
   <h1>
     Chat Box
-    <a class="btn btn-primary" [routerLink]="'/'" >Logout</a>
+    <a class="btn btn-primary" (click)="logout()" >Logout</a>
   </h1>
   <div class="d-flex flex-column">
     <ng-container *ngFor="let message of messages" >
@@ -13,7 +13,7 @@
       </p>
     </ng-container>
   </div>
-  <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+  <form [formGroup]="messageForm" class="fixed-bottom" (ngSubmit)="sendMessage()">
     <div class="form-group">
       <input formControlName="message" class="form-control" type="text" autofocus placeholder="Enter message">
       <button class="btn btn-primary" [disabled]="loading">Send</button>
