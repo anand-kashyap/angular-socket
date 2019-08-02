@@ -87,7 +87,6 @@ export class ChatroomComponent implements OnInit {
 
   subscribeSocketEvents() {
     this.onNewMessage().subscribe(message => {
-      console.log(message);
       this.messages.push(message);
       this.messageForm.reset();
     });
@@ -103,6 +102,7 @@ export class ChatroomComponent implements OnInit {
 
   logout() {
     this.socket.emit('logout');
+    this.chatService.clearUser();
     this.router.navigate(['/']);
   }
 }

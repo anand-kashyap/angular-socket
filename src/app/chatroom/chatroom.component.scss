@@ -1,3 +1,4 @@
 .other-user{background: #4f85b5a6;}
 .current-user{background: #80808085; align-self: flex-end}
 .current-user, .other-user{padding: 20px 20px; border-radius: 5px; display: inline-block; width: 25%;}
+.scrollable{min-height: 470px;max-height: 470px;overflow: scroll}
