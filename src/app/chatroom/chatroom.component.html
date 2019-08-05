@@ -17,7 +17,7 @@
     <form [formGroup]="messageForm" class="align-self-end" (ngSubmit)="sendMessage()">
       <div class="form-group">
         <input formControlName="message" class="form-control" type="text" autofocus placeholder="Enter message">
-        <button class="btn btn-primary" [disabled]="loading">Send</button>
+        <button class="btn btn-primary" [disabled]="loading || checkValid()">Send</button>
         <button class="btn btn-warning" [disabled]="loading" type="button" (click)="sendLocation()">Share Location</button>
       </div>
     </form>

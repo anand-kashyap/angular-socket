@@ -4,7 +4,7 @@ import * as io from 'socket.io-client';
 import { Observable, Observer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-chatroom',
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class ChatroomComponent implements OnInit {
   messageForm = new FormGroup({
-    message: new FormControl('', [])
+    message: new FormControl('', [Validators.required])
   });
   socket: SocketIOClient.Socket;
   loading = false;
@@ -40,11 +40,20 @@ export class ChatroomComponent implements OnInit {
   }
 
   sendMessage() {
-    this.loading = true;
-    const message = this.messageForm.get('message').value;
-    console.log(message);
-    this.socket.emit('newMessage', message);
-    this.loading = false;
+    if (this.messageForm.valid) {
+      this.loading = true;
+      const message = this.messageForm.get('message').value;
+      console.log(message);
+      this.socket.emit('newMessage', message);
+      this.loading = false;
+    }
+  }
+
+  checkValid() {
+    if (!this.messageForm.valid || this.messageForm.get('message').value.trim() === '') {
+      return true;
+    }
+    return false;
   }
 
   onNewMessage() {
