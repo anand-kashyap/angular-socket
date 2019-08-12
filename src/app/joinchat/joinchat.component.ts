@@ -37,12 +37,17 @@ export class JoinchatComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.chatService.clearUser();
+    this.errMsg = this.chatService.getRouteErrorMsg();
+    if (this.errMsg) {
+      this.error = true;
+    }
     this.errSubscription = this.chatService.getErrorMsg().subscribe(msg => {
       this.errMsg = msg;
       if (this.errMsg) {
         this.error = true;
         setTimeout(() => {
           this.error = false;
+          this.errMsg = '';
         }, this.errTimeout);
       }
     });

@@ -40,11 +40,21 @@ export class ChatService {
     // return this.setInLocal('error', val);
   }
 
+  setRouteErrorMsg(val: string) {
+    return this.setInLocal('error', val);
+  }
+
   getErrorMsg(): Observable<any> {
     return this.errMsgSub.asObservable();
     /* const error = this.getFromLocal('error', false);
     localStorage.removeItem('error');
     return error; */
+  }
+
+  getRouteErrorMsg() {
+    const error = this.getFromLocal('error', false);
+    localStorage.removeItem('error');
+    return error;
   }
 
   getValidationErrors(formControl: string, formGroup, validations): string {

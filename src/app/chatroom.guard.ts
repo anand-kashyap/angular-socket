@@ -21,7 +21,7 @@ export class ChatroomGuard implements CanActivate {
     if (hasUser && isLoggedIn) {
       return true;
     }
-    this.chatService.setErrorMsg('You need to login First!');
+    this.chatService.setRouteErrorMsg('You need to login First!');
     return this.router.parseUrl('/');
   }
 
