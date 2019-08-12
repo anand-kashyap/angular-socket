@@ -3,6 +3,7 @@ import { ChatService } from './../chat.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-joinchat',
   templateUrl: './joinchat.component.html',
@@ -33,7 +34,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     ]
   };
 
-  constructor(private chatService: ChatService, private socketService: SocketService) { }
+  constructor(private router: Router, private chatService: ChatService, private socketService: SocketService) { }
 
   ngOnInit() {
     this.chatService.clearUser();
@@ -42,14 +43,15 @@ export class JoinchatComponent implements OnInit, OnDestroy {
       this.error = true;
     }
     this.errSubscription = this.chatService.getErrorMsg().subscribe(msg => {
+      console.log('msg', msg);
+
       this.errMsg = msg;
-      if (this.errMsg) {
-        this.error = true;
-        setTimeout(() => {
-          this.error = false;
-          this.errMsg = '';
-        }, this.errTimeout);
-      }
+      // if (this.errMsg) {
+      this.error = true;
+      setTimeout(() => {
+        this.error = false;
+      }, this.errTimeout);
+      // }
     });
   }
 

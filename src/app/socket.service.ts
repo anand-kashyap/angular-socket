@@ -23,7 +23,12 @@ export class SocketService {
    }
 
    connectNewClent(user) {
+    console.log('here', this.socket);
+    if (this.socket.disconnected) {
+      this.socket.open();
+    }
     this.socket.emit('join', user, (error) => {
+      console.log('called');
       if (error) {
         console.log(error);
         this.chatService.setErrorMsg(error);
@@ -66,6 +71,7 @@ export class SocketService {
 
    logout() {
     this.sendMessage('logout');
+    this.socket.disconnect();
     this.chatService.clearUser();
     this.router.navigate(['/']);
   }
