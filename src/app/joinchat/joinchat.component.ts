@@ -1,20 +1,22 @@
+import { SocketService } from './../socket.service';
 import { ChatService } from './../chat.service';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-joinchat',
   templateUrl: './joinchat.component.html',
   styleUrls: ['./joinchat.component.scss']
 })
-export class JoinchatComponent implements OnInit {
+export class JoinchatComponent implements OnInit, OnDestroy {
   error = false;
   errMsg = '';
-  errTimeout = '4000';
+  errTimeout = 4000;
   joinFormGroup = new FormGroup({
     username: new FormControl('', [Validators.required]),
     room: new FormControl('one', [Validators.required]),
   });
+  errSubscription: Subscription;
 
   joinValidations = {
     username: [
@@ -31,20 +33,31 @@ export class JoinchatComponent implements OnInit {
     ]
   };
 
-  constructor(private router: Router, private chatService: ChatService) { }
+  constructor(private chatService: ChatService, private socketService: SocketService) { }
 
   ngOnInit() {
     this.chatService.clearUser();
-    this.errMsg = this.chatService.getErrorMsg();
-    if (this.errMsg) {
-      this.error = true;
-    }
+    this.errSubscription = this.chatService.getErrorMsg().subscribe(msg => {
+      this.errMsg = msg;
+      if (this.errMsg) {
+        this.error = true;
+        setTimeout(() => {
+          this.error = false;
+        }, this.errTimeout);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.errSubscription.unsubscribe();
   }
 
   joinRoom() {
     if (this.joinFormGroup.valid) {
-      this.chatService.setUserInfo(this.joinFormGroup.value);
-      this.router.navigate(['/chat']);
+      const user = this.joinFormGroup.value;
+      user.username = user.username.toLowerCase();
+      this.chatService.setUserInfo(user);
+      this.socketService.connectNewClent(user);
     } else {
       this.chatService.markFieldsAsDirty(this.joinFormGroup);
     }

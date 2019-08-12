@@ -9,7 +9,7 @@
         <p *ngIf="message.joined" class="text-success">{{message.joined}}</p>
         <p *ngIf="message.left" class="text-danger">{{message.left}}</p>
         <p *ngIf="message.username" [ngClass]="message.username === user.username ? 'current-user' : 'other-user'">
-          <strong class="d-block" *ngIf="message.username !== user.username">{{message.username}}</strong>
+          <strong class="d-block" *ngIf="message.username !== user.username">{{message.username | uppercase}}</strong>
           <span [innerHTML]="message.msg"></span>
         </p>
       </ng-container>
