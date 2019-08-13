@@ -4,13 +4,16 @@
     <a class="btn btn-primary" (click)="logout()" >Logout</a>
   </h1>
   <div>
+    <!-- <span class="new-day">Aug 13, 2019</span> -->
     <div #scrollbox [scrollTop]="scrollbox.scrollHeight" class="d-flex flex-column scrollable">
       <ng-container *ngFor="let message of messages" >
+        <span *ngIf="message.datechange" class="new-day">{{message.datechange | date: 'mediumDate'}}</span>
         <p *ngIf="message.joined" class="text-success">{{message.joined}}</p>
         <p *ngIf="message.left" class="text-danger">{{message.left}}</p>
         <p *ngIf="message.username" [ngClass]="message.username === user.username ? 'current-user' : 'other-user'">
           <strong class="d-block" *ngIf="message.username !== user.username">{{message.username | uppercase}}</strong>
           <span [innerHTML]="message.msg"></span>
+          <span class="message-date">{{message.date | date: 'shortTime'}}</span>
         </p>
       </ng-container>
     </div>

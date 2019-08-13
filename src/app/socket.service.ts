@@ -15,6 +15,11 @@ export class SocketService {
   isLoggedIn = false;
 
   constructor(private chatService: ChatService, private router: Router) {
+    // this.socket = io.connect(this.socketUrl);
+    this.connectSocket();
+   }
+
+   connectSocket() {
     this.socket = io.connect(this.socketUrl);
    }
 
@@ -42,13 +47,16 @@ export class SocketService {
    }
 
    sendMessage(key: string, message: string| object = '') { // message or location or logout
+    if (this.socket.disconnected) {
+      this.socket.open();
+    }
     this.socket.emit(key, message);
    }
 
    onNewMessage() {
     return new Observable((observer: Observer<any>) => {
-      this.socket.on('newMessage', (msg: string, username: string) => {
-        observer.next({msg, username});
+      this.socket.on('newMessage', (msg: string, username: string, date) => {
+        observer.next({msg, username, date});
       });
     });
    }

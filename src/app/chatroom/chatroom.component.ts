@@ -1,19 +1,21 @@
 import { SocketService } from './../socket.service';
 import { ChatService } from './../chat.service';
 import { Component, OnInit } from '@angular/core';
+import { formatDate } from '@angular/common';
 
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-chatroom',
   templateUrl: './chatroom.component.html',
-  styleUrls: ['./chatroom.component.scss']
+  styleUrls: ['./chatroom.component.scss'],
 })
 export class ChatroomComponent implements OnInit {
   messageForm = new FormGroup({
     message: new FormControl('', [Validators.required])
   });
 
+  fullDates = [];
   loading = false;
 
   count: string;
@@ -22,11 +24,17 @@ export class ChatroomComponent implements OnInit {
   user;
 
   constructor(private chatService: ChatService, private router: Router, private socketService: SocketService) {
-
+    // this.socketService.connectSocket();
   }
 
   ngOnInit() {
     this.user = this.chatService.getUserInfo();
+    /* this.messages = [
+    {datechange: '2019-08-10T08:11:56.012Z'},
+    {msg: 'kjhbkjh10', username: 'anand', date: '2019-08-10T08:04:28.527Z'},
+    {msg: 'kjhbkjh10', username: 'anand', date: '2019-08-10T08:04:28.527Z'},
+    {datechange: '2019-08-12T08:11:56.012Z'},
+    {msg: 'kjhbkjh12', username: 'anand', date: '2019-08-12T08:04:28.527Z'}]; */
     console.log(this.user);
     this.subscribeSocketEvents();
   }
@@ -64,6 +72,13 @@ export class ChatroomComponent implements OnInit {
 
   subscribeSocketEvents() {
     this.socketService.onNewMessage().subscribe(message => {
+      console.log(this.messages);
+      const date = formatDate(new Date(), 'mediumDate', 'en');
+      const found = this.fullDates.indexOf(date);
+      if (found === -1) {
+        this.messages.push({datechange: message.date});
+        this.fullDates.push(date);
+      }
       this.messages.push(message);
       this.messageForm.reset();
     });

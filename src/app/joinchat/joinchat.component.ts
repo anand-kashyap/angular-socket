@@ -34,7 +34,9 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     ]
   };
 
-  constructor(private router: Router, private chatService: ChatService, private socketService: SocketService) { }
+  constructor(private router: Router, private chatService: ChatService, private socketService: SocketService) {
+    // this.socketService.connectSocket();
+   }
 
   ngOnInit() {
     this.chatService.clearUser();

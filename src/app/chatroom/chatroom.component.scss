@@ -1,4 +1,7 @@
 .other-user{background: #4f85b5a6;}
 .current-user{background: #80808085; align-self: flex-end}
-.current-user, .other-user{padding: 20px 20px; border-radius: 5px; display: inline-block; width: 25%;}
+.current-user, .other-user{padding: 20px 20px; border-radius: 5px; display: inline-block; width: 25%; position: relative}
 .scrollable{min-height: 470px;max-height: 470px;overflow: scroll}
+.message-date{position: absolute; bottom: 5px; right: 5px; font-size: 0.7rem;}
+.new-day{text-align: center;}
+.new-day::before, .new-day::after{content: ""; height: 1px; display: inline-block; width: 40%; background-color: rgba(0, 0, 0, 0.7); margin: 0 1%; vertical-align: middle;}
