@@ -10,12 +10,14 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { ChatroomComponent } from './chatroom/chatroom.component';
 import { JoinchatComponent } from './joinchat/joinchat.component';
+import { RecentDatePipe } from './recent-date.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatroomComponent,
-    JoinchatComponent
+    JoinchatComponent,
+    RecentDatePipe
   ],
   imports: [
     BrowserModule,

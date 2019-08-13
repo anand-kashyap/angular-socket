@@ -6,7 +6,7 @@ import { ChatroomGuard } from './chatroom.guard';
 
 const routes: Routes = [
   {path: '', component: JoinchatComponent},
-  {path: 'chat', component: ChatroomComponent, /* canActivate: [ChatroomGuard] */},
+  {path: 'chat', component: ChatroomComponent, canActivate: [ChatroomGuard]},
 ];
 
 @NgModule({
