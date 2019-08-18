@@ -1,15 +1,24 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject, Observable } from 'rxjs';
+
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-
+  private apiUrl = environment.socketUrl;
+  private loggedIn = false;
   private errMsgSub = new Subject<string>();
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) {}
+
+  isLoggedIn() {
+    if (this.loggedIn) { return this.getUserInfo(); }
+    return this.getUserInfo() ? this.getUserInfo() : false;
+  }
 
   clearUser() {
     localStorage.removeItem('user');
@@ -19,7 +28,7 @@ export class ChatService {
     localStorage.setItem(key, JSON.stringify(val));
   }
 
-  getFromLocal(key: string, json = true) {
+  getFromLocal(key: string, json = true): any {
     let item = localStorage.getItem(key);
     if (json && item) {
       item = JSON.parse(item);
@@ -32,6 +41,7 @@ export class ChatService {
   }
 
   setUserInfo(val) {
+    this.loggedIn = true;
     return this.setInLocal('user', val);
   }
 
@@ -72,5 +82,29 @@ export class ChatService {
       const control = formGroup.get(formControl);
       control.markAsDirty({ onlySelf: true });
     });
+  }
+
+  login(loginInput: any): Observable<any> {
+    const loginUrl = this.apiUrl + '/user/authenticate';
+    const headers = new HttpHeaders();
+
+    return this.httpClient.post<any>(loginUrl, loginInput, { headers });
+  }
+
+  register(registerInput: any): Observable<any> {
+    const registerUrl = this.apiUrl + '/user/register';
+    const headers = new HttpHeaders();
+
+    return this.httpClient.post<any>(registerUrl, registerInput, { headers });
+  }
+
+  sendOtp(): Observable<any> {
+    const verifyUrl = this.apiUrl + '/user/verify-account';
+    const headers = new HttpHeaders();
+    if (!this.isLoggedIn()) {
+      return;
+    }
+    const email = this.getUserInfo().email;
+    return this.httpClient.post<any>(verifyUrl, {email}, { headers });
   }
 }

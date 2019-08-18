@@ -11,19 +11,27 @@ import { AlertModule } from 'ngx-bootstrap/alert';
 import { ChatroomComponent } from './chatroom/chatroom.component';
 import { JoinchatComponent } from './joinchat/joinchat.component';
 import { RecentDatePipe } from './recent-date.pipe';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { HttpClientModule } from '@angular/common/http';
+import { VerifyAccountComponent } from './verify-account/verify-account.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatroomComponent,
     JoinchatComponent,
-    RecentDatePipe
+    RecentDatePipe,
+    RegisterComponent,
+    LoginComponent,
+    VerifyAccountComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule, ReactiveFormsModule,
+    HttpClientModule,
     AlertModule.forRoot(),
     ButtonsModule.forRoot(),
     ModalModule.forRoot()
