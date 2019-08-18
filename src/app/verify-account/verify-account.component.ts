@@ -8,17 +8,20 @@ import { ChatService } from '../chat.service';
   styleUrls: ['./verify-account.component.scss']
 })
 export class VerifyAccountComponent implements OnInit {
-  @ViewChild('resendButton', {static: false}) resendButton: ElementRef;
+  @ViewChild('resendButton', {static: false}) private resendButton: ElementRef;
   errorMessage: string;
+  otpSent = false;
+  actualOtp: string;
+  lastOtpSent: string;
   successMsg: string;
   loader = false;
   isResend = false;
-  resendTime = new Date().setMinutes(0, 10, 0);
+  resendTime = new Date().setMinutes(2, 0, 0);
   verifyForm = new FormGroup({
     otp: new FormControl('', [Validators.required, Validators.minLength(4)])
   });
-  verifyValidations = [
-    {otp: [
+  verifyValidations = {
+    otp: [
       {
         type: 'required',
         message: 'OTP is required'
@@ -27,18 +30,21 @@ export class VerifyAccountComponent implements OnInit {
         type: 'minlength',
         message: 'OTP must be atleast 4 digits'
       }
-    ]}
-  ];
+    ]
+  };
   constructor(private chatService: ChatService, private renderer: Renderer2) { }
 
   ngOnInit() {
-    // this.sendOtp();
-    console.log(this.resendTime);
+    this.sendOtp();
+  }
+
+  setTimer() {
     const timer = setInterval(() => {
       const d = new Date(this.resendTime);
       if (d.getMinutes() === 0 && d.getSeconds() === 1) {
         this.isResend = true;
-        this.resendButton.nativeElement.innerText = 'Resend';
+        // this.resendButton.nativeElement.innerText = 'Resend'; <- never use this
+        this.renderer.setProperty(this.resendButton.nativeElement, 'innerText', 'Resend');
         clearInterval(timer);
       }
       this.resendTime = d.setSeconds(d.getSeconds() - 1 );
@@ -48,6 +54,10 @@ export class VerifyAccountComponent implements OnInit {
   sendOtp() {
     this.chatService.sendOtp().subscribe(res => {
       this.successMsg = res.message;
+      this.actualOtp = res.otp;
+      this.lastOtpSent = res.lastVerified;
+      this.otpSent = true;
+      this.setTimer();
     }, err => {
       this.errorMessage = err.error.message;
     });
@@ -73,10 +83,12 @@ export class VerifyAccountComponent implements OnInit {
   }
 
   verifyOtp() {
-
-  }
-
-  checkTimer() {
-
+    if (this.verifyForm.valid) {
+      if (this.verifyForm.value.otp !== this.actualOtp) {
+        this.errorMessage = 'incorrect otp entered';
+      }
+    } else {
+      this.chatService.markFieldsAsDirty(this.verifyForm);
+    }
   }
 }
