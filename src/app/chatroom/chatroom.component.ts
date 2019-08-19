@@ -28,7 +28,7 @@ export class ChatroomComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.user = this.chatService.getUserInfo();
+    this.user = this.chatService.getUserInfo(true);
     /* this.messages = [
     {datechange: '2019-08-10T08:11:56.012Z'},
     {msg: 'kjhbkjh10', username: 'anand', date: '2019-08-10T08:04:28.527Z'},

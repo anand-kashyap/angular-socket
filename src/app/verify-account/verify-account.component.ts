@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ChatService } from '../chat.service';
@@ -32,9 +33,12 @@ export class VerifyAccountComponent implements OnInit {
       }
     ]
   };
-  constructor(private chatService: ChatService, private renderer: Renderer2) { }
+  constructor(private chatService: ChatService, private renderer: Renderer2, private router: Router) { }
 
   ngOnInit() {
+    // const nuser = this.chatService.getUserInfo();
+    // console.log(nuser);
+    // this.chatService.clearUser();
     this.sendOtp();
   }
 
@@ -78,15 +82,28 @@ export class VerifyAccountComponent implements OnInit {
     );
   }
 
-  resendOtp() {
-
-  }
-
   verifyOtp() {
     if (this.verifyForm.valid) {
       if (this.verifyForm.value.otp !== this.actualOtp) {
         this.errorMessage = 'incorrect otp entered';
+        return;
       }
+      const otpInput = {
+        email: this.chatService.getUserInfo().email,
+        otp: this.verifyForm.value.otp
+      };
+      this.chatService.confirmOtp(otpInput).subscribe(res => {
+        this.successMsg = 'otp confirmed';
+        this.otpSent = false;
+        // return setTimeout(() => {
+        const user = this.chatService.getUserInfo();
+        user.isVerified = true;
+        this.chatService.setUserInfo(user);
+        this.router.navigateByUrl('/join');
+        // }, 1000);
+      }, err => {
+        this.errorMessage = err.error.message;
+      });
     } else {
       this.chatService.markFieldsAsDirty(this.verifyForm);
     }

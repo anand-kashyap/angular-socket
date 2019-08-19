@@ -38,6 +38,9 @@ export class LoginComponent implements OnInit {
   constructor(private chatService: ChatService, private router: Router) {}
 
   ngOnInit(): void {
+    const l = this.chatService.isLoggedIn();
+    console.log(l);
+
     // this.errorMessage = this.authService.getErrorMessage();
   }
 

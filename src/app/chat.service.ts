@@ -10,13 +10,13 @@ import { environment } from '../environments/environment';
 })
 export class ChatService {
   private apiUrl = environment.socketUrl;
-  private loggedIn = false;
+  // private loggedIn = false;
   private errMsgSub = new Subject<string>();
 
   constructor(private httpClient: HttpClient) {}
 
   isLoggedIn() {
-    if (this.loggedIn) { return this.getUserInfo(); }
+    // if (this.loggedIn) { return this.getUserInfo(); }
     return this.getUserInfo() ? this.getUserInfo() : false;
   }
 
@@ -36,12 +36,18 @@ export class ChatService {
     return item;
   }
 
-  getUserInfo() {
+  getUserInfo(socketUser = false) {
+    if (socketUser) {
+      return this.getFromLocal('sUser');
+    }
     return this.getFromLocal('user');
   }
 
-  setUserInfo(val) {
-    this.loggedIn = true;
+  setUserInfo(val, socketUser = false) {
+    // this.loggedIn = true;
+    if (socketUser) {
+      return this.setInLocal('sUser', val);
+    }
     return this.setInLocal('user', val);
   }
 
@@ -101,10 +107,17 @@ export class ChatService {
   sendOtp(): Observable<any> {
     const verifyUrl = this.apiUrl + '/user/verify-account';
     const headers = new HttpHeaders();
-    if (!this.isLoggedIn()) {
+    /* if (!this.isLoggedIn()) {
       return;
-    }
+    } */
     const email = this.getUserInfo().email;
     return this.httpClient.post<any>(verifyUrl, {email}, { headers });
+  }
+
+  confirmOtp(otpInput: any): Observable<any> {
+    const confirmOtpUrl = this.apiUrl + '/user/confirm-otp';
+    const headers = new HttpHeaders();
+
+    return this.httpClient.post<any>(confirmOtpUrl, otpInput, { headers });
   }
 }

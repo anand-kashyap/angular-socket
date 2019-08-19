@@ -39,7 +39,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
-    this.chatService.clearUser();
+    // this.chatService.clearUser();
     this.errMsg = this.chatService.getRouteErrorMsg();
     if (this.errMsg) {
       this.error = true;
@@ -65,7 +65,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     if (this.joinFormGroup.valid) {
       const user = this.joinFormGroup.value;
       user.username = user.username.toLowerCase();
-      this.chatService.setUserInfo(user);
+      this.chatService.setUserInfo(user, true);
       this.socketService.connectNewClent(user);
     } else {
       this.chatService.markFieldsAsDirty(this.joinFormGroup);

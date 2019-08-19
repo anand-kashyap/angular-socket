@@ -9,11 +9,11 @@ import { VerifyAccountComponent } from './verify-account/verify-account.componen
 import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
-  {path: '', component: LoginComponent},
-  {path: 'register', component: RegisterComponent},
-  {path: 'verify', component: VerifyAccountComponent, canActivate: [AuthGuard]},
-  {path: 'join', component: JoinchatComponent},
-  {path: 'chat', component: ChatroomComponent, canActivate: [ChatroomGuard]},
+  {path: '', component: LoginComponent, canActivate: [AuthGuard], data: {checkloggedIn: true}},
+  {path: 'register', component: RegisterComponent, canActivate: [AuthGuard], data: {checkloggedIn: true}},
+  {path: 'verify', component: VerifyAccountComponent, canActivate: [AuthGuard], data: {checkVerified: true}},
+  {path: 'join', component: JoinchatComponent, canActivate: [AuthGuard], data: {checkjoin: true}},
+  {path: 'chat', component: ChatroomComponent, canActivate: [AuthGuard, ChatroomGuard], data: {checkjoin: true}},
 ];
 
 @NgModule({
