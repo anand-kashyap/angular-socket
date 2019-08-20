@@ -1,7 +1,7 @@
 <div class="container-fluid view-area">
     <div class="row mt-4">
-      <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-sm-10 offset-sm-1">
-        <div class="card mx-auto w-75">
+      <div class="col-md-4 m-auto">
+          <div class="card">
           <div class="card-header bg-primary text-light">
             Register
           </div>
@@ -43,11 +43,11 @@
                 </div>
               </div>
               <div>
-                <div class="spinner-border text-primary" *ngIf="loader" role="status">
-                  <span class="sr-only">Loading...</span>
-                </div>
-                <button type="submit" *ngIf="!loader" class="btn btn-primary d-inline-block">Register</button>
-                <button type="button" [routerLink]="['/']" class="btn btn-outline-success d-inline-block ml-2">Already a User ? Login</button>
+                <button type="submit" [disabled]="loader" class="btn btn-primary d-inline-block">
+                    <span class="spinner-border spinner-border-sm" *ngIf="loader" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </span> Register</button>
+                <button type="button" [disabled]="loader" [routerLink]="['/']" class="btn btn-outline-success d-inline-block ml-1">Already a User ? Login</button>
               </div>
               <div class="invalid-feedback mt-3 d-block" *ngIf="errorMessage">{{errorMessage}}</div>
             </form>

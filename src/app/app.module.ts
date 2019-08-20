@@ -15,6 +15,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { VerifyAccountComponent } from './verify-account/verify-account.component';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { VerifyAccountComponent } from './verify-account/verify-account.componen
     RecentDatePipe,
     RegisterComponent,
     LoginComponent,
-    VerifyAccountComponent
+    VerifyAccountComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

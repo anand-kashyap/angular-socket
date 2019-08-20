@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject, Observable } from 'rxjs';
 
 import { environment } from '../environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class ChatService {
   // private loggedIn = false;
   private errMsgSub = new Subject<string>();
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private router: Router) {}
 
   isLoggedIn() {
     // if (this.loggedIn) { return this.getUserInfo(); }
@@ -95,6 +96,11 @@ export class ChatService {
     const headers = new HttpHeaders();
 
     return this.httpClient.post<any>(loginUrl, loginInput, { headers });
+  }
+
+  logout() {
+    this.clearUser();
+    this.router.navigate(['/']);
   }
 
   register(registerInput: any): Observable<any> {

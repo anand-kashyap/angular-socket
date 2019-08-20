@@ -24,7 +24,7 @@
     "@angular/platform-browser-dynamic": "~8.0.3",
     "@angular/router": "~8.0.3",
     "@types/socket.io-client": "^1.4.32",
-    "bootstrap": "4.1.1",
+    "bootstrap": "4.3.1",
     "express": "^4.17.1",
     "jwt-decode": "^2.2.0",
     "ngx-bootstrap": "^5.1.0",
