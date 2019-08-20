@@ -20,8 +20,12 @@
               <div class="spinner-border text-primary" *ngIf="loader" role="status">
                 <span class="sr-only">Loading...</span>
               </div>
-              <button type="submit" [disabled]="!otpSent" *ngIf="!loader" class="btn btn-primary d-inline-block">Verify</button>
-              <button #resendButton class="btn btn-outline-success float-right" *ngIf="otpSent" [disabled]="!isResend" (click)="sendOtp()">Resend in {{resendTime | date: 'mm:ss'}}</button>
+              <button type="submit" [disabled]="!otpSent" class="btn btn-primary d-inline-block">Verify</button>
+              <button type="button" #resendButton class="btn btn-outline-success float-right" [disabled]="!isResend" (click)="sendOtp()">Resend
+                <ng-container *ngIf="resendTime !== null">
+                  in {{resendTime | date: 'mm:ss'}}
+                </ng-container>
+              </button>
             </div>
             <div class="invalid-feedback mt-3 d-block" *ngIf="errorMessage">{{errorMessage}}</div>
           </form>

@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, /* Renderer2, ElementRef, ViewChild */ } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ChatService } from '../chat.service';
 
@@ -9,15 +9,13 @@ import { ChatService } from '../chat.service';
   styleUrls: ['./verify-account.component.scss']
 })
 export class VerifyAccountComponent implements OnInit {
-  @ViewChild('resendButton', {static: false}) private resendButton: ElementRef;
+  // @ViewChild('resendButton', {static: false}) private resendButton: ElementRef;
   errorMessage: string;
   otpSent = false;
-  actualOtp: string;
-  lastOtpSent: string;
   successMsg: string;
   loader = false;
   isResend = false;
-  resendTime = new Date().setMinutes(2, 0, 0);
+  resendTime = null;
   verifyForm = new FormGroup({
     otp: new FormControl('', [Validators.required, Validators.minLength(4)])
   });
@@ -33,36 +31,43 @@ export class VerifyAccountComponent implements OnInit {
       }
     ]
   };
-  constructor(private chatService: ChatService, private renderer: Renderer2, private router: Router) { }
+  constructor(private chatService: ChatService, /* private renderer: Renderer2, */ private router: Router) { }
 
   ngOnInit() {
-    // const nuser = this.chatService.getUserInfo();
-    // console.log(nuser);
-    // this.chatService.clearUser();
     this.sendOtp();
   }
 
   setTimer() {
+    this.resendTime = new Date().setMinutes(2, 0, 0);
     const timer = setInterval(() => {
       const d = new Date(this.resendTime);
       if (d.getMinutes() === 0 && d.getSeconds() === 1) {
         this.isResend = true;
         // this.resendButton.nativeElement.innerText = 'Resend'; <- never use this
-        this.renderer.setProperty(this.resendButton.nativeElement, 'innerText', 'Resend');
+        this.resendTime = null;
+        // this.renderer.setProperty(this.resendButton.nativeElement, 'innerText', 'Resend');
         clearInterval(timer);
+      } else {
+        this.resendTime = d.setSeconds(d.getSeconds() - 1 );
       }
-      this.resendTime = d.setSeconds(d.getSeconds() - 1 );
     }, 1000);
   }
 
   sendOtp() {
+    this.isResend = false;
     this.chatService.sendOtp().subscribe(res => {
       this.successMsg = res.message;
-      this.actualOtp = res.otp;
-      this.lastOtpSent = res.lastVerified;
       this.otpSent = true;
-      this.setTimer();
+      if (res.attempt < 3) {
+        this.setTimer();
+      }
     }, err => {
+      this.otpSent = true;
+      if (err.status === 400) {
+        this.resendTime = null;
+      } else {
+        this.isResend = true;
+      }
       this.errorMessage = err.error.message;
     });
   }
@@ -84,10 +89,6 @@ export class VerifyAccountComponent implements OnInit {
 
   verifyOtp() {
     if (this.verifyForm.valid) {
-      if (this.verifyForm.value.otp !== this.actualOtp) {
-        this.errorMessage = 'incorrect otp entered';
-        return;
-      }
       const otpInput = {
         email: this.chatService.getUserInfo().email,
         otp: this.verifyForm.value.otp
@@ -95,13 +96,12 @@ export class VerifyAccountComponent implements OnInit {
       this.chatService.confirmOtp(otpInput).subscribe(res => {
         this.successMsg = 'otp confirmed';
         this.otpSent = false;
-        // return setTimeout(() => {
         const user = this.chatService.getUserInfo();
         user.isVerified = true;
         this.chatService.setUserInfo(user);
         this.router.navigateByUrl('/join');
-        // }, 1000);
       }, err => {
+        this.otpSent = true;
         this.errorMessage = err.error.message;
       });
     } else {

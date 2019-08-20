@@ -105,7 +105,7 @@ export class ChatService {
   }
 
   sendOtp(): Observable<any> {
-    const verifyUrl = this.apiUrl + '/user/verify-account';
+    const verifyUrl = this.apiUrl + '/user/send-otp';
     const headers = new HttpHeaders();
     /* if (!this.isLoggedIn()) {
       return;
@@ -117,7 +117,6 @@ export class ChatService {
   confirmOtp(otpInput: any): Observable<any> {
     const confirmOtpUrl = this.apiUrl + '/user/confirm-otp';
     const headers = new HttpHeaders();
-
     return this.httpClient.post<any>(confirmOtpUrl, otpInput, { headers });
   }
 }
