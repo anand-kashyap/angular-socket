@@ -68,7 +68,7 @@ export class VerifyAccountComponent implements OnInit {
       } else {
         this.isResend = true;
       }
-      this.errorMessage = err.error.message;
+      this.errorMessage = this.chatService.showResponseError(err);
     });
   }
 
@@ -102,7 +102,7 @@ export class VerifyAccountComponent implements OnInit {
         this.router.navigateByUrl('/join');
       }, err => {
         this.otpSent = true;
-        this.errorMessage = err.error.message;
+        this.errorMessage = this.chatService.showResponseError(err);
       });
     } else {
       this.chatService.markFieldsAsDirty(this.verifyForm);

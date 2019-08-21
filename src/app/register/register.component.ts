@@ -131,11 +131,7 @@ export class RegisterComponent implements OnInit {
         },
         error => {
           this.loader = false;
-          if (error.error.message === undefined) {
-            this.errorMessage = error.status + ' - ' + error.statusText;
-          } else {
-            this.errorMessage = error.error.message;
-          }
+          this.errorMessage = this.chatService.showResponseError(error);
         }
       );
     } else {

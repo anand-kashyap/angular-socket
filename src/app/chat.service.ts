@@ -91,6 +91,26 @@ export class ChatService {
     });
   }
 
+  showResponseError(error) {
+    if (error.status === 422 && error.error.errors) {
+      let msg = '';
+      const errors = error.error.errors;
+      for (let i = 0; i < errors.length; i++) {
+        const element = errors[i];
+        msg += element.msg;
+        if (i !== errors.length - 1) {
+          msg += '. ';
+        }
+      }
+      return msg;
+      return;
+    } else if (error.error.message === undefined) {
+      return error.status + ' - ' + error.statusText;
+    } else {
+      return error.error.message;
+    }
+  }
+
   login(loginInput: any): Observable<any> {
     const loginUrl = this.apiUrl + '/user/authenticate';
     const headers = new HttpHeaders();
