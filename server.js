@@ -1,9 +1,10 @@
 //Install express server
-const express = require('express');
-const path = require('path');
+const express = require('express'),
+compression = require('compression'),
+path = require('path');
 
 const app = express();
-
+app.use(compression());
 // Serve only the static files form the dist directory
 app.use(express.static('./dist/angular-socket'));
 
