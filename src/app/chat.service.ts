@@ -103,7 +103,6 @@ export class ChatService {
         }
       }
       return msg;
-      return;
     } else if (error.error.message === undefined) {
       return error.status + ' - ' + error.statusText;
     } else {
@@ -113,9 +112,7 @@ export class ChatService {
 
   login(loginInput: any): Observable<any> {
     const loginUrl = this.apiUrl + '/user/authenticate';
-    const headers = new HttpHeaders();
-
-    return this.httpClient.post<any>(loginUrl, loginInput, { headers });
+    return this.httpClient.post<any>(loginUrl, loginInput);
   }
 
   logout() {
@@ -125,24 +122,23 @@ export class ChatService {
 
   register(registerInput: any): Observable<any> {
     const registerUrl = this.apiUrl + '/user/register';
-    const headers = new HttpHeaders();
-
-    return this.httpClient.post<any>(registerUrl, registerInput, { headers });
+    return this.httpClient.post<any>(registerUrl, registerInput);
   }
 
   sendOtp(): Observable<any> {
     const verifyUrl = this.apiUrl + '/user/send-otp';
-    const headers = new HttpHeaders();
-    /* if (!this.isLoggedIn()) {
-      return;
-    } */
+    const headers = new HttpHeaders({
+      'x-access-token': this.getFromLocal('token')
+    });
     const email = this.getUserInfo().email;
     return this.httpClient.post<any>(verifyUrl, {email}, { headers });
   }
 
   confirmOtp(otpInput: any): Observable<any> {
     const confirmOtpUrl = this.apiUrl + '/user/confirm-otp';
-    const headers = new HttpHeaders();
+    const headers = new HttpHeaders({
+      'x-access-token': this.getFromLocal('token')
+    });
     return this.httpClient.post<any>(confirmOtpUrl, otpInput, { headers });
   }
 }

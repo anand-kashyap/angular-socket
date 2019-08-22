@@ -5,7 +5,7 @@
     "ng": "ng",
     "dev": "ng serve --open",
     "start": "node server.js",
-    "heroku-postbuild": "ng build --configuration=production",
+    "heroku-postbuild": "ng build -c=production --aot",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
