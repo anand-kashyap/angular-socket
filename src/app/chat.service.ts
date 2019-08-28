@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Subject, Observable } from 'rxjs';
 
 import { environment } from '../environments/environment';
@@ -140,5 +140,32 @@ export class ChatService {
       'x-access-token': this.getFromLocal('token')
     });
     return this.httpClient.post<any>(confirmOtpUrl, otpInput, { headers });
+  }
+
+  checkIfUserExists(userString: string) {
+    const checkUserUrl = this.apiUrl + '/user/check-username';
+    const params = new HttpParams().set('userinput', userString);
+    const headers = new HttpHeaders({
+      'x-access-token': this.getFromLocal('token')
+    });
+    return this.httpClient.get<any>(checkUserUrl, { headers, params });
+  }
+
+  getUserDetails() {
+    const getUserDetailsUrl = this.apiUrl + '/user/user-details';
+    const params = new HttpParams().set('email', this.getUserInfo().email);
+    const headers = new HttpHeaders({
+      'x-access-token': this.getFromLocal('token')
+    });
+    return this.httpClient.get<any>(getUserDetailsUrl, { headers, params });
+  }
+
+  updateProfile(userInfo) {
+    const updateProfileUrl = this.apiUrl + '/user/update-profile';
+    userInfo.email = this.getUserInfo().email;
+    const headers = new HttpHeaders({
+      'x-access-token': this.getFromLocal('token')
+    });
+    return this.httpClient.patch<any>(updateProfileUrl, userInfo, { headers });
   }
 }

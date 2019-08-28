@@ -10,7 +10,10 @@ import { ChatService } from './../chat.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  error = false;
+  errMsg = '';
   loader = false;
+  errTimeout = 4000;
   errorMessage: string;
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -38,6 +41,10 @@ export class LoginComponent implements OnInit {
   constructor(private chatService: ChatService, private router: Router) {}
 
   ngOnInit(): void {
+    this.errMsg = this.chatService.getRouteErrorMsg();
+    if (this.errMsg) {
+      this.error = true;
+    }
     const l = this.chatService.isLoggedIn();
     console.log(l);
 
@@ -63,9 +70,11 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       // return;
       this.loader = true;
+      this.loginForm.disable();
       this.chatService.login(this.loginForm.value).subscribe(
         response => {
           this.loader = false;
+          this.loginForm.enable();
           const token = jwt_decode(response.token);
           if (!token.active) {
             this.errorMessage =
@@ -75,11 +84,7 @@ export class LoginComponent implements OnInit {
           this.chatService.setUserInfo(token);
           this.chatService.setInLocal('token', response.token);
           console.log(token);
-          if (token.isVerified) {
-            this.router.navigate(['/join']);
-          } else {
-            this.router.navigate(['/verify']);
-          }
+          this.router.navigate(['/join']);
           /* if (token.isAdmin) {
             if (!token.isVerified) {
               this.router.navigate(['admin/update-password']);
@@ -95,6 +100,7 @@ export class LoginComponent implements OnInit {
         },
         error => {
           this.loader = false;
+          this.loginForm.enable();
           this.errorMessage = this.chatService.showResponseError(error);
         }
       );

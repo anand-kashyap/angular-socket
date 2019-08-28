@@ -4,16 +4,7 @@
 <div class="row">
   <form class="col-md-6 mx-auto mt-5 joinbox" [formGroup]="joinFormGroup" (ngSubmit)="joinRoom()">
     <h2>Join Chat</h2>
-    <div class="form-group">
-      <label for="user">Username</label>
-      <input type="text" class="form-control"
-        [ngClass]="{'is-invalid': joinFormGroup.get('username').invalid && joinFormGroup.get('username').dirty}"
-        formControlName="username" id="user" placeholder="Enter Username">
-      <div class="invalid-feedback"
-        *ngIf="joinFormGroup.get('username').invalid && joinFormGroup.get('username').dirty">
-        {{getErrors('username')}}
-      </div>
-    </div>
+    <p>Hi <strong>{{username}}</strong>!</p>
     <div class="form-group">
       <label for="room">Room</label>
       <select id="room" formControlName="room"

@@ -27,7 +27,7 @@ export class SocketService {
     return this.isLoggedIn;
    }
 
-   connectNewClent(user) {
+   connectNewClient(user) {
     console.log('here', this.socket);
     if (this.socket.disconnected) {
       this.socket.open();

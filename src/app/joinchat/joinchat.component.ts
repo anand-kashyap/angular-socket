@@ -13,19 +13,13 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   error = false;
   errMsg = '';
   errTimeout = 4000;
+  username = '';
   joinFormGroup = new FormGroup({
-    username: new FormControl('', [Validators.required]),
     room: new FormControl('one', [Validators.required]),
   });
   errSubscription: Subscription;
 
   joinValidations = {
-    username: [
-      {
-        type: 'required',
-        message: 'User Name is required'
-      }
-    ],
     room: [
       {
         type: 'required',
@@ -40,6 +34,8 @@ export class JoinchatComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // this.chatService.clearUser();
+    this.username = this.chatService.getUserInfo().username;
+    console.log(this.username);
     this.errMsg = this.chatService.getRouteErrorMsg();
     if (this.errMsg) {
       this.error = true;
@@ -64,9 +60,9 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   joinRoom() {
     if (this.joinFormGroup.valid) {
       const user = this.joinFormGroup.value;
-      user.username = user.username.toLowerCase();
+      user.username = this.username;
       this.chatService.setUserInfo(user, true);
-      this.socketService.connectNewClent(user);
+      this.socketService.connectNewClient(user);
     } else {
       this.chatService.markFieldsAsDirty(this.joinFormGroup);
     }

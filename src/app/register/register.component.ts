@@ -116,9 +116,11 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.valid) {
       // return;
       this.loader = true;
+      this.registerForm.disable();
       this.chatService.register(this.registerForm.value).subscribe(
         response => {
           this.loader = false;
+          this.registerForm.enable();
           const token = jwt_decode(response.token);
           if (!token.active) {
             this.errorMessage =
@@ -131,6 +133,7 @@ export class RegisterComponent implements OnInit {
         },
         error => {
           this.loader = false;
+          this.registerForm.enable();
           this.errorMessage = this.chatService.showResponseError(error);
         }
       );
