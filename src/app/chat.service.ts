@@ -144,7 +144,7 @@ export class ChatService {
 
   checkIfUserExists(userString: string) {
     const checkUserUrl = this.apiUrl + '/user/check-username';
-    const params = new HttpParams().set('userinput', userString);
+    const params = new HttpParams().set('userinput', userString).set('email', this.getUserInfo().email);
     const headers = new HttpHeaders({
       'x-access-token': this.getFromLocal('token')
     });
