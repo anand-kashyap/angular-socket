@@ -1,3 +1,4 @@
+import { ChatapiService } from './../chatapi.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
 import { ChatService } from '../chat.service';
@@ -87,14 +88,14 @@ export class ProfileComponent implements OnInit {
     ]
   };
 
-  constructor(private chatService: ChatService, private router: Router) {}
+  constructor(private chatService: ChatService, private chatapiService: ChatapiService, private router: Router) {}
 
   ngOnInit() {
     this.setUserValues();
   }
 
   setUserValues() {
-    this.chatService.getUserDetails().subscribe(res => {
+    this.chatapiService.getUserDetails().subscribe(res => {
       const controlkeys  = {username: 'username', email: 'email', firstName: 'firstName', lastName: 'lastName'};
       if (res.data.username !== '') {
         this.profileForm.controls[controlkeys.username].setValue(res.data.username);
@@ -117,7 +118,7 @@ export class ProfileComponent implements OnInit {
         return;
       }
 
-      this.chatService.checkIfUserExists(usernameControl.value).subscribe(res => {
+      this.chatapiService.checkIfUserExists(usernameControl.value).subscribe(res => {
         // set error on usernameControl if user exists
         if (res.exists ) {
           usernameControl.setErrors({ unique: true });
@@ -167,7 +168,7 @@ export class ProfileComponent implements OnInit {
       console.log(this.profileForm.value);
       this.loader = true;
       this.profileForm.disable();
-      this.chatService.updateProfile(this.profileForm.value).subscribe(
+      this.chatapiService.updateProfile(this.profileForm.value).subscribe(
         res => {
           this.loader = false;
           this.profileForm.enable();

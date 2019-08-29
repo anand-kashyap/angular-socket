@@ -1,3 +1,4 @@
+import { ChatapiService } from './../chatapi.service';
 import { ChatService } from './../chat.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService, private chatapiService: ChatapiService) { }
 
   ngOnInit() {
   }
@@ -18,7 +19,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.chatService.logout();
+    this.chatapiService.logout();
   }
 
 }

@@ -1,3 +1,4 @@
+import { ChatapiService } from './../chatapi.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import jwt_decode from 'jwt-decode';
@@ -38,7 +39,7 @@ export class LoginComponent implements OnInit {
     ]
   };
 
-  constructor(private chatService: ChatService, private router: Router) {}
+  constructor(private chatService: ChatService, private chatapiService: ChatapiService, private router: Router) {}
 
   ngOnInit(): void {
     this.errMsg = this.chatService.getRouteErrorMsg();
@@ -71,7 +72,7 @@ export class LoginComponent implements OnInit {
       // return;
       this.loader = true;
       this.loginForm.disable();
-      this.chatService.login(this.loginForm.value).subscribe(
+      this.chatapiService.login(this.loginForm.value).subscribe(
         response => {
           this.loader = false;
           this.loginForm.enable();
