@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "dev": "ng serve --open",
+    "exbuild": "ng b --prod=false --outputPath=../node-socket/public --watch",
     "start": "node server.js",
     "heroku-postbuild": "ng build -c=production --aot",
     "build": "ng build",
