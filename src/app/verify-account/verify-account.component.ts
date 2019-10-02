@@ -1,4 +1,4 @@
-import { ChatapiService } from './../chatapi.service';
+import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { Component, OnInit, /* Renderer2, ElementRef, ViewChild */ } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -34,7 +34,7 @@ export class VerifyAccountComponent implements OnInit {
   };
   constructor(
     private chatService: ChatService,
-    private chatapiService: ChatapiService, /* private renderer: Renderer2, */ private router: Router) { }
+    private apiService: ApiService, /* private renderer: Renderer2, */ private router: Router) { }
 
   ngOnInit() {
     this.sendOtp();
@@ -58,7 +58,7 @@ export class VerifyAccountComponent implements OnInit {
 
   sendOtp() {
     this.isResend = false;
-    this.chatapiService.sendOtp().subscribe(res => {
+    this.apiService.sendOtp().subscribe(res => {
       this.successMsg = res.message;
       this.otpSent = true;
       if (res.attempt < 3) {
@@ -96,7 +96,7 @@ export class VerifyAccountComponent implements OnInit {
         email: this.chatService.getUserInfo().email,
         otp: this.verifyForm.value.otp
       };
-      this.chatapiService.confirmOtp(otpInput).subscribe(res => {
+      this.apiService.confirmOtp(otpInput).subscribe(res => {
         this.successMsg = 'otp confirmed';
         this.otpSent = false;
         const user = this.chatService.getUserInfo();

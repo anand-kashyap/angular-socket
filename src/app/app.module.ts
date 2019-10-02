@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { VerifyAccountComponent } from './verify-account/verify-account.component';
 import { HeaderComponent } from './header/header.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ProfileComponent } from './profile/profile.component';
     LoginComponent,
     VerifyAccountComponent,
     HeaderComponent,
-    ProfileComponent
+    ProfileComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { ChatapiService } from './../chatapi.service';
+import { ApiService } from '../api.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import jwt_decode from 'jwt-decode';
@@ -74,7 +74,7 @@ export class RegisterComponent implements OnInit {
     ]
   };
 
-  constructor(private chatService: ChatService, private router: Router, private chatapiService: ChatapiService) {}
+  constructor(private chatService: ChatService, private router: Router, private apiService: ApiService) {}
 
   ngOnInit() {
   }
@@ -118,7 +118,7 @@ export class RegisterComponent implements OnInit {
       // return;
       this.loader = true;
       this.registerForm.disable();
-      this.chatapiService.register(this.registerForm.value).subscribe(
+      this.apiService.register(this.registerForm.value).subscribe(
         response => {
           this.loader = false;
           this.registerForm.enable();

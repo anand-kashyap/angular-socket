@@ -8,7 +8,7 @@ import { environment } from '../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class ChatapiService {
+export class ApiService {
   private apiUrl = environment.socketUrl;
 
   constructor(private httpClient: HttpClient, private router: Router, private chatService: ChatService) { }
@@ -26,6 +26,11 @@ export class ChatapiService {
   register(registerInput: any): Observable<any> {
     const registerUrl = this.apiUrl + '/user/register';
     return this.httpClient.post<any>(registerUrl, registerInput);
+  }
+
+  forgotPass(email: string): Observable<any> {
+    const forgotUrl = this.apiUrl + '/user/forgot-password';
+    return this.httpClient.post<any>(forgotUrl, {email, baseUrl: environment.baseUrl});
   }
 
   addXToken() {

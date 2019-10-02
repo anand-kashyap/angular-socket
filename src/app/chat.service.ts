@@ -77,6 +77,13 @@ export class ChatService {
     }
   }
 
+  isInvalid(formgroup: FormGroup, formControl: string) {
+    return (
+      formgroup.get(formControl).invalid &&
+      formgroup.get(formControl).dirty
+    );
+  }
+
   markFieldsAsDirty(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(formControl => {
       const control = formGroup.get(formControl);
