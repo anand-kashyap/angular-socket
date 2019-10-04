@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ValidatorFn } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
 
 @Injectable({
@@ -67,7 +67,7 @@ export class ChatService {
     return error;
   }
 
-  getValidationErrors(formControl: string, formGroup, validations): string {
+  getErrors(formControl: string, formGroup, validations): string {
     const errorField = validations[formControl];
 
     for (const i in errorField) {
@@ -89,6 +89,25 @@ export class ChatService {
       const control = formGroup.get(formControl);
       control.markAsDirty({ onlySelf: true });
     });
+  }
+
+  mustMatch(controlName: string, matchingControlName: string): ValidatorFn {
+    return (formGroup: FormGroup): ValidatorFn => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+
+      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+        // return if another validator has already found an error on the matchingControl
+        return;
+      }
+
+      // set error on matchingControl if validation fails
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({ mustMatch: true });
+      } else {
+        matchingControl.setErrors(null);
+      }
+    };
   }
 
   showResponseError(error) {

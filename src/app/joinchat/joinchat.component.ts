@@ -70,6 +70,6 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   }
 
   getErrors(formcontrol: string) {
-    return this.chatService.getValidationErrors(formcontrol, this.joinFormGroup, this.joinValidations);
+    return this.chatService.getErrors(formcontrol, this.joinFormGroup, this.joinValidations);
   }
 }

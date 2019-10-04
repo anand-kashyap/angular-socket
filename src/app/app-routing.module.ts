@@ -9,11 +9,13 @@ import { VerifyAccountComponent } from './verify-account/verify-account.componen
 import { AuthGuard } from './auth.guard';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const routes: Routes = [
   {path: '', component: LoginComponent, canActivate: [AuthGuard], data: {checkloggedIn: true}},
   {path: 'register', component: RegisterComponent, canActivate: [AuthGuard], data: {checkloggedIn: true}},
   {path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [AuthGuard], data: {checkloggedIn: true}},
+  {path: 'reset-password', component: ResetPasswordComponent, canActivate: [AuthGuard], data: {checkloggedIn: true}},
   {path: 'verify', component: VerifyAccountComponent, canActivate: [AuthGuard], data: {checkVerified: true}},
   {path: 'update-profile', component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'join', component: JoinchatComponent, canActivate: [AuthGuard], data: {checkjoin: true, checkUsername: true}},

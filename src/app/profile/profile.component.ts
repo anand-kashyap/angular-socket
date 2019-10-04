@@ -149,7 +149,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getErrors(formcontrol: string) {
-    return this.chatService.getValidationErrors(
+    return this.chatService.getErrors(
       formcontrol,
       this.profileForm,
       this.profileValidations

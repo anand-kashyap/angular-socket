@@ -18,6 +18,7 @@ import { VerifyAccountComponent } from './verify-account/verify-account.componen
 import { HeaderComponent } from './header/header.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
     VerifyAccountComponent,
     HeaderComponent,
     ProfileComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

@@ -33,6 +33,11 @@ export class ApiService {
     return this.httpClient.post<any>(forgotUrl, {email, baseUrl: environment.baseUrl});
   }
 
+  resetPass(resObj): Observable<any> {
+    const resetUrl = this.apiUrl + '/user/reset-password';
+    return this.httpClient.put<any>(resetUrl, resObj);
+  }
+
   addXToken() {
     return new HttpHeaders({
       'x-access-token': this.chatService.getFromLocal('token')

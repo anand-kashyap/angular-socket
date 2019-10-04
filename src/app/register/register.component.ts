@@ -99,7 +99,7 @@ export class RegisterComponent implements OnInit {
   }
 
   getErrors(formcontrol: string) {
-    return this.chatService.getValidationErrors(
+    return this.chatService.getErrors(
       formcontrol,
       this.registerForm,
       this.registerValidations

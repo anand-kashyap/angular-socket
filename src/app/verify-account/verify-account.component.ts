@@ -76,7 +76,7 @@ export class VerifyAccountComponent implements OnInit {
   }
 
   getErrors(formcontrol: string) {
-    return this.chatService.getValidationErrors(
+    return this.chatService.getErrors(
       formcontrol,
       this.verifyForm,
       this.verifyValidations
