@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
     if (loggedIn) {
       if (next.data.checkVerified) {
         const isVerified = this.chatService.getUserInfo().isVerified;
-        if (isVerified) { return this.router.parseUrl('/join'); }
+        if (isVerified) { return this.router.parseUrl('/user'); }
       }
       if (next.data.checkjoin) {
         const isVerified = this.chatService.getUserInfo().isVerified;
@@ -27,10 +27,10 @@ export class AuthGuard implements CanActivate {
       }
       if (next.data.checkUsername) {
         const username = this.chatService.getUserInfo().username;
-        if (username === '') { return this.router.parseUrl('/update-profile'); }
+        if (username === '') { return this.router.parseUrl('/user/update-profile'); }
       }
       if (next.data.checkloggedIn) {
-        return this.router.parseUrl('/join');
+        return this.router.parseUrl('/user');
       }
       return true;
     } else {

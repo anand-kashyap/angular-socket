@@ -1,9 +1,10 @@
-import { SocketService } from './../socket.service';
-import { ChatService } from './../chat.service';
+import { SocketService } from '../socket.service';
+import { ChatService } from '../../chat.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-joinchat',
   templateUrl: './joinchat.component.html',

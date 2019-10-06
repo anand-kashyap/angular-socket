@@ -1,10 +1,11 @@
-import { SocketService } from './../socket.service';
-import { ChatService } from './../chat.service';
+import { SocketService } from '../socket.service';
+import { ChatService } from '../../chat.service';
 import { Component, OnInit } from '@angular/core';
 import { formatDate } from '@angular/common';
 
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-chatroom',
   templateUrl: './chatroom.component.html',

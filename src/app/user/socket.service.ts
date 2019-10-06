@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { ChatService } from './chat.service';
+import { ChatService } from '../chat.service';
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 
@@ -41,7 +41,7 @@ export class SocketService {
         this.router.navigate(['/']);
         return;
       }
-      this.router.navigate(['/chat']);
+      this.router.navigate(['/user/chat']);
       this.isLoggedIn = true;
     });
    }

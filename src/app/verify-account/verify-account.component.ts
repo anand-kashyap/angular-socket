@@ -102,7 +102,7 @@ export class VerifyAccountComponent implements OnInit {
         const user = this.chatService.getUserInfo();
         user.isVerified = true;
         this.chatService.setUserInfo(user);
-        this.router.navigateByUrl('/join');
+        this.router.navigateByUrl('/user');
       }, err => {
         this.otpSent = true;
         this.errorMessage = this.chatService.showResponseError(err);

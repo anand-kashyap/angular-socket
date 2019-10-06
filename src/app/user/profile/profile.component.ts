@@ -1,7 +1,7 @@
-import { ApiService } from '../api.service';
+import { ApiService } from '../../api.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
-import { ChatService } from '../chat.service';
+import { ChatService } from '../../chat.service';
 import { Router } from '@angular/router';
 
 @Component({
