@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
           this.chatService.setUserInfo(token);
           this.chatService.setInLocal('token', response.token);
           console.log(token);
-          this.router.navigate(['/join']);
+          this.router.navigateByUrl('/user');
           /* if (token.isAdmin) {
             if (!token.isVerified) {
               this.router.navigate(['admin/update-password']);

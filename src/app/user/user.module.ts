@@ -10,7 +10,7 @@ import { JoinchatComponent } from './joinchat/joinchat.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ProfileComponent } from './profile/profile.component';
 
-
+// ng generate module customers --route customer-list --module app.module
 @NgModule({
   declarations: [
     RecentDatePipe,

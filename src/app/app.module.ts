@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
@@ -34,7 +33,6 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     HttpClientModule,
     AlertModule.forRoot(),
     ButtonsModule.forRoot(),
-    ModalModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
