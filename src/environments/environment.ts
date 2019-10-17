@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  hmr: false,
   socketUrl: 'http://localhost:3000',
   baseUrl: 'http://localhost:3000'
 };
