@@ -1,12 +1,12 @@
 import { JoinchatComponent } from './user/joinchat/joinchat.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { VerifyAccountComponent } from './verify-account/verify-account.component';
+import { LoginComponent } from './common/login/login.component';
+import { RegisterComponent } from './common/register/register.component';
+import { VerifyAccountComponent } from './common/verify-account/verify-account.component';
 import { AuthGuard } from './auth.guard';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ForgotPasswordComponent } from './common/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './common/reset-password/reset-password.component';
 
 const routes: Routes = [
   {path: '', component: LoginComponent, canActivate: [AuthGuard], data: {checkloggedIn: true}},

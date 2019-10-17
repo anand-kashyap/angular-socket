@@ -7,13 +7,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { AlertModule } from 'ngx-bootstrap/alert';
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './common/register/register.component';
+import { LoginComponent } from './common/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
-import { VerifyAccountComponent } from './verify-account/verify-account.component';
-import { HeaderComponent } from './header/header.component';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { VerifyAccountComponent } from './common/verify-account/verify-account.component';
+import { HeaderComponent } from './common/header/header.component';
+import { ForgotPasswordComponent } from './common/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './common/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [

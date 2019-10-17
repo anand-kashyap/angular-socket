@@ -1,5 +1,5 @@
-import { ApiService } from '../api.service';
-import { ChatService } from './../chat.service';
+import { ApiService } from '../../api.service';
+import { ChatService } from '../../chat.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

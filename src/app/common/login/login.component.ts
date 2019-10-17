@@ -1,9 +1,9 @@
-import { ApiService } from '../api.service';
+import { ApiService } from '../../api.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
-import { ChatService } from './../chat.service';
+import { ChatService } from '../../chat.service';
 
 @Component({
   selector: 'app-login',

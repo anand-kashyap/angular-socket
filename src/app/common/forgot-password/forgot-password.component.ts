@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ChatService } from '../chat.service';
-import { ApiService } from '../api.service';
+import { ChatService } from '../../chat.service';
+import { ApiService } from '../../api.service';
 
 @Component({
   selector: 'app-forgot-password',

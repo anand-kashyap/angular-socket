@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "dev": "ng serve --open",
     "hmr": "ng serve --configuration hmr",
+    "dev": "ng serve --open",
     "exbuild": "ng b --prod=false --outputPath=../node-socket/public",
     "pBuild": "ng b --prod --outputPath=../node-socket/public",
     "start": "node server.js",

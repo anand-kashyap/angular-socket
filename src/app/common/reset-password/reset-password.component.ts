@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChatService } from '../chat.service';
-import { ApiService } from '../api.service';
+import { ChatService } from '../../chat.service';
+import { ApiService } from '../../api.service';
 
 @Component({
   selector: 'app-reset-password',

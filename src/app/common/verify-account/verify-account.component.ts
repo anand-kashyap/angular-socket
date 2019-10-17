@@ -1,8 +1,8 @@
-import { ApiService } from '../api.service';
+import { ApiService } from '../../api.service';
 import { Router } from '@angular/router';
 import { Component, OnInit, /* Renderer2, ElementRef, ViewChild */ } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ChatService } from '../chat.service';
+import { ChatService } from '../../chat.service';
 
 @Component({
   selector: 'app-verify-account',
