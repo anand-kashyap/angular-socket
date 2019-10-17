@@ -30,12 +30,11 @@ export class ChatroomComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.chatService.getUserInfo(true);
-    /* this.messages = [
-    {datechange: '2019-08-10T08:11:56.012Z'},
-    {msg: 'kjhbkjh10', username: 'anand', date: '2019-08-10T08:04:28.527Z'},
-    {msg: 'kjhbkjh10', username: 'anand', date: '2019-08-10T08:04:28.527Z'},
-    {datechange: '2019-08-12T08:11:56.012Z'},
-    {msg: 'kjhbkjh12', username: 'anand', date: '2019-08-12T08:04:28.527Z'}]; */
+    if (this.user) {
+      this.socketService.connectNewClient(this.user);
+    } else {
+      this.router.navigateByUrl('/');
+    }
     console.log(this.user);
     this.subscribeSocketEvents();
   }
@@ -83,13 +82,17 @@ export class ChatroomComponent implements OnInit {
       this.messages.push(message);
       this.messageForm.reset();
     });
-    this.socketService.onNewClient().subscribe((mesg) => {
-      const joined = mesg;
-      this.messages.push({joined});
+    this.socketService.onNewClient().subscribe((username) => {
+      if (this.user.username !== username) {
+        const joined = `${username} has joined`;
+        this.messages.push({joined});
+      }
     });
-    this.socketService.onClientDisconnect().subscribe((mesg) => {
-      const left = mesg;
-      this.messages.push({left});
+    this.socketService.onClientDisconnect().subscribe((username) => {
+      if (this.user.username !== username) {
+        const left = `${username} has left`;
+        this.messages.push({left});
+      }
     });
   }
 

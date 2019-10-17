@@ -5,7 +5,7 @@
     "ng": "ng",
     "dev": "ng serve --open",
     "hmr": "ng serve --configuration hmr",
-    "exbuild": "ng b --prod=false --outputPath=../node-socket/public --watch",
+    "exbuild": "ng b --prod=false --outputPath=../node-socket/public",
     "pBuild": "ng b --prod --outputPath=../node-socket/public",
     "start": "node server.js",
     "heroku-postbuild": "ng build -c=production --aot",

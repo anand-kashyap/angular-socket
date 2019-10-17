@@ -63,7 +63,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
       const user = this.joinFormGroup.value;
       user.username = this.username;
       this.chatService.setUserInfo(user, true);
-      this.socketService.connectNewClient(user);
+      this.router.navigate(['/user/chat']);
     } else {
       this.chatService.markFieldsAsDirty(this.joinFormGroup);
     }

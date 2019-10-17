@@ -16,9 +16,9 @@ export class ChatroomGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const hasUser =  this.chatService.getUserInfo();
-    const isLoggedIn = this.socketService.loggedIn();
+    const hasSocket =  this.chatService.isSocketPresent();
     // console.log('hasUser');
-    if (hasUser && isLoggedIn) {
+    if (hasUser && hasSocket) {
       return true;
     }
     this.chatService.setRouteErrorMsg('You need to login First!');

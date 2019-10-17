@@ -15,6 +15,10 @@ export class ChatService {
     return this.getUserInfo() ? this.getUserInfo() : false;
   }
 
+  isSocketPresent() {
+    return localStorage.getItem('sUser');
+  }
+
   clearUser() {
     localStorage.removeItem('user');
   }

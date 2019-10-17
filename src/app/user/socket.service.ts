@@ -29,20 +29,12 @@ export class SocketService {
 
    connectNewClient(user) {
     console.log('here', this.socket);
+    console.log('user', user);
     if (this.socket.disconnected) {
       this.socket.open();
     }
-    this.socket.emit('join', user, (error) => {
+    this.socket.emit('join', user, () => {
       console.log('called');
-      if (error) {
-        console.log(error);
-        this.chatService.setErrorMsg(error);
-        this.isLoggedIn = false;
-        this.router.navigate(['/']);
-        return;
-      }
-      this.router.navigate(['/user/chat']);
-      this.isLoggedIn = true;
     });
    }
 
