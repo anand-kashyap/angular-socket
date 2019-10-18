@@ -5,3 +5,14 @@
   padding: 30px 20px;
   background: #85dbf5;
 }
+
+.stick-search, .stick-loader{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  margin: 7px 10px;
+}
+
+.stick-loader{
+  margin: 10px 10px;
+}

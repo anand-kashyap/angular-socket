@@ -2,21 +2,30 @@
   <span [innerHtml]="errMsg"></span>
 </alert>
 <div class="row">
-  <form class="col-md-6 mx-auto mt-5 joinbox" [formGroup]="joinFormGroup" (ngSubmit)="joinRoom()">
+  <div class="col-md-6 mx-auto mt-5 joinbox">
     <h2>Join Chat</h2>
     <p>Hi <strong>{{username}}</strong>!</p>
+    <ng-template #usersTemp let-model="item" let-index="index">
+      <p>{{model.fullName}} (username: {{model.username}})</p>
+    </ng-template>
     <div class="form-group">
-      <label for="room">Room</label>
-      <select id="room" formControlName="room"
-        [ngClass]="{'is-invalid': joinFormGroup.get('room').invalid && joinFormGroup.get('room').dirty}">
-        <option value="one">One</option>
-        <option value="two">Two</option>
-        <option value="three">Three</option>
-      </select>
-      <div class="invalid-feedback" *ngIf="joinFormGroup.get('room').invalid && joinFormGroup.get('room').dirty">
-        {{getErrors('room')}}
+      <label for="user">Search for Users</label>
+      <div class="position-relative">
+        <input [(ngModel)]="userinput"
+        [typeaheadAsync]="true"
+        (typeaheadOnSelect)="joinRoom($event.item)"
+        [typeahead]="usersList"
+        [typeaheadItemTemplate]="usersTemp"
+        [typeaheadMinLength]="3"
+        [adaptivePosition]="true"
+        (typeaheadLoading)="loader = $event"
+        typeaheadOptionField="fullName"
+        class="form-control">
+        <fa-icon icon="search" *ngIf="!loader" class="stick-search"></fa-icon>
+        <span class="spinner-border spinner-border-sm stick-loader" *ngIf="loader" role="status">
+          <span class="sr-only">Loading...</span>
+        </span>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+  </div>
 </div>

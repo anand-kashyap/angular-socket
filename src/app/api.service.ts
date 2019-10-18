@@ -64,6 +64,14 @@ export class ApiService {
     return this.httpClient.get<any>(checkUserUrl, { headers, params });
   }
 
+  getUsersList(userString: string) {
+    const searchUserUrl = this.apiUrl + '/user/search-user';
+    const params = new HttpParams().set('userinput', userString);
+    const body = this.chatService.getUserInfo();
+    const headers = this.addXToken();
+    return this.httpClient.post<any>(searchUserUrl, {user: body}, { headers, params });
+  }
+
   getUserDetails() {
     const getUserDetailsUrl = this.apiUrl + '/user/user-details';
     const params = new HttpParams().set('email', this.chatService.getUserInfo().email);
@@ -76,5 +84,11 @@ export class ApiService {
     userInfo.email = this.chatService.getUserInfo().email;
     const headers = this.addXToken();
     return this.httpClient.patch<any>(updateProfileUrl, userInfo, { headers });
+  }
+
+  findOrCreateRoom(userNameArr: string[]) {
+    const updateProfileUrl = this.apiUrl + '/room';
+    const headers = this.addXToken();
+    return this.httpClient.put<any>(updateProfileUrl, { userNameArr }, { headers });
   }
 }

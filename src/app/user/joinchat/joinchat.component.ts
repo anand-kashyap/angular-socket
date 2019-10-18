@@ -1,9 +1,9 @@
-import { SocketService } from '../socket.service';
 import { ChatService } from '../../chat.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { ApiService } from 'src/app/api.service';
 
 @Component({
   selector: 'app-joinchat',
@@ -12,31 +12,32 @@ import { Router } from '@angular/router';
 })
 export class JoinchatComponent implements OnInit, OnDestroy {
   error = false;
+  loader = false;
+  userinput: string;
+  usersList: Observable<any>;
   errMsg = '';
   errTimeout = 4000;
-  username = '';
-  joinFormGroup = new FormGroup({
-    room: new FormControl('one', [Validators.required]),
-  });
+  username: string;
   errSubscription: Subscription;
 
-  joinValidations = {
-    room: [
-      {
-        type: 'required',
-        message: 'Room Selection is required'
-      }
-    ]
-  };
-
-  constructor(private router: Router, private chatService: ChatService, private socketService: SocketService) {
-    // this.socketService.connectSocket();
+  constructor(
+    private router: Router,
+    private chatService: ChatService,
+    private apiService: ApiService
+    ) {
+    this.usersList = new Observable((observer: any) => {
+      this.loader = true;
+      this.apiService.getUsersList(this.userinput).subscribe(res => {
+        console.log(res);
+        observer.next(res.data);
+      },
+      err => console.error(err)
+      ).add(() => this.loader = false);
+    });
    }
 
   ngOnInit() {
-    // this.chatService.clearUser();
     this.username = this.chatService.getUserInfo().username;
-    console.log(this.username);
     this.errMsg = this.chatService.getRouteErrorMsg();
     if (this.errMsg) {
       this.error = true;
@@ -58,19 +59,18 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     this.errSubscription.unsubscribe();
   }
 
-  joinRoom() {
-    if (this.joinFormGroup.valid) {
-      const user = this.joinFormGroup.value;
-      user.username = this.username;
-      this.chatService.setUserInfo(user, true);
-      this.router.navigate(['/user/chat']);
-    } else {
-      this.chatService.markFieldsAsDirty(this.joinFormGroup);
-    }
-
-  }
-
-  getErrors(formcontrol: string) {
-    return this.chatService.getErrors(formcontrol, this.joinFormGroup, this.joinValidations);
+  joinRoom(userObj) {
+    console.log('to', userObj.username);
+    // create or open existing room
+    this.apiService.findOrCreateRoom([this.username, userObj.username])
+    .subscribe(
+      res => {
+        console.log(res);
+      },
+      err => console.error(err)
+    );
+    return;
+    this.chatService.setUserInfo(userObj, true);
+    this.router.navigate(['/user/chat']);
   }
 }
