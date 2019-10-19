@@ -27,12 +27,13 @@ export class SocketService {
     return this.isLoggedIn;
    }
 
-   connectNewClient(user) {
+   connectNewClient(username: string, room: string) {
     console.log('here', this.socket);
+    const user = {username, room};
     console.log('user', user);
-    if (this.socket.disconnected) {
+    /* if (this.socket.disconnected) {
       this.socket.open();
-    }
+    } */
     this.socket.emit('join', user, () => {
       console.log('called');
     });

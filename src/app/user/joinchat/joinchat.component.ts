@@ -66,11 +66,10 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     .subscribe(
       res => {
         console.log(res);
+        this.chatService.setRoom(res.data);
+        this.router.navigate(['/user/chat']);
       },
       err => console.error(err)
     );
-    return;
-    this.chatService.setUserInfo(userObj, true);
-    this.router.navigate(['/user/chat']);
   }
 }

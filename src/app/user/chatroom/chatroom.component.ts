@@ -23,19 +23,17 @@ export class ChatroomComponent implements OnInit {
   messages = [];
   chatContent = '';
   user;
+  room;
 
   constructor(private chatService: ChatService, private router: Router, private socketService: SocketService) {
     // this.socketService.connectSocket();
   }
 
   ngOnInit() {
-    this.user = this.chatService.getUserInfo(true);
-    if (this.user) {
-      this.socketService.connectNewClient(this.user);
-    } else {
-      this.router.navigateByUrl('/');
-    }
-    console.log(this.user);
+    this.user = this.chatService.getUserInfo();
+    this.room = this.chatService.getRoom();
+    this.socketService.connectNewClient(this.user.username, this.room._id);
+    console.log(this.user, this.room);
     this.subscribeSocketEvents();
   }
 

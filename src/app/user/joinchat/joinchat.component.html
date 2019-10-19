@@ -12,6 +12,7 @@
       <label for="user">Search for Users</label>
       <div class="position-relative">
         <input [(ngModel)]="userinput"
+        typeaheadWaitMs="600"
         [typeaheadAsync]="true"
         (typeaheadOnSelect)="joinRoom($event.item)"
         [typeahead]="usersList"

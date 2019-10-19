@@ -16,7 +16,7 @@ export class ChatService {
   }
 
   isSocketPresent() {
-    return localStorage.getItem('sUser');
+    return localStorage.getItem('room');
   }
 
   clearUser() {
@@ -35,18 +35,20 @@ export class ChatService {
     return item;
   }
 
-  getUserInfo(socketUser = false) {
-    if (socketUser) {
-      return this.getFromLocal('sUser');
-    }
+  getUserInfo() {
     return this.getFromLocal('user');
   }
 
-  setUserInfo(val, socketUser = false) {
-    if (socketUser) {
-      return this.setInLocal('sUser', val);
-    }
+  setUserInfo(val) {
     return this.setInLocal('user', val);
+  }
+
+  setRoom(roomObj) {
+    return this.setInLocal('room', roomObj);
+  }
+
+  getRoom() {
+    return this.getFromLocal('room');
   }
 
   setErrorMsg(val: string) {
