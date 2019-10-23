@@ -48,8 +48,8 @@ export class SocketService {
 
    onNewMessage() {
     return new Observable((observer: Observer<any>) => {
-      this.socket.on('newMessage', (msg: string, username: string, date) => {
-        observer.next({msg, username, date});
+      this.socket.on('newMessage', (message: {msg: string, username: string, date: Date}) => {
+        observer.next(message);
       });
     });
    }
@@ -71,9 +71,13 @@ export class SocketService {
    }
 
    logout() {
-    this.sendMessage('logout');
-    this.socket.disconnect();
+    this.disconnect();
     this.chatService.clearUser();
     this.router.navigate(['/']);
+  }
+
+  disconnect() {
+    this.sendMessage('logout');
+    this.socket.disconnect();
   }
 }

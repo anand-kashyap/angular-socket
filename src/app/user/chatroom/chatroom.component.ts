@@ -1,17 +1,16 @@
 import { SocketService } from '../socket.service';
 import { ChatService } from '../../chat.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { formatDate } from '@angular/common';
 
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-chatroom',
   templateUrl: './chatroom.component.html',
   styleUrls: ['./chatroom.component.scss'],
 })
-export class ChatroomComponent implements OnInit {
+export class ChatroomComponent implements OnInit, OnDestroy {
   messageForm = new FormGroup({
     message: new FormControl('', [Validators.required])
   });
@@ -25,16 +24,21 @@ export class ChatroomComponent implements OnInit {
   user;
   room;
 
-  constructor(private chatService: ChatService, private router: Router, private socketService: SocketService) {
-    // this.socketService.connectSocket();
+  constructor(private chatService: ChatService, private socketService: SocketService) {
   }
 
   ngOnInit() {
     this.user = this.chatService.getUserInfo();
     this.room = this.chatService.getRoom();
+    this.messages = this.room.messages;
     this.socketService.connectNewClient(this.user.username, this.room._id);
     console.log(this.user, this.room);
     this.subscribeSocketEvents();
+  }
+
+  ngOnDestroy() {
+    this.socketService.disconnect();
+    console.log('cleared socket');
   }
 
   sendMessage() {
