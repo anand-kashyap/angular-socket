@@ -8,7 +8,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-chatroom',
   templateUrl: './chatroom.component.html',
-  styleUrls: ['./chatroom.component.scss'],
+  styleUrls: ['./chatroom.component.scss']
 })
 export class ChatroomComponent implements OnInit, OnDestroy {
   messageForm = new FormGroup({
@@ -24,13 +24,27 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   user;
   room;
 
-  constructor(private chatService: ChatService, private socketService: SocketService) {
-  }
+  constructor(
+    private chatService: ChatService,
+    private socketService: SocketService
+  ) {}
 
   ngOnInit() {
     this.user = this.chatService.getUserInfo();
     this.room = this.chatService.getRoom();
+    for (const i in this.room.messages) {
+      if (this.room.messages.hasOwnProperty(i)) {
+        const msg = this.room.messages[i];
+        const date = formatDate(new Date(msg.date), 'mediumDate', 'en');
+        if (this.fullDates.indexOf(date) === -1) {
+          // if changed date present already
+          this.room.messages[i].datechange = date;
+          this.fullDates.push(date);
+        }
+      }
+    }
     this.messages = this.room.messages;
+    console.log('messages', this.messages);
     this.socketService.connectNewClient(this.user.username, this.room._id);
     console.log(this.user, this.room);
     this.subscribeSocketEvents();
@@ -67,7 +81,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       const lat = position.coords.latitude;
       const long = position.coords.longitude;
       console.log(position);
-      this.socketService.sendMessage('sendLocation', {lat, long});
+      this.socketService.sendMessage('sendLocation', { lat, long });
       this.loading = false;
     });
   }
@@ -78,22 +92,22 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       const date = formatDate(new Date(), 'mediumDate', 'en');
       const found = this.fullDates.indexOf(date);
       if (found === -1) {
-        this.messages.push({datechange: message.date});
+        this.messages.push({ datechange: message.date });
         this.fullDates.push(date);
       }
       this.messages.push(message);
       this.messageForm.reset();
     });
-    this.socketService.onNewClient().subscribe((username) => {
+    this.socketService.onNewClient().subscribe(username => {
       if (this.user.username !== username) {
         const joined = `${username} has joined`;
-        this.messages.push({joined});
+        this.messages.push({ joined });
       }
     });
-    this.socketService.onClientDisconnect().subscribe((username) => {
+    this.socketService.onClientDisconnect().subscribe(username => {
       if (this.user.username !== username) {
         const left = `${username} has left`;
-        this.messages.push({left});
+        this.messages.push({ left });
       }
     });
   }

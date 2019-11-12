@@ -64,7 +64,7 @@ export class SocketService {
 
    onClientDisconnect() {
     return new Observable((observer: Observer<any>) => {
-      this.socket.on('clientLeft', (msg: string) => {
+      this.socket.on('clientLeft',(msg: string) => {
         observer.next(msg);
       });
     });

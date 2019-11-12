@@ -8,6 +8,8 @@
     "exbuild": "ng b --prod=false --outputPath=../node-socket/public",
     "pBuild": "ng b --prod --outputPath=../node-socket/public",
     "start": "node server.js",
+    "pretty": "prettier --write \"./**/*.ts\"",
+    "prettys": "prettier --write",
     "heroku-postbuild": "ng build -c=production --aot",
     "build": "ng build",
     "test": "ng test",
@@ -58,6 +60,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
+    "prettier": "^1.19.1",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0"
