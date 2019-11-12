@@ -35,7 +35,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     for (const i in this.room.messages) {
       if (this.room.messages.hasOwnProperty(i)) {
         const msg = this.room.messages[i];
-        const date = formatDate(new Date(msg.date), 'mediumDate', 'en');
+        const date = formatDate(new Date(msg.createdAt), 'mediumDate', 'en');
         if (this.fullDates.indexOf(date) === -1) {
           // if changed date present already
           this.room.messages[i].datechange = date;
@@ -88,11 +88,11 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   subscribeSocketEvents() {
     this.socketService.onNewMessage().subscribe(message => {
-      console.log(this.messages);
+      console.log(message);
       const date = formatDate(new Date(), 'mediumDate', 'en');
       const found = this.fullDates.indexOf(date);
       if (found === -1) {
-        this.messages.push({ datechange: message.date });
+        this.messages.push({ datechange: message.createdAt });
         this.fullDates.push(date);
       }
       this.messages.push(message);
