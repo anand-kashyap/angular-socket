@@ -12,7 +12,7 @@
         <p *ngIf="message.username" [ngClass]="message.username === user.username ? 'current-user' : 'other-user'">
           <strong class="d-block" *ngIf="message.username !== user.username">{{message.username | uppercase}}</strong>
           <span [innerHTML]="message.msg"></span>
-          <span class="message-date">{{message.date | date: 'shortTime'}}</span>
+          <span class="message-date">{{message.createdAt | date: 'shortTime'}}</span>
         </p>
       </ng-container>
     </div>
