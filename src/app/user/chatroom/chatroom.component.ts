@@ -1,6 +1,6 @@
 import { SocketService } from '../socket.service';
 import { ChatService } from '../../chat.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { formatDate } from '@angular/common';
 
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -26,7 +26,8 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   constructor(
     private chatService: ChatService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -65,8 +66,16 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }
   }
 
+  deleteMessage(message) {
+    console.log('message to be del', message);
+    this.socketService.sendMessage('deleteMessage', message);
+  }
+
   checkValid() {
-    if (!this.messageForm.valid || this.messageForm.get('message').value.trim() === '') {
+    if (
+      !this.messageForm.valid ||
+      this.messageForm.get('message').value.trim() === ''
+    ) {
       return true;
     }
     return false;
@@ -97,6 +106,19 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       }
       this.messages.push(message);
       this.messageForm.reset();
+    });
+    this.socketService.onDeletedMessage().subscribe(delMessage => {
+      for (const index in this.messages) {
+        if (this.messages.hasOwnProperty(index)) {
+          const i = parseInt(index, 10);
+          const msg = this.messages[index];
+          if (msg._id === delMessage._id) {
+            console.log('deleted message index', i);
+            this.messages.splice(i, 1);
+            this.cdRef.detectChanges();
+          }
+        }
+      }
     });
     this.socketService.onNewClient().subscribe(username => {
       if (this.user.username !== username) {

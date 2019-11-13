@@ -17,19 +17,19 @@ export class SocketService {
   constructor(private chatService: ChatService, private router: Router) {
     // this.socket = io.connect(this.socketUrl);
     this.connectSocket();
-   }
+  }
 
-   connectSocket() {
+  connectSocket() {
     this.socket = io.connect(this.socketUrl);
-   }
+  }
 
-   loggedIn(): boolean {
+  loggedIn(): boolean {
     return this.isLoggedIn;
-   }
+  }
 
-   connectNewClient(username: string, room: string) {
+  connectNewClient(username: string, room: string) {
     console.log('here', this.socket);
-    const user = {username, room};
+    const user = { username, room };
     console.log('user', user);
     /* if (this.socket.disconnected) {
       this.socket.open();
@@ -37,40 +37,52 @@ export class SocketService {
     this.socket.emit('join', user, () => {
       console.log('called');
     });
-   }
+  }
 
-   sendMessage(key: string, message: string| object = '') { // message or location or logout
+  sendMessage(key: string, message: string | object = '') {
+    // message or location or logout
     if (this.socket.disconnected) {
       this.socket.open();
     }
     this.socket.emit(key, message);
-   }
+  }
 
-   onNewMessage() {
+  onNewMessage() {
     return new Observable((observer: Observer<any>) => {
-      this.socket.on('newMessage', (message: {msg: string, username: string, date: Date}) => {
+      this.socket.on(
+        'newMessage',
+        (message: { msg: string; username: string; date: Date }) => {
+          observer.next(message);
+        }
+      );
+    });
+  }
+
+  onDeletedMessage() {
+    return new Observable((observer: Observer<any>) => {
+      this.socket.on('deleteMessage', message => {
         observer.next(message);
       });
     });
-   }
+  }
 
-   onNewClient() {
+  onNewClient() {
     return new Observable((observer: Observer<any>) => {
       this.socket.on('newClient', (msg: string) => {
         observer.next(msg);
       });
     });
-   }
+  }
 
-   onClientDisconnect() {
+  onClientDisconnect() {
     return new Observable((observer: Observer<any>) => {
-      this.socket.on('clientLeft',(msg: string) => {
+      this.socket.on('clientLeft', (msg: string) => {
         observer.next(msg);
       });
     });
-   }
+  }
 
-   logout() {
+  logout() {
     this.disconnect();
     this.chatService.clearUser();
     this.router.navigate(['/']);

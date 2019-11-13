@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faCoffee, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faSearch, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 // import { fa } from '@fortawesome/free-regular-svg-icons';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -44,6 +44,6 @@ import { ResetPasswordComponent } from './common/reset-password/reset-password.c
 export class AppModule {
   constructor(library: FaIconLibrary) {
     // Add an icon to the library for convenient access in other components
-    library.addIcons(faCoffee, faSearch);
+    library.addIcons(faCoffee, faSearch, faEllipsisV);
   }
  }
