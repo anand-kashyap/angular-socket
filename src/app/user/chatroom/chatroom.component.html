@@ -14,7 +14,8 @@
       <div *ngIf="message.username" dropdown [ngClass]="
           message.username === user.username ? 'current-user' : 'other-user'
         ">
-        <fa-icon icon="ellipsis-v" class="sticky-more" dropdownToggle aria-controls="dropdown-basic" size="xs">
+        <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username" class="sticky-more" dropdownToggle
+          aria-controls="dropdown-basic" size="xs">
         </fa-icon>
         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right sticky-menu" role="menu"
           aria-labelledby="button-basic">
