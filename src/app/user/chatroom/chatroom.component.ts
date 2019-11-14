@@ -1,6 +1,12 @@
 import { SocketService } from '../socket.service';
 import { ChatService } from '../../chat.service';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  ViewRef
+} from '@angular/core';
 import { formatDate } from '@angular/common';
 
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -51,6 +57,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // this.cdRef.detach();
     this.socketService.disconnect();
     console.log('cleared socket');
   }
@@ -114,7 +121,8 @@ export class ChatroomComponent implements OnInit, OnDestroy {
           if (msg._id === delMessage._id) {
             console.log('deleted message index', i);
             this.messages.splice(i, 1);
-            if (!this.cdRef['destroyed']) {
+            // if (!this.cdRef['destroyed']) {
+            if (!(this.cdRef as ViewRef).destroyed) {
               this.cdRef.detectChanges();
             }
           }
