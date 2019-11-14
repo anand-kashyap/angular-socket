@@ -6,16 +6,16 @@
   <!-- <span class="new-day">Aug 13, 2019</span> -->
   <div #scrollbox [scrollTop]="scrollbox.scrollHeight" class="d-flex flex-column scrollable">
     <ng-container *ngFor="let message of messages; let i=index">
-      <span *ngIf="message.datechange && messages.length !== i+1" class="new-day">{{
+      <span *ngIf="message.datechange && i !== messages.length-1" class="new-day">{{
         message.datechange | date: 'mediumDate' | recentDate
       }}</span>
       <p *ngIf="message.joined" class="text-success">{{ message.joined }}</p>
       <p *ngIf="message.left" class="text-danger">{{ message.left }}</p>
-      <div *ngIf="message.username" dropdown [ngClass]="
+      <div *ngIf="message.username" (mouseover)="hover[i] = true" (mouseout)="hover[i] = false" dropdown [ngClass]="
           message.username === user.username ? 'current-user' : 'other-user'
         ">
-        <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username" class="sticky-more" dropdownToggle
-          aria-controls="dropdown-basic" size="xs">
+        <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username" [class.d-none]="!hover[i]"
+          class="sticky-more" dropdownToggle aria-controls="dropdown-basic" size="xs">
         </fa-icon>
         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right sticky-menu" role="menu"
           aria-labelledby="button-basic">

@@ -17,6 +17,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   fullDates = [];
   loading = false;
+  hover = [];
 
   count: string;
   messages = [];
@@ -33,15 +34,13 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.user = this.chatService.getUserInfo();
     this.room = this.chatService.getRoom();
-    for (const i in this.room.messages) {
-      if (this.room.messages.hasOwnProperty(i)) {
-        const msg = this.room.messages[i];
-        const date = formatDate(new Date(msg.createdAt), 'mediumDate', 'en');
-        if (this.fullDates.indexOf(date) === -1) {
-          // if changed date present already
-          this.room.messages[i].datechange = date;
-          this.fullDates.push(date);
-        }
+    for (let i = 0; i < this.room.messages.length; i++) {
+      const msg = this.room.messages[i];
+      const date = formatDate(new Date(msg.createdAt), 'mediumDate', 'en');
+      if (this.fullDates.indexOf(date) === -1) {
+        // if changed date present already
+        this.room.messages.splice(i, 0, { datechange: date });
+        this.fullDates.push(date);
       }
     }
     this.messages = this.room.messages;
@@ -115,7 +114,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
           if (msg._id === delMessage._id) {
             console.log('deleted message index', i);
             this.messages.splice(i, 1);
-            this.cdRef.detectChanges();
+            if (!this.cdRef['destroyed']) {
+              this.cdRef.detectChanges();
+            }
           }
         }
       }
