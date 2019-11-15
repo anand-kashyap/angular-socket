@@ -11,7 +11,7 @@ import { environment } from '../environments/environment';
 export class ApiService {
   private apiUrl = environment.socketUrl;
 
-  constructor(private httpClient: HttpClient, private router: Router, private chatService: ChatService) { }
+  constructor(private httpClient: HttpClient, private router: Router, private chatService: ChatService) {}
 
   login(loginInput: any): Observable<any> {
     const loginUrl = this.apiUrl + '/user/authenticate';
@@ -30,7 +30,10 @@ export class ApiService {
 
   forgotPass(email: string): Observable<any> {
     const forgotUrl = this.apiUrl + '/user/forgot-password';
-    return this.httpClient.post<any>(forgotUrl, {email, baseUrl: environment.baseUrl});
+    return this.httpClient.post<any>(forgotUrl, {
+      email,
+      baseUrl: environment.baseUrl
+    });
   }
 
   resetPass(resObj): Observable<any> {
@@ -48,7 +51,7 @@ export class ApiService {
     const verifyUrl = this.apiUrl + '/user/send-otp';
     const headers = this.addXToken();
     const email = this.chatService.getUserInfo().email;
-    return this.httpClient.post<any>(verifyUrl, {email}, { headers });
+    return this.httpClient.post<any>(verifyUrl, { email }, { headers });
   }
 
   confirmOtp(otpInput: any): Observable<any> {
@@ -69,7 +72,13 @@ export class ApiService {
     const params = new HttpParams().set('userinput', userString);
     const body = this.chatService.getUserInfo();
     const headers = this.addXToken();
-    return this.httpClient.post<any>(searchUserUrl, {user: body}, { headers, params });
+    return this.httpClient.post<any>(searchUserUrl, { user: body }, { headers, params });
+  }
+
+  getRecentChats() {
+    const recentChatsUrl = this.apiUrl + `/room/recentChats/${this.chatService.getUserInfo().username}`;
+    const headers = this.addXToken();
+    return this.httpClient.get<any>(recentChatsUrl, { headers });
   }
 
   getUserDetails() {
@@ -90,5 +99,11 @@ export class ApiService {
     const updateProfileUrl = this.apiUrl + '/room';
     const headers = this.addXToken();
     return this.httpClient.put<any>(updateProfileUrl, { userNameArr }, { headers });
+  }
+
+  getRoomById(roomId: string) {
+    const getRoomUrl = this.apiUrl + '/room/' + roomId;
+    const headers = this.addXToken();
+    return this.httpClient.get<any>(getRoomUrl, { headers });
   }
 }

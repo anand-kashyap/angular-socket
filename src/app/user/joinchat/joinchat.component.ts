@@ -1,6 +1,5 @@
 import { ChatService } from '../../chat.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
@@ -15,43 +14,59 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   loader = false;
   userinput: string;
   usersList: Observable<any>;
+  recentContacts: Array<any>;
   errMsg = '';
   errTimeout = 4000;
   username: string;
   errSubscription: Subscription;
 
-  constructor(
-    private router: Router,
-    private chatService: ChatService,
-    private apiService: ApiService
-    ) {
+  constructor(private router: Router, private chatService: ChatService, private apiService: ApiService) {
+    this.searchUser();
+  }
+
+  searchUser() {
     this.usersList = new Observable((observer: any) => {
       this.loader = true;
-      this.apiService.getUsersList(this.userinput).subscribe(res => {
-        console.log(res);
-        observer.next(res.data);
-      },
-      err => console.error(err)
-      ).add(() => this.loader = false);
+      this.apiService
+        .getUsersList(this.userinput)
+        .subscribe(
+          res => {
+            console.log(res);
+            observer.next(res.data);
+          },
+          err => console.error(err)
+        )
+        .add(() => (this.loader = false));
     });
-   }
+  }
 
   ngOnInit() {
     this.username = this.chatService.getUserInfo().username;
+    if (this.username) {
+      this.apiService.getRecentChats().subscribe(
+        res => {
+          this.recentContacts = res.data;
+          console.log(this.recentContacts);
+        },
+        err => console.error('err', err)
+      );
+    }
     this.errMsg = this.chatService.getRouteErrorMsg();
     if (this.errMsg) {
       this.error = true;
     }
+    this.subscribeError();
+  }
+
+  subscribeError() {
     this.errSubscription = this.chatService.getErrorMsg().subscribe(msg => {
       console.log('msg', msg);
-
       this.errMsg = msg;
       // if (this.errMsg) {
       this.error = true;
       setTimeout(() => {
         this.error = false;
       }, this.errTimeout);
-      // }
     });
   }
 
@@ -62,8 +77,18 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   joinRoom(userObj) {
     console.log('to', userObj.username);
     // create or open existing room
-    this.apiService.findOrCreateRoom([this.username, userObj.username])
-    .subscribe(
+    this.apiService.findOrCreateRoom([this.username, userObj.username]).subscribe(
+      res => {
+        console.log(res);
+        this.chatService.setRoom(res.data);
+        this.router.navigate(['/user/chat']);
+      },
+      err => console.error(err)
+    );
+  }
+
+  openChat(roomId: string) {
+    this.apiService.getRoomById(roomId).subscribe(
       res => {
         console.log(res);
         this.chatService.setRoom(res.data);

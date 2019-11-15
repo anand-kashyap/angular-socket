@@ -57,7 +57,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.cdRef.detach();
     this.socketService.disconnect();
     console.log('cleared socket');
   }
@@ -121,7 +120,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
           if (msg._id === delMessage._id) {
             console.log('deleted message index', i);
             this.messages.splice(i, 1);
-            // if (!this.cdRef['destroyed']) {
             if (!(this.cdRef as ViewRef).destroyed) {
               this.cdRef.detectChanges();
             }
