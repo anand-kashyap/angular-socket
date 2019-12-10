@@ -1,15 +1,10 @@
 import { SocketService } from '../socket.service';
 import { ChatService } from '../../chat.service';
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ChangeDetectorRef,
-  ViewRef
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { formatDate } from '@angular/common';
 
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ApiService } from '@app/api.service';
 
 @Component({
   selector: 'app-chatroom',
@@ -33,6 +28,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   constructor(
     private chatService: ChatService,
+    private apiService: ApiService,
     private socketService: SocketService,
     private cdRef: ChangeDetectorRef
   ) {}
@@ -52,7 +48,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     this.messages = this.room.messages;
     console.log('messages', this.messages);
     this.socketService.connectNewClient(this.user.username, this.room._id);
-    console.log(this.user, this.room);
+    console.log(this.user, 'curRoom', this.room);
     this.subscribeSocketEvents();
   }
 
@@ -68,6 +64,8 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       console.log(message);
       this.socketService.sendMessage('newMessage', message);
       this.loading = false;
+      // update recent chat observable
+      this.apiService.updateRecentChats({ ...this.room }, this.user.username);
     }
   }
 
@@ -77,10 +75,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   }
 
   checkValid() {
-    if (
-      !this.messageForm.valid ||
-      this.messageForm.get('message').value.trim() === ''
-    ) {
+    if (!this.messageForm.valid || this.messageForm.get('message').value.trim() === '') {
       return true;
     }
     return false;

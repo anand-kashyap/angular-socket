@@ -31,7 +31,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
         .getUsersList(this.userinput)
         .subscribe(
           res => {
-            console.log(res);
+            console.log('usersList', res);
             observer.next(res.data);
           },
           err => console.error(err)
@@ -45,7 +45,8 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     if (this.username) {
       this.apiService.getRecentChats().subscribe(
         res => {
-          this.recentContacts = res.data;
+          console.log('recent usersList', res);
+          this.recentContacts = [...res];
           console.log(this.recentContacts);
         },
         err => console.error('err', err)

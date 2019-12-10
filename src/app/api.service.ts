@@ -5,12 +5,16 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { environment } from '../environments/environment';
+
+import { map, publishReplay, refCount } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   private apiUrl = environment.socketUrl;
-
+  private newChatsArr;
+  recentUsers: Observable<any>;
   constructor(private httpClient: HttpClient, private router: Router, private chatService: ChatService) {}
 
   login(loginInput: any): Observable<any> {
@@ -75,10 +79,42 @@ export class ApiService {
     return this.httpClient.post<any>(searchUserUrl, { user: body }, { headers, params });
   }
 
-  getRecentChats() {
-    const recentChatsUrl = this.apiUrl + `/room/recentChats/${this.chatService.getUserInfo().username}`;
-    const headers = this.addXToken();
-    return this.httpClient.get<any>(recentChatsUrl, { headers });
+  updateRecentChats(newRoom, currentUserName: string) {
+    // todo: modify for room instead of dm
+    if (this.recentUsers) {
+      for (const [i, room] of this.newChatsArr.entries()) {
+        if (room._id === newRoom._id) {
+          this.newChatsArr.splice(i, 1);
+        }
+      }
+      const index = newRoom.members.indexOf(currentUserName);
+      if (index !== -1) {
+        newRoom.members.splice(index, 1);
+      }
+      this.newChatsArr.unshift(newRoom);
+    }
+  }
+
+  getRecentChats(): Observable<any> {
+    if (!this.newChatsArr) {
+      const recentChatsUrl = `${this.apiUrl}/room/recentChats/${this.chatService.getUserInfo().username}`;
+      const headers = this.addXToken();
+      this.recentUsers = this.httpClient
+        .get<any>(recentChatsUrl, { headers })
+        .pipe(
+          map(resp => {
+            this.newChatsArr = resp.data;
+            return resp.data;
+          }),
+          publishReplay(1),
+          refCount()
+        );
+      return this.recentUsers;
+    } else {
+      return new Observable(observer => {
+        observer.next([...this.newChatsArr]);
+      });
+    }
   }
 
   getUserDetails() {
