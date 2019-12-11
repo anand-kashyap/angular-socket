@@ -9,10 +9,20 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './common/header/header.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { NotifyComponent } from './common/notify/notify.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent],
-  imports: [BrowserModule, FontAwesomeModule, AppRoutingModule, BrowserAnimationsModule, HttpClientModule],
+  declarations: [AppComponent, HeaderComponent, NotifyComponent],
+  imports: [
+    BrowserModule,
+    FontAwesomeModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

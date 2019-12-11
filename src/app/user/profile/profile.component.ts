@@ -15,12 +15,9 @@ export class ProfileComponent implements OnInit {
   profileForm = new FormGroup(
     {
       username: new FormControl('', [Validators.required, Validators.minLength(5)]),
-      email: new FormControl({value: '', disabled: true}, [Validators.required, Validators.email]),
-      firstName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3)
-      ]),
-      lastName: new FormControl('', []),
+      email: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.email]),
+      firstName: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      lastName: new FormControl('', [])
       /* password: new FormControl('', [
         Validators.required,
         Validators.minLength(6)
@@ -36,6 +33,10 @@ export class ProfileComponent implements OnInit {
       {
         type: 'required',
         message: 'Username is required'
+      },
+      {
+        type: 'empty',
+        message: 'Username cannot be empty'
       },
       {
         type: 'unique',
@@ -95,18 +96,21 @@ export class ProfileComponent implements OnInit {
   }
 
   setUserValues() {
-    this.apiService.getUserDetails().subscribe(res => {
-      const controlkeys  = {username: 'username', email: 'email', firstName: 'firstName', lastName: 'lastName'};
-      if (res.data.username !== '') {
-        this.profileForm.controls[controlkeys.username].setValue(res.data.username);
+    this.apiService.getUserDetails().subscribe(
+      res => {
+        const controlkeys = { username: 'username', email: 'email', firstName: 'firstName', lastName: 'lastName' };
+        if (res.data.username !== '') {
+          this.profileForm.controls[controlkeys.username].setValue(res.data.username);
+        }
+        this.profileForm.controls[controlkeys.email].setValue(res.data.email);
+        this.profileForm.controls[controlkeys.firstName].setValue(res.data.firstName);
+        this.profileForm.controls[controlkeys.lastName].setValue(res.data.lastName);
+      },
+      err => {
+        console.log(err);
+        this.errorMessage = this.chatService.showResponseError(err);
       }
-      this.profileForm.controls[controlkeys.email].setValue(res.data.email);
-      this.profileForm.controls[controlkeys.firstName].setValue(res.data.firstName);
-      this.profileForm.controls[controlkeys.lastName].setValue(res.data.lastName);
-    }, err => {
-      console.log(err);
-      this.errorMessage = this.chatService.showResponseError(err);
-    });
+    );
   }
 
   uniqueUser(userInput: string): ValidatorFn {
@@ -117,15 +121,21 @@ export class ProfileComponent implements OnInit {
         // return if another validator has already found an error on the usernameControl
         return;
       }
-
-      this.apiService.checkIfUserExists(usernameControl.value).subscribe(res => {
-        // set error on usernameControl if user exists
-        if (res.exists ) {
-          usernameControl.setErrors({ unique: true });
-        } else {
-          usernameControl.setErrors(null);
-        }
-      }, err => console.log(err));
+      if (usernameControl.value.trim() === '') {
+        usernameControl.setErrors({ empty: true });
+        return;
+      }
+      this.apiService.checkIfUserExists(usernameControl.value).subscribe(
+        res => {
+          // set error on usernameControl if user exists
+          if (res.exists) {
+            usernameControl.setErrors({ unique: true });
+          } else {
+            usernameControl.setErrors(null);
+          }
+        },
+        err => console.log(err)
+      );
     };
   }
 
@@ -149,18 +159,11 @@ export class ProfileComponent implements OnInit {
   }
 
   getErrors(formcontrol: string) {
-    return this.chatService.getErrors(
-      formcontrol,
-      this.profileForm,
-      this.profileValidations
-    );
+    return this.chatService.getErrors(formcontrol, this.profileForm, this.profileValidations);
   }
 
   getInvalidCondition(formControl: string) {
-    return (
-      this.profileForm.get(formControl).invalid &&
-      this.profileForm.get(formControl).dirty
-    );
+    return this.profileForm.get(formControl).invalid && this.profileForm.get(formControl).dirty;
   }
 
   updateProfile() {
@@ -175,7 +178,7 @@ export class ProfileComponent implements OnInit {
           const user = this.chatService.getUserInfo();
           user.username = res.data.username;
           this.chatService.setUserInfo(user);
-          this.router.navigate(['/join']);
+          this.router.navigateByUrl('user/join');
         },
         error => {
           this.loader = false;
