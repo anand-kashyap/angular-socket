@@ -40,6 +40,10 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     this.room = this.chatService.getRoom();
     for (let i = 0; i < this.room.messages.length; i++) {
       const msg = this.room.messages[i];
+      if (msg.datechange) {
+        this.fullDates.push(msg.datechange);
+        continue;
+      }
       const date = formatDate(new Date(msg.createdAt), 'mediumDate', 'en');
       if (this.fullDates.indexOf(date) === -1) {
         // if changed date present already
@@ -69,8 +73,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       console.log(message);
       this.socketService.sendMessage('newMessage', message);
       this.loading = false;
-      // update recent chat observable
-      this.apiService.updateRecentChats({ ...this.room }, this.user.username);
     }
   }
 
@@ -107,6 +109,10 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         console.log(message);
         const date = formatDate(new Date(), 'mediumDate', 'en');
         const found = this.fullDates.indexOf(date);
+        if (message.username === this.user.username) {
+          // update recent chat observable
+          this.apiService.updateRecentChats({ ...this.room }, this.user.username);
+        }
         if (found === -1) {
           this.messages.push({ datechange: message.createdAt });
           this.fullDates.push(date);
