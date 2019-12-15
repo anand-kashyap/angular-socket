@@ -5,6 +5,7 @@ import { formatDate } from '@angular/common';
 
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '@app/api.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chatroom',
@@ -21,6 +22,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   hover = [];
 
   count: string;
+  subscriptions: Subscription[];
   messages = [];
   chatContent = '';
   user;
@@ -54,6 +56,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.socketService.disconnect();
+    for (const sub of this.subscriptions) {
+      sub.unsubscribe();
+    }
     console.log('cleared socket');
   }
 
@@ -96,44 +101,54 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   }
 
   subscribeSocketEvents() {
-    this.socketService.onNewMessage().subscribe(message => {
-      console.log(message);
-      const date = formatDate(new Date(), 'mediumDate', 'en');
-      const found = this.fullDates.indexOf(date);
-      if (found === -1) {
-        this.messages.push({ datechange: message.createdAt });
-        this.fullDates.push(date);
-      }
-      this.messages.push(message);
-      this.messageForm.reset();
-    });
-    this.socketService.onDeletedMessage().subscribe(delMessage => {
-      for (const index in this.messages) {
-        if (this.messages.hasOwnProperty(index)) {
-          const i = parseInt(index, 10);
-          const msg = this.messages[index];
-          if (msg._id === delMessage._id) {
-            console.log('deleted message index', i);
-            this.messages.splice(i, 1);
-            if (!(this.cdRef as ViewRef).destroyed) {
-              this.cdRef.detectChanges();
+    const subs = [];
+    subs.push(
+      this.socketService.onNewMessage().subscribe(message => {
+        console.log(message);
+        const date = formatDate(new Date(), 'mediumDate', 'en');
+        const found = this.fullDates.indexOf(date);
+        if (found === -1) {
+          this.messages.push({ datechange: message.createdAt });
+          this.fullDates.push(date);
+        }
+        this.messages.push(message);
+        this.messageForm.reset();
+      })
+    );
+    subs.push(
+      this.socketService.onDeletedMessage().subscribe(delMessage => {
+        for (const index in this.messages) {
+          if (this.messages.hasOwnProperty(index)) {
+            const i = parseInt(index, 10);
+            const msg = this.messages[index];
+            if (msg._id === delMessage._id) {
+              console.log('deleted message index', i);
+              this.messages.splice(i, 1);
+              if (!(this.cdRef as ViewRef).destroyed) {
+                this.cdRef.detectChanges();
+              }
             }
           }
         }
-      }
-    });
-    this.socketService.onNewClient().subscribe(username => {
-      if (this.user.username !== username) {
-        const joined = `${username} has joined`;
-        this.messages.push({ joined });
-      }
-    });
-    this.socketService.onClientDisconnect().subscribe(username => {
-      if (this.user.username !== username) {
-        const left = `${username} has left`;
-        this.messages.push({ left });
-      }
-    });
+      })
+    );
+    subs.push(
+      this.socketService.onNewClient().subscribe(username => {
+        if (this.user.username !== username) {
+          const joined = `${username} has joined`;
+          this.messages.push({ joined });
+        }
+      })
+    );
+    subs.push(
+      this.socketService.onClientDisconnect().subscribe(username => {
+        if (this.user.username !== username) {
+          const left = `${username} has left`;
+          this.messages.push({ left });
+        }
+      })
+    );
+    this.subscriptions = subs;
   }
 
   logout() {

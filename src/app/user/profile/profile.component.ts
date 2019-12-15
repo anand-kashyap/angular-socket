@@ -178,7 +178,7 @@ export class ProfileComponent implements OnInit {
           const user = this.chatService.getUserInfo();
           user.username = res.data.username;
           this.chatService.setUserInfo(user);
-          this.router.navigateByUrl('user/join');
+          this.router.navigateByUrl('/user/join');
         },
         error => {
           this.loader = false;
