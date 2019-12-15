@@ -26,7 +26,7 @@
         <h5>Recent Chats</h5>
       </div>
       <div class="col-md-6 recent-container noselect" *ngFor="let contact of recentContacts">
-        <div class="recent-contact" (click)="openChat(contact._id)"><strong>
+        <div class="recent-contact" (click)="openChat(contact)"><strong>
             <ng-container *ngIf="contact.directMessage; else Room">
               {{contact.members[0]}}
             </ng-container>
