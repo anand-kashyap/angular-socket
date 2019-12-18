@@ -34,7 +34,9 @@ export class JoinchatComponent implements OnInit, OnDestroy {
             console.log('usersList', res);
             observer.next(res.data);
           },
-          err => console.error(err)
+          err => {
+            console.error(err);
+          }
         )
         .add(() => (this.loader = false));
     });
@@ -49,7 +51,10 @@ export class JoinchatComponent implements OnInit, OnDestroy {
           this.recentContacts = [...res];
           console.log(this.recentContacts);
         },
-        err => console.error('err', err)
+        err => {
+          console.error('err', err);
+          this.chatService.showResponseError(err);
+        }
       );
     }
     this.errMsg = this.chatService.getRouteErrorMsg();
@@ -81,23 +86,14 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     this.apiService.findOrCreateRoom([this.username, userObj.username]).subscribe(
       res => {
         console.log(res);
-        this.chatService.setRoom(res.data);
-        this.router.navigate(['/user/chat']);
+        this.openChat(res.data);
       },
       err => console.error(err)
     );
   }
 
   openChat(room) {
-    this.chatService.setRoom(room);
-    this.router.navigateByUrl('/user/chat');
-    /* this.apiService.getRoomById(roomId).subscribe(
-      res => {
-        console.log(res);
-        this.chatService.setRoom(res.data);
-        this.router.navigate(['/user/chat']);
-      },
-      err => console.error(err)
-    ); */
+    this.chatService.room = room;
+    this.router.navigateByUrl(`/user/chat/${room._id}`);
   }
 }

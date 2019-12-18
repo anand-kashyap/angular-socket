@@ -8,21 +8,18 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ChatroomGuard implements CanActivate {
-
-  constructor(private chatService: ChatService, private router: Router, private socketService: SocketService) {
-  }
+  constructor(private chatService: ChatService, private router: Router, private socketService: SocketService) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const hasUser =  this.chatService.getUserInfo();
-    const hasSocket =  this.chatService.isSocketPresent();
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    const hasUser = this.chatService.getUserInfo();
     // console.log('hasUser');
-    if (hasUser && hasSocket) {
+    if (hasUser) {
       return true;
     }
     this.chatService.setRouteErrorMsg('You need to login First!');
     return this.router.parseUrl('/');
   }
-
 }

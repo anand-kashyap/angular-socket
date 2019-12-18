@@ -6,6 +6,7 @@ import { formatDate } from '@angular/common';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '@app/api.service';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chatroom',
@@ -32,12 +33,30 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     private chatService: ChatService,
     private apiService: ApiService,
     private socketService: SocketService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.user = this.chatService.getUserInfo();
-    this.room = this.chatService.getRoom();
+    this.room = this.chatService.room;
+    if (!this.room) {
+      const roomId = this.route.snapshot.params.roomId;
+      if (roomId) {
+        this.apiService.getRoomById(roomId).subscribe(res => {
+          this.room = res.data;
+          this.chatService.room = this.room;
+          this.inits();
+        });
+      } else {
+        return this.chatService.gotoJoin();
+      }
+    } else {
+      this.inits();
+    }
+  }
+
+  inits() {
     for (let i = 0; i < this.room.messages.length; i++) {
       const msg = this.room.messages[i];
       if (msg.datechange) {
@@ -60,8 +79,10 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.socketService.disconnect();
-    for (const sub of this.subscriptions) {
-      sub.unsubscribe();
+    if (this.subscriptions && this.subscriptions.length) {
+      for (const sub of this.subscriptions) {
+        sub.unsubscribe();
+      }
     }
     console.log('cleared socket');
   }

@@ -10,14 +10,24 @@ import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   // { path: '', component: UserComponent },
-  { path: '', redirectTo: 'join', pathMatch: 'full'},
-  { path: 'join', component: JoinchatComponent, canActivate: [AuthGuard], data: {checkjoin: true, checkUsername: true} },
-  { path: 'chat', component: ChatroomComponent, canActivate: [AuthGuard, ChatroomGuard], data: {checkjoin: true, checkUsername: true} },
-  { path: 'update-profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: '', redirectTo: 'join', pathMatch: 'full' },
+  {
+    path: 'join',
+    component: JoinchatComponent,
+    canActivate: [AuthGuard],
+    data: { checkjoin: true, checkUsername: true }
+  },
+  {
+    path: 'chat/:roomId',
+    component: ChatroomComponent,
+    canActivate: [AuthGuard, ChatroomGuard],
+    data: { checkjoin: true, checkUsername: true }
+  },
+  { path: 'update-profile', component: ProfileComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class UserRoutingModule { }
+export class UserRoutingModule {}

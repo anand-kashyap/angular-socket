@@ -1,22 +1,18 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, ValidatorFn } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-
   private errMsgSub = new Subject<string>();
-
-  constructor() {}
+  private proom;
+  constructor(private router: Router) {}
 
   isLoggedIn() {
-    return this.getUserInfo() ? this.getUserInfo() : false;
-  }
-
-  isSocketPresent() {
-    return localStorage.getItem('room');
+    return this.getUserInfo() || false;
   }
 
   clearUser() {
@@ -43,12 +39,16 @@ export class ChatService {
     return this.setInLocal('user', val);
   }
 
-  setRoom(roomObj) {
-    return this.setInLocal('room', roomObj);
+  set room(roomObj) {
+    this.proom = roomObj;
   }
 
-  getRoom() {
-    return this.getFromLocal('room');
+  get room() {
+    return this.proom;
+  }
+
+  gotoJoin() {
+    return this.router.navigateByUrl('/user/join');
   }
 
   setErrorMsg(val: string) {
@@ -84,10 +84,7 @@ export class ChatService {
   }
 
   isInvalid(formgroup: FormGroup, formControl: string) {
-    return (
-      formgroup.get(formControl).invalid &&
-      formgroup.get(formControl).dirty
-    );
+    return formgroup.get(formControl).invalid && formgroup.get(formControl).dirty;
   }
 
   markFieldsAsDirty(formGroup: FormGroup) {
@@ -128,11 +125,13 @@ export class ChatService {
         }
       }
       return msg;
+    } else if (error.status === 401) {
+      this.clearUser();
+      this.router.navigateByUrl('/');
     } else if (error.error.message === undefined) {
       return error.status + ' - ' + error.statusText;
     } else {
       return error.error.message;
     }
   }
-
 }
