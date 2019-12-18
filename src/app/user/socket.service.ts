@@ -15,7 +15,6 @@ export class SocketService {
   isLoggedIn = false;
 
   constructor(private chatService: ChatService, private router: Router) {
-    // this.socket = io.connect(this.socketUrl);
     this.connectSocket();
   }
 
@@ -28,14 +27,11 @@ export class SocketService {
   }
 
   connectNewClient(username: string, room: string) {
-    console.log('here', this.socket);
+    console.log('socket connected', this.socket);
     const user = { username, room };
-    console.log('user', user);
-    /* if (this.socket.disconnected) {
-      this.socket.open();
-    } */
+    console.log('user info', user);
     this.socket.emit('join', user, () => {
-      console.log('called');
+      console.log('joined user');
     });
   }
 
@@ -85,7 +81,7 @@ export class SocketService {
   logout() {
     this.disconnect();
     this.chatService.clearUser();
-    this.router.navigate(['/']);
+    this.router.navigateByUrl('/');
   }
 
   disconnect() {
