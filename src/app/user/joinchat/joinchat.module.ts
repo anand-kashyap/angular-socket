@@ -5,7 +5,6 @@ import { PreloadModule } from '@app/shared/preload.module';
 import { RformModule } from '@app/shared/rform.module';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [{ path: '', component: JoinchatComponent }];
@@ -17,8 +16,7 @@ const routes: Routes = [{ path: '', component: JoinchatComponent }];
     RformModule,
     RouterModule.forChild(routes),
     TypeaheadModule.forRoot(),
-    AlertModule.forRoot(),
-    FontAwesomeModule
+    AlertModule.forRoot()
   ]
 })
 export class JoinchatModule {}

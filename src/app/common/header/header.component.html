@@ -1,4 +1,14 @@
 <nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" [routerLink]="['/']">Angular Socket</a>
-    <button class="btn btn-primary" *ngIf="isLoggedIn()" (click)="logout()">Logout</button>
-  </nav>
+  <a class="navbar-brand" [routerLink]="['/']">Angular Socket</a>
+  <ng-container *ngIf="isLoggedIn()">
+    <div class="right-unav">
+      <!-- <div class="point" routerLink="/user/update-profile"> -->
+      <fa-icon icon="user-circle" class="fa-lg pr-2 point" routerLink="/user/update-profile"></fa-icon>
+      <!-- </div> -->
+      <div>
+        <button class="btn btn-primary" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </ng-container>
+
+</nav>

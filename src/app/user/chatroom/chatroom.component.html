@@ -11,7 +11,25 @@
       }}</span>
       <p *ngIf="message.joined" class="text-success">{{ message.joined }}</p>
       <p *ngIf="message.left" class="text-danger">{{ message.left }}</p>
-      <div *ngIf="message.username" (mouseover)="hover[i] = true" (mouseout)="hover[i] = false" dropdown [ngClass]="
+      <div *ngIf="message.username && isMobile" dropdown [ngClass]="
+          message.username === user.username ? 'current-user' : 'other-user'
+        ">
+        <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username"
+          class="sticky-more" dropdownToggle aria-controls="dropdown-basic" size="xs">
+        </fa-icon>
+        <ul *dropdownMenu class="dropdown-menu dropdown-menu-right sticky-menu" role="menu"
+          aria-labelledby="button-basic">
+          <li role="menuitem" (click)="deleteMessage(message)" class="delete">Delete</li>
+        </ul>
+        <strong class="d-block" *ngIf="message.username !== user.username">{{
+          message.username | uppercase
+        }}</strong>
+        <span [innerHTML]="message.msg"></span>
+        <span class="message-date">{{
+          message.createdAt | date: 'shortTime'
+        }}</span>
+      </div>
+      <div *ngIf="message.username && !isMobile" (mouseover)="hover[i] = true" (mouseout)="hover[i] = false" dropdown [ngClass]="
           message.username === user.username ? 'current-user' : 'other-user'
         ">
         <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username" [class.d-none]="!hover[i]"

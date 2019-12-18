@@ -9,7 +9,6 @@ import { UserRoutingModule } from './user-routing.module';
   imports: [
     CommonModule,
     // BrowserAnimationsModule,
-    // FontAwesomeModule,
     UserRoutingModule
   ]
 })
