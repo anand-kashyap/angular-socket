@@ -17,7 +17,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   messageForm = new FormGroup({
     message: new FormControl('', [Validators.required])
   });
-  isMobile = false;
   fullDates = [];
   loading = false;
   hover = [];
@@ -35,9 +34,13 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     private socketService: SocketService,
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute
-  ) {
-    this.isMobile = window.screen.width <= 768; // tablet and below
-    console.log('ismobile', window.screen.width, this.isMobile);
+  ) {}
+
+  checkMobile(hovered) {
+    if (window.screen.width <= 768) {
+      return null;
+    }
+    return !hovered;
   }
 
   ngOnInit() {
