@@ -15,11 +15,17 @@ const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
 
 if (environment.hmr) {
   if ((module as any).hot) {
-    hmrBootstrap((module as any), bootstrap);
+    hmrBootstrap(module as any, bootstrap);
   } else {
     console.error('HMR is not enabled for webpack-dev-server!');
     console.log('Are you using the --hmr flag for ng serve?');
   }
 } else {
-  bootstrap().catch(err => console.log(err));
+  bootstrap()
+    .then(() => {
+      if ('serviceWorker' in navigator && environment.production) {
+        navigator.serviceWorker.register('./ngsw-worker.js');
+      }
+    })
+    .catch(err => console.log(err));
 }

@@ -5,7 +5,7 @@
     "ng": "ng",
     "hmr": "ng serve --configuration hmr",
     "dev": "ng serve",
-    "dev:sw": "ng b && http-server -p 8080 -c-1 dist/angular-socket",
+    "dev:sw": "ng b --prod && http-server -p 8080 -c-1 dist/angular-socket",
     "exbuild": "ng b --prod=false --outputPath=../node-socket/public",
     "pBuild": "ng b --prod --outputPath=../node-socket/public",
     "start": "node server.js",

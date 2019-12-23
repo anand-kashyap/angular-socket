@@ -7,6 +7,12 @@
       "type": "npm",
       "script": "dev",
       "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "pBuild",
+      "group": "build",
+      "problemMatcher": []
     }
   ]
 }
