@@ -6,6 +6,14 @@ import * as io from 'socket.io-client';
 import { environment } from 'src/environments/environment';
 import { Observable, Observer } from 'rxjs';
 
+export class Events {
+  public static events = {
+    NEW_MESSAGE: 'newMessage',
+    DEL_MESSAGE: 'deleteMessage',
+    NEW_CLIENT: 'newClient',
+    LEFT_CLIENT: 'clientLeft'
+  };
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -43,40 +51,21 @@ export class SocketService {
     this.socket.emit(key, message);
   }
 
-  onNewMessage() {
+  onSEvent(event: string) {
     return new Observable((observer: Observer<any>) => {
-      this.socket.on(
-        'newMessage',
-        (message: { msg: string; username: string; date: Date }) => {
-          observer.next(message);
-        }
-      );
-    });
-  }
-
-  onDeletedMessage() {
-    return new Observable((observer: Observer<any>) => {
-      this.socket.on('deleteMessage', message => {
+      this.socket.on(event, message => {
         observer.next(message);
       });
     });
   }
 
-  onNewClient() {
+  /*  onNewMessage() {
     return new Observable((observer: Observer<any>) => {
-      this.socket.on('newClient', (msg: string) => {
-        observer.next(msg);
+      this.socket.on('newMessage', (message: { msg: string; username: string; date: Date }) => {
+        observer.next(message);
       });
     });
-  }
-
-  onClientDisconnect() {
-    return new Observable((observer: Observer<any>) => {
-      this.socket.on('clientLeft', (msg: string) => {
-        observer.next(msg);
-      });
-    });
-  }
+  } */
 
   logout() {
     this.disconnect();

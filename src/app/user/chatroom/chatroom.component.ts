@@ -1,4 +1,4 @@
-import { SocketService } from '../socket.service';
+import { SocketService, Events } from '../socket.service';
 import { ChatService } from '../../chat.service';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { formatDate } from '@angular/common';
@@ -131,25 +131,26 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   subscribeSocketEvents() {
     const subs = [];
+    const events = Events.events;
     subs.push(
-      this.socketService.onNewMessage().subscribe(message => {
+      this.socketService.onSEvent(events.NEW_MESSAGE).subscribe(message => {
         console.log(message);
         const date = formatDate(new Date(), 'mediumDate', 'en');
         const found = this.fullDates.indexOf(date);
-        if (message.username === this.user.username) {
-          // update recent chat observable
-          this.apiService.updateRecentChats({ ...this.room }, this.user.username);
-        }
         if (found === -1) {
           this.messages.push({ datechange: message.createdAt });
           this.fullDates.push(date);
         }
         this.messages.push(message);
-        this.messageForm.reset();
+        if (message.username === this.user.username) {
+          // update recent chat observable
+          this.apiService.updateRecentChats({ ...this.room }, this.user.username);
+          this.messageForm.reset();
+        }
       })
     );
     subs.push(
-      this.socketService.onDeletedMessage().subscribe(delMessage => {
+      this.socketService.onSEvent(events.DEL_MESSAGE).subscribe(delMessage => {
         for (const index in this.messages) {
           if (this.messages.hasOwnProperty(index)) {
             const i = parseInt(index, 10);
@@ -166,7 +167,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       })
     );
     subs.push(
-      this.socketService.onNewClient().subscribe(username => {
+      this.socketService.onSEvent(events.NEW_CLIENT).subscribe(username => {
         if (this.user.username !== username) {
           const joined = `${username} has joined`;
           this.messages.push({ joined });
@@ -174,7 +175,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       })
     );
     subs.push(
-      this.socketService.onClientDisconnect().subscribe(username => {
+      this.socketService.onSEvent(events.LEFT_CLIENT).subscribe(username => {
         if (this.user.username !== username) {
           const left = `${username} has left`;
           this.messages.push({ left });
