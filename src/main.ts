@@ -21,11 +21,5 @@ if (environment.hmr) {
     console.log('Are you using the --hmr flag for ng serve?');
   }
 } else {
-  bootstrap()
-    .then(() => {
-      if ('serviceWorker' in navigator && environment.production) {
-        navigator.serviceWorker.register('./ngsw-worker.js');
-      }
-    })
-    .catch(err => console.log(err));
+  bootstrap().catch(err => console.log(err));
 }
