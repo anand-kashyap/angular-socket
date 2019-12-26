@@ -137,9 +137,13 @@ export class ApiService {
     return this.httpClient.put<any>(updateProfileUrl, { userNameArr }, { headers });
   }
 
-  getRoomById(roomId: string) {
+  getRoomById(roomId: string, currentUser = null) {
     const getRoomUrl = this.apiUrl + '/room/' + roomId;
+    let params = {};
+    if (currentUser) {
+      params = { currentUser };
+    }
     const headers = this.addXToken();
-    return this.httpClient.get<any>(getRoomUrl, { headers });
+    return this.httpClient.get<any>(getRoomUrl, { headers, params });
   }
 }

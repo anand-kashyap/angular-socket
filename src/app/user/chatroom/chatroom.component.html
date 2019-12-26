@@ -1,7 +1,9 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<h1>
-  Chat Box
-</h1>
+<div *ngIf="title">
+  <h3 class="d-inline">
+    {{title}}
+  </h3>
+  <span class="badge badge-pill" [ngClass]="status == 'active' ? 'badge-success': 'badge-danger'">{{status}}</span>
+</div>
 <div>
   <!-- <span class="new-day">Aug 13, 2019</span> -->
   <div #scrollbox [scrollTop]="scrollbox.scrollHeight" class="d-flex flex-column scrollable">

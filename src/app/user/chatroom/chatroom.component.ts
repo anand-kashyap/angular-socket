@@ -17,16 +17,17 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   messageForm = new FormGroup({
     message: new FormControl('', [Validators.required])
   });
+  status = 'away';
   fullDates = [];
   loading = false;
   hover = [];
 
-  count: string;
   subscriptions: Subscription[];
   messages = [];
   chatContent = '';
   user;
   room;
+  title = '';
 
   constructor(
     private chatService: ChatService,
@@ -49,7 +50,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     if (!this.room) {
       const roomId = this.route.snapshot.params.roomId;
       if (roomId) {
-        this.apiService.getRoomById(roomId).subscribe(res => {
+        this.apiService.getRoomById(roomId, this.user.username).subscribe(res => {
           this.room = res.data;
           this.chatService.room = this.room;
           this.inits();
@@ -78,9 +79,16 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }
     this.messages = this.room.messages;
     console.log('messages', this.messages);
-    this.socketService.connectNewClient(this.user.username, this.room._id);
+    if (this.room.directMessage) {
+      const { members } = this.room;
+      this.title = members[0];
+    }
     console.log(this.user, 'curRoom', this.room);
-    this.subscribeSocketEvents();
+    this.socketService.connectNewClient(this.user.username, this.room._id).then((onlineUsers: string[]) => {
+      console.log('from croom', onlineUsers);
+      this.updateActive([...onlineUsers]);
+      this.subscribeSocketEvents();
+    });
   }
 
   ngOnDestroy() {
@@ -94,12 +102,18 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   }
 
   sendMessage() {
-    if (this.messageForm.valid) {
+    if (this.messageForm.valid && !this.loading) {
       this.loading = true;
       const message = this.messageForm.get('message').value;
       console.log(message);
       this.socketService.sendMessage('newMessage', message);
-      this.loading = false;
+    }
+  }
+
+  updateActive(onlineUsers: string[]) {
+    if (this.room.directMessage) {
+      const oId = onlineUsers.indexOf(this.title); // other username
+      this.status = oId === -1 ? 'away' : 'active';
     }
   }
 
@@ -147,6 +161,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
           this.apiService.updateRecentChats({ ...this.room }, this.user.username);
           this.messageForm.reset();
         }
+        this.loading = false;
       })
     );
     subs.push(
@@ -167,18 +182,18 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       })
     );
     subs.push(
-      this.socketService.onSEvent(events.NEW_CLIENT).subscribe(username => {
+      this.socketService.onSEvent(events.NEW_CLIENT).subscribe(({ username, onlineUsers }) => {
+        this.updateActive(onlineUsers);
         if (this.user.username !== username) {
-          const joined = `${username} has joined`;
-          this.messages.push({ joined });
+          console.log('joined', username);
         }
       })
     );
     subs.push(
-      this.socketService.onSEvent(events.LEFT_CLIENT).subscribe(username => {
-        if (this.user.username !== username) {
-          const left = `${username} has left`;
-          this.messages.push({ left });
+      this.socketService.onSEvent(events.LEFT_CLIENT).subscribe(({ onlineUsers, left }) => {
+        this.updateActive(onlineUsers);
+        if (this.user.username !== left) {
+          console.log('left', left);
         }
       })
     );

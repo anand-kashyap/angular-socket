@@ -38,8 +38,13 @@ export class SocketService {
     console.log('socket connected', this.socket);
     const user = { username, room };
     console.log('user info', user);
-    this.socket.emit('join', user, () => {
-      console.log('joined user');
+    if (this.socket.disconnected) {
+      this.connectSocket();
+    }
+    return new Promise((res, rej) => {
+      this.socket.emit('join', user, online => {
+        res(online);
+      });
     });
   }
 

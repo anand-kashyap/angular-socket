@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 // import { UserComponent } from './user.component';
-import { ChatroomComponent } from './chatroom/chatroom.component';
 import { AuthGuard } from '../auth.guard';
 import { ChatroomGuard } from './chatroom.guard';
 
