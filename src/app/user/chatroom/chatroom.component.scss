@@ -1,29 +1,28 @@
 .other-user {
   background: #4f85b5a6;
+  box-shadow: -1px 1px 3px 0px #212121;
 }
 .current-user {
   background: #80808085;
   align-self: flex-end;
+  box-shadow: 1px 1px 3px 0px #212121;
 }
 .current-user,
 .other-user {
-  padding: 20px 20px;
+  white-space: pre-wrap;
+  padding: 12px 10px;
   border-radius: 5px;
   display: inline-block;
   width: 25%;
   position: relative;
-  margin: 3px 5px;
-}
-.scrollable {
-  min-height: 470px;
-  max-height: 470px;
-  overflow: scroll;
+  margin: 8px 5px;
 }
 .message-date {
   position: absolute;
   bottom: 5px;
   right: 5px;
   font-size: 0.7rem;
+  font-weight: 500;
 }
 .new-day {
   text-align: center;
@@ -52,5 +51,24 @@
     color: red;
     padding: 0 8px;
     cursor: pointer;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  .heading {
+    margin: 10px 0;
+    padding: 5px 0;
+    border-bottom: 1px solid #21212154;
+  }
+  .msg-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: 400px;
+  }
+  textarea {
+    resize: none;
   }
 }
