@@ -1,9 +1,8 @@
 import { SocketService, Events } from '../socket.service';
-import { ChatService } from '../../chat.service';
+import { ChatService } from '@app/chat.service';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { formatDate } from '@angular/common';
 
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '@app/api.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -14,9 +13,6 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./chatroom.component.scss']
 })
 export class ChatroomComponent implements OnInit, OnDestroy {
-  messageForm = new FormGroup({
-    message: new FormControl('', [Validators.required])
-  });
   status = 'away';
   fullDates = [];
   loading = false;
@@ -24,7 +20,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[];
   messages = [];
-  chatContent = '';
   user;
   room;
   title = '';
@@ -101,15 +96,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     console.log('cleared socket');
   }
 
-  sendMessage() {
-    if (this.messageForm.valid && !this.loading) {
-      this.loading = true;
-      const message = this.messageForm.get('message').value;
-      console.log(message);
-      this.socketService.sendMessage('newMessage', message);
-    }
-  }
-
   updateActive(onlineUsers: string[]) {
     if (this.room.directMessage) {
       const oId = onlineUsers.indexOf(this.title); // other username
@@ -122,25 +108,12 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     this.socketService.sendMessage('deleteMessage', message);
   }
 
-  checkValid() {
-    if (!this.messageForm.valid || this.messageForm.get('message').value.trim() === '') {
-      return true;
-    }
-    return false;
+  sendMessage(msg: string) {
+    this.socketService.sendMessage('newMessage', msg);
   }
 
-  sendLocation() {
-    if (!navigator.geolocation) {
-      return alert('You browser does not support geolocation');
-    }
-    this.loading = true;
-    navigator.geolocation.getCurrentPosition(position => {
-      const lat = position.coords.latitude;
-      const long = position.coords.longitude;
-      console.log(position);
-      this.socketService.sendMessage('sendLocation', { lat, long });
-      this.loading = false;
-    });
+  sendLocation({ lat, long }) {
+    this.socketService.sendMessage('sendLocation', { lat, long });
   }
 
   subscribeSocketEvents() {
@@ -159,7 +132,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         if (message.username === this.user.username) {
           // update recent chat observable
           this.apiService.updateRecentChats({ ...this.room }, this.user.username);
-          this.messageForm.reset();
         }
         this.loading = false;
       })
@@ -198,9 +170,5 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       })
     );
     this.subscriptions = subs;
-  }
-
-  logout() {
-    this.socketService.logout();
   }
 }

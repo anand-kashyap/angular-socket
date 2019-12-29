@@ -32,15 +32,5 @@
       </div>
     </ng-container>
   </div>
-  <form [formGroup]="messageForm" class="send-msg">
-    <div class="form-group">
-      <textarea formControlName="message" autofocus class="form-control" cols="10" rows="1"></textarea>
-      <button class="btn btn-primary" [disabled]="loading || checkValid()" type="button" (click)="sendMessage()">
-        Send
-      </button>
-      <button class="btn btn-warning" [disabled]="loading" type="button" (click)="sendLocation()">
-        Share Location
-      </button>
-    </div>
-  </form>
+  <app-send [loading]="loading" (send)="sendMessage($event)" (location)="sendLocation($event)"></app-send>
 </div>
