@@ -1,4 +1,4 @@
-<div class="main">
+<div class="main" [ngClass]="notifyOpen ? 'small-chat': null">
   <div *ngIf="title" class="heading">
     <h3 class="d-inline">
       {{title}}

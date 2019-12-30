@@ -1,11 +1,13 @@
 <form [formGroup]="messageForm" class="send-msg">
   <div class="form-group">
     <textarea formControlName="message" autofocus class="form-control" cols="10" rows="1"></textarea>
-    <button class="btn btn-primary" [disabled]="loading || checkValid()" type="button" (click)="sendMessage()">
-      Send
-    </button>
-    <button class="btn btn-warning" [disabled]="loading" type="button" (click)="sendLocation()">
-      Share Location
-    </button>
+    <div class="btns">
+      <button class="btn send-btn" [disabled]="loading || checkValid()" type="button" (click)="sendMessage()">
+        <fa-icon icon="paper-plane"></fa-icon>
+      </button>
+      <button class="btn loc-btn" [disabled]="loading" type="button" (click)="sendLocation()">
+        <fa-icon icon="map-marker-alt"></fa-icon>
+      </button>
+    </div>
   </div>
 </form>

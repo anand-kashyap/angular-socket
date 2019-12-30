@@ -1,7 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faCoffee, faSearch, faEllipsisV, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCoffee,
+  faSearch,
+  faEllipsisV,
+  faUserCircle,
+  faPaperPlane,
+  faMapMarkerAlt
+} from '@fortawesome/free-solid-svg-icons';
 // import { fa } from '@fortawesome/free-regular-svg-icons';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -32,6 +39,6 @@ import { NotifyComponent } from './common/notify/notify.component';
 export class AppModule {
   constructor(library: FaIconLibrary) {
     // Add an icon to the library for convenient access in other components
-    library.addIcons(faCoffee, faSearch, faEllipsisV, faUserCircle);
+    library.addIcons(faCoffee, faSearch, faEllipsisV, faUserCircle, faPaperPlane, faMapMarkerAlt);
   }
 }

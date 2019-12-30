@@ -17,6 +17,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   fullDates = [];
   loading = false;
   hover = [];
+  notifyOpen = false;
 
   subscriptions: Subscription[];
   messages = [];
@@ -42,6 +43,11 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.user = this.chatService.getUserInfo();
     this.room = this.chatService.room;
+    this.subscriptions = [
+      this.apiService.getNotify().subscribe(opened => {
+        this.notifyOpen = opened;
+      })
+    ];
     if (!this.room) {
       const roomId = this.route.snapshot.params.roomId;
       if (roomId) {
@@ -169,6 +175,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         }
       })
     );
-    this.subscriptions = subs;
+    this.subscriptions.concat(subs);
   }
 }

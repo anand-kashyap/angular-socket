@@ -1,7 +1,7 @@
 import { ChatService } from './chat.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { environment } from '../environments/environment';
@@ -15,7 +15,16 @@ export class ApiService {
   private apiUrl = environment.socketUrl;
   private newChatsArr;
   recentUsers: Observable<any>;
+  private notify = new Subject<boolean>();
   constructor(private httpClient: HttpClient, private router: Router, private chatService: ChatService) {}
+
+  notifyMethod(val: boolean) {
+    this.notify.next(val);
+  }
+
+  getNotify() {
+    return this.notify;
+  }
 
   login(loginInput: any): Observable<any> {
     const loginUrl = this.apiUrl + '/user/authenticate';
@@ -145,5 +154,11 @@ export class ApiService {
     }
     const headers = this.addXToken();
     return this.httpClient.get<any>(getRoomUrl, { headers, params });
+  }
+
+  saveNotifySubs(notifySub) {
+    const getRoomUrl = this.apiUrl + '/user/store-notification/' + this.chatService.getUserInfo().id;
+    const headers = this.addXToken();
+    return this.httpClient.post<any>(getRoomUrl, { data: notifySub }, { headers });
   }
 }

@@ -1,10 +1,21 @@
-<div class="alert alert-primary" *ngIf="updateAvailable$ | async" role="alert">
+<div class="alert alert-primary notif" *ngIf="updateAvailable$ | async" role="alert">
   <span>We have published a new release!</span>
-  <div class="float-right">
-    <button class="btn btn-success btn-sm" (click)="activateUpdate()">
+  <div>
+    <button class="btn btn-success btn-sm upBtn" (click)="activateUpdate()">
       Activate and reload
     </button>
     <button class="close ml-2" aria-label="Close" (click)="closed$.next()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>
+<div class="alert alert-success notif" *ngIf="open" role="alert">
+  <span>Allow Notifications!</span>
+  <div>
+    <button class="btn btn-success btn-sm upBtn" (click)="subscribeNotify()">
+      Allow
+    </button>
+    <button class="close ml-2" aria-label="Close" (click)="notify(false, false)">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { merge, Observable, of, Subject } from 'rxjs';
 
-import { SwUpdate } from '@angular/service-worker';
+import { SwUpdate, SwPush } from '@angular/service-worker';
 import { map } from 'rxjs/operators';
 import { environment } from '@env/environment';
+import { ApiService } from '@app/api.service';
 
 @Component({
   selector: 'app-notify',
@@ -13,12 +14,22 @@ import { environment } from '@env/environment';
 export class NotifyComponent implements OnInit {
   updateAvailable$: Observable<boolean>;
   closed$ = new Subject<void>();
-
-  constructor(private updates: SwUpdate) {
+  open;
+  constructor(private updates: SwUpdate, private swPush: SwPush, private apiService: ApiService) {
     this.updateAvailable$ = merge(
       of(false),
-      this.updates.available.pipe(map(() => true)),
-      this.closed$.pipe(map(() => false))
+      this.updates.available.pipe(
+        map(() => {
+          this.notify(true);
+          return true;
+        })
+      ),
+      this.closed$.pipe(
+        map(() => {
+          this.notify(false);
+          return false;
+        })
+      )
     );
   }
 
@@ -29,5 +40,28 @@ export class NotifyComponent implements OnInit {
       });
     }
   }
+
   ngOnInit() {}
+
+  subscribeNotify() {
+    this.swPush
+      .requestSubscription({
+        serverPublicKey: environment.vapid.publicKey
+      })
+      .then(sub => {
+        console.log('sub', sub);
+        this.apiService.saveNotifySubs(sub).subscribe(
+          res => console.log('stored in db', res),
+          err => console.error('not stored', err)
+        );
+      })
+      .catch(err => console.error('Could not subscribe to notifications', err));
+  }
+
+  notify(val: boolean, update = true) {
+    if (!update) {
+      this.open = val;
+    }
+    this.apiService.notifyMethod(val);
+  }
 }

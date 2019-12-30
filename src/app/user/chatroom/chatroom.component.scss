@@ -57,16 +57,20 @@
 .main {
   display: flex;
   flex-direction: column;
+  height: 91vh;
   .heading {
-    margin: 10px 0;
+    margin-bottom: 10px;
     padding: 5px 0;
     border-bottom: 1px solid #21212154;
   }
   .msg-container {
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: scroll;
     font-size: 14px;
-    height: 400px;
   }
+}
+
+.small-chat {
+  height: 84vh;
 }
