@@ -5,6 +5,7 @@ import { SwUpdate, SwPush } from '@angular/service-worker';
 import { map } from 'rxjs/operators';
 import { environment } from '@env/environment';
 import { ApiService } from '@app/api.service';
+import { ChatService } from '@app/chat.service';
 
 @Component({
   selector: 'app-notify',

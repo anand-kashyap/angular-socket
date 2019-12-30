@@ -69,6 +69,7 @@
   }
   .msg-container {
     display: flex;
+    min-height: 72%;
     flex-direction: column;
     overflow-y: scroll;
     font-size: 14px;
