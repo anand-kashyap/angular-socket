@@ -16,10 +16,19 @@ export class ApiService {
   private newChatsArr;
   recentUsers: Observable<any>;
   private notify = new Subject<boolean>();
+  private openNotify = new Subject<boolean>(); // get user object
   constructor(private httpClient: HttpClient, private router: Router, private chatService: ChatService) {}
 
   notifyMethod(val: boolean) {
     this.notify.next(val);
+  }
+
+  checkNotify() {
+    return this.openNotify;
+  }
+
+  setNotify(user) {
+    this.openNotify.next(user);
   }
 
   getNotify() {

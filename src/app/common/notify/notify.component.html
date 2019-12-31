@@ -10,7 +10,7 @@
   </div>
 </div>
 <!-- open when logged in -->
-<div class="alert alert-success notif" role="alert">
+<div class="alert alert-success notif" *ngIf="open" role="alert">
   <span>Allow Notifications!</span>
   <div>
     <button class="btn btn-success btn-sm upBtn" (click)="subscribeNotify()">

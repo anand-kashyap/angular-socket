@@ -53,18 +53,11 @@ export class LoginComponent implements OnInit {
   }
 
   getErrors(formcontrol: string) {
-    return this.chatService.getErrors(
-      formcontrol,
-      this.loginForm,
-      this.loginValidations
-    );
+    return this.chatService.getErrors(formcontrol, this.loginForm, this.loginValidations);
   }
 
   getInvalidCondition(formControl: string) {
-    return (
-      this.loginForm.get(formControl).invalid &&
-      this.loginForm.get(formControl).dirty
-    );
+    return this.loginForm.get(formControl).invalid && this.loginForm.get(formControl).dirty;
   }
 
   login() {
@@ -78,11 +71,13 @@ export class LoginComponent implements OnInit {
           this.loginForm.enable();
           const token = jwt_decode(response.token);
           if (!token.active) {
-            this.errorMessage =
-              'Your account is not active. Please contact admin.';
+            this.errorMessage = 'Your account is not active. Please contact admin.';
             return;
           }
           this.chatService.setUserInfo(token);
+          if (token.notificationSub === null) {
+            this.apiService.setNotify(true); // open notify popup
+          }
           this.chatService.setInLocal('token', response.token);
           console.log(token);
           this.router.navigateByUrl('/user');
@@ -109,5 +104,4 @@ export class LoginComponent implements OnInit {
       this.chatService.markFieldsAsDirty(this.loginForm);
     }
   }
-
 }

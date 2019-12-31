@@ -5,7 +5,6 @@ import { SwUpdate, SwPush } from '@angular/service-worker';
 import { map } from 'rxjs/operators';
 import { environment } from '@env/environment';
 import { ApiService } from '@app/api.service';
-import { ChatService } from '@app/chat.service';
 
 @Component({
   selector: 'app-notify',
@@ -17,6 +16,27 @@ export class NotifyComponent implements OnInit {
   closed$ = new Subject<void>();
   open;
   constructor(private updates: SwUpdate, private swPush: SwPush, private apiService: ApiService) {
+    this.checkForUpdate();
+    this.checkNotifSub();
+  }
+
+  checkNotifSub() {
+    this.apiService.checkNotify().subscribe(
+      open => {
+        if (open) {
+          console.log('showing notif on popup');
+          setTimeout(() => {
+            this.open = true;
+          }, 3000);
+        } else {
+          console.log('already notif on');
+        }
+      },
+      err => console.error(err)
+    );
+  }
+
+  checkForUpdate() {
     this.updateAvailable$ = merge(
       of(false),
       this.updates.available.pipe(
@@ -52,7 +72,10 @@ export class NotifyComponent implements OnInit {
       .then(sub => {
         console.log('sub', sub);
         this.apiService.saveNotifySubs(sub).subscribe(
-          res => console.log('stored in db', res),
+          res => {
+            console.log('stored in db', res);
+            this.open = false;
+          },
           err => console.error('not stored', err)
         );
       })
