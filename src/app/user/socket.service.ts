@@ -3,7 +3,7 @@ import { ChatService } from '../chat.service';
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 
-import { environment } from 'src/environments/environment';
+import { environment } from '@env/environment';
 import { Observable, Observer } from 'rxjs';
 
 export class Events {
@@ -53,7 +53,7 @@ export class SocketService {
     if (this.socket.disconnected) {
       this.socket.open();
     }
-    this.socket.emit(key, message);
+    this.socket.emit(key, message, environment.production);
   }
 
   onSEvent(event: string) {

@@ -1,12 +1,13 @@
 <form [formGroup]="messageForm" class="send-msg">
   <div class="form-group">
-    <textarea formControlName="message" autofocus class="form-control" cols="10" rows="1"></textarea>
+    <textarea formControlName="message" #inpt (keyup)="onType(inpt)" class="form-control" cols="10" rows="1"></textarea>
     <div class="btns">
-      <button class="btn send-btn" [disabled]="loading || checkValid()" type="button" (click)="sendMessage()">
-        <fa-icon icon="paper-plane"></fa-icon>
+      <button class="btn send-btn" *ngIf="showSend" [disabled]="loading || checkValid()" type="button"
+        (click)="sendMessage()">
+        <fa-icon icon="paper-plane" class="fa-lg"></fa-icon>
       </button>
-      <button class="btn loc-btn" [disabled]="loading" type="button" (click)="sendLocation()">
-        <fa-icon icon="map-marker-alt"></fa-icon>
+      <button class="btn loc-btn" *ngIf="!showSend" [disabled]="loading" type="button" (click)="sendLocation()">
+        <fa-icon icon="map-marker-alt" class="fa-lg"></fa-icon>
       </button>
     </div>
   </div>

@@ -10,12 +10,27 @@ export class SendComponent implements OnInit {
   messageForm = new FormGroup({
     message: new FormControl('', [Validators.required])
   });
+  showSend = false;
   @Input() loading = false;
   @Output() send = new EventEmitter();
   @Output() location = new EventEmitter();
   constructor() {}
 
   ngOnInit() {}
+
+  onType(inptEl) {
+    /* if (inptEl.style.height < inptEl.style.maxHeight) {
+      inptEl.style.overflow = 'hidden';
+      inptEl.style.height = 'auto';
+      inptEl.style.height = inptEl.scrollHeight + 'px';
+    } */
+    const msg = inptEl.value;
+    if (msg.trim() === '') {
+      this.showSend = false;
+      return;
+    }
+    this.showSend = true;
+  }
 
   sendMessage() {
     if (this.messageForm.valid && !this.loading) {
@@ -25,6 +40,7 @@ export class SendComponent implements OnInit {
       this.send.emit(message);
       this.messageForm.reset();
       this.loading = false;
+      this.showSend = false;
     }
   }
 
