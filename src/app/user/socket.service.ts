@@ -11,7 +11,9 @@ export class Events {
     NEW_MESSAGE: 'newMessage',
     DEL_MESSAGE: 'deleteMessage',
     NEW_CLIENT: 'newClient',
-    LEFT_CLIENT: 'clientLeft'
+    TYPING: 'typing',
+    LEFT_CLIENT: 'clientLeft',
+    LOCATION: 'sendLocation'
   };
 }
 @Injectable({

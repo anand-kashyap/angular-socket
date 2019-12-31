@@ -18,6 +18,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   loading = false;
   hover = [];
   notifyOpen = false;
+  typingArr = [];
 
   subscriptions: Subscription[];
   messages = [];
@@ -111,15 +112,19 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   deleteMessage(message) {
     console.log('message to be del', message);
-    this.socketService.sendMessage('deleteMessage', message);
+    this.socketService.sendMessage(Events.events.DEL_MESSAGE, message);
+  }
+
+  showTyping() {
+    this.socketService.sendMessage(Events.events.TYPING);
   }
 
   sendMessage(msg: string) {
-    this.socketService.sendMessage('newMessage', msg);
+    this.socketService.sendMessage(Events.events.NEW_MESSAGE, msg);
   }
 
   sendLocation({ lat, long }) {
-    this.socketService.sendMessage('sendLocation', { lat, long });
+    this.socketService.sendMessage(Events.events.LOCATION, { lat, long });
   }
 
   subscribeSocketEvents() {
@@ -164,6 +169,21 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         this.updateActive(onlineUsers);
         if (this.user.username !== username) {
           console.log('joined', username);
+        }
+      })
+    );
+    subs.push(
+      this.socketService.onSEvent(events.TYPING).subscribe(username => {
+        if (this.user.username !== username) {
+          console.log('is typing', username);
+          const found = this.typingArr.indexOf(username);
+          if (found === -1) {
+            this.typingArr.push(username);
+          }
+          setTimeout(() => {
+            const olF = this.typingArr.indexOf(username);
+            this.typingArr.splice(olF, 1);
+          }, 1000);
         }
       })
     );

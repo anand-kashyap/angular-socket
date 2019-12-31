@@ -14,6 +14,7 @@ export class SendComponent implements OnInit {
   @Input() loading = false;
   @Output() send = new EventEmitter();
   @Output() location = new EventEmitter();
+  @Output() typing = new EventEmitter();
   constructor() {}
 
   ngOnInit() {}
@@ -24,6 +25,7 @@ export class SendComponent implements OnInit {
       inptEl.style.height = 'auto';
       inptEl.style.height = inptEl.scrollHeight + 'px';
     } */
+    this.typing.emit();
     const msg = inptEl.value;
     if (msg.trim() === '') {
       this.showSend = false;

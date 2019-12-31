@@ -4,6 +4,13 @@
       {{title}}
     </h3>
     <span class="badge badge-pill" [ngClass]="status == 'active' ? 'badge-success': 'badge-danger'">{{status}}</span>
+    <ng-container *ngIf="typingArr.length > 0">
+      <span class="text-success pl-2" *ngIf="!room.directMessage;else dm">{{typingArr.join(', ')}} is typing...</span>
+      <ng-template #dm>
+        <span class="text-success pl-2">typing...</span>
+      </ng-template>
+    </ng-container>
+
   </div>
   <!-- <span class="new-day">Aug 13, 2019</span> -->
   <div #scrollbox [scrollTop]="scrollbox.scrollHeight" class="msg-container">
@@ -32,5 +39,6 @@
       </div>
     </ng-container>
   </div>
-  <app-send [loading]="loading" (send)="sendMessage($event)" (location)="sendLocation($event)"></app-send>
+  <app-send [loading]="loading" (typing)="showTyping()" (send)="sendMessage($event)" (location)="sendLocation($event)">
+  </app-send>
 </div>
