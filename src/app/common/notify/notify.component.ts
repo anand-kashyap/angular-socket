@@ -29,7 +29,8 @@ export class NotifyComponent implements OnInit {
             this.open = true;
           }, 3000);
         } else {
-          console.log('already notif on');
+          this.open = false;
+          console.log('already notif on or logged out');
         }
       },
       err => console.error(err)

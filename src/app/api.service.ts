@@ -41,6 +41,7 @@ export class ApiService {
   }
 
   logout() {
+    this.setNotify(false);
     this.chatService.clearUser();
     this.router.navigate(['/']);
   }
