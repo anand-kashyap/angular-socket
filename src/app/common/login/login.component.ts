@@ -17,18 +17,19 @@ export class LoginComponent implements OnInit {
   errTimeout = 4000;
   errorMessage: string;
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required])
+    email: new FormControl('', [Validators.required, Validators.minLength(4)]),
+    password: new FormControl('', [Validators.required]),
+    remember: new FormControl(false)
   });
   loginValidations = {
     email: [
       {
         type: 'required',
-        message: 'Email is required'
+        message: 'Username/Email is required'
       },
       {
-        type: 'email',
-        message: 'Invalid Email'
+        type: 'minlength',
+        message: 'Username/Email must be atleast 4 characters'
       }
     ],
     password: [
@@ -62,6 +63,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.loginForm.valid) {
+      // console.log(this.loginForm.value);
       // return;
       this.loader = true;
       this.loginForm.disable();

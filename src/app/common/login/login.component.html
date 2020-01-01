@@ -11,9 +11,9 @@
         <div class="card-body">
           <form [formGroup]="loginForm" (ngSubmit)="login()">
             <div class="form-group">
-              <label>Email</label>
+              <label>Username or Email</label>
               <input class="form-control" [ngClass]="{'is-invalid': getInvalidCondition('email')}"
-                formControlName="email" placeholder="Your Login Email" autocomplete="email">
+                formControlName="email" placeholder="Your Login Username or Email" autocomplete="email">
               <div class="invalid-feedback" *ngIf="getInvalidCondition('email')">
                 {{getErrors('email')}}
               </div>
@@ -26,6 +26,10 @@
               <div class="invalid-feedback" *ngIf="getInvalidCondition('password')">
                 {{getErrors('password')}}
               </div>
+            </div>
+            <div class="form-group form-check">
+              <input type="checkbox" formControlName="remember" class="form-check-input" id="remem" />
+              <label class="form-check-label" for="remem">Remember me</label>
             </div>
             <div>
               <div class="btn-group" role="login" aria-label="Login Register">

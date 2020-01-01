@@ -175,15 +175,21 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     subs.push(
       this.socketService.onSEvent(events.TYPING).subscribe(username => {
         if (this.user.username !== username) {
-          console.log('is typing', username);
           const found = this.typingArr.indexOf(username);
+          let timer;
           if (found === -1) {
             this.typingArr.push(username);
+            timer = setTimeout(() => {
+              const olF = this.typingArr.indexOf(username);
+              this.typingArr.splice(olF, 1);
+            }, 2000);
+          } else {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+              const olF = this.typingArr.indexOf(username);
+              this.typingArr.splice(olF, 1);
+            }, 2000);
           }
-          setTimeout(() => {
-            const olF = this.typingArr.indexOf(username);
-            this.typingArr.splice(olF, 1);
-          }, 1000);
         }
       })
     );
