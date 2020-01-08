@@ -4,7 +4,7 @@
   box-shadow: -1px 1px 3px 0px #212121;
 }
 .current-user {
-  background: #80808085;
+  background: #77c889;
   align-self: flex-end;
   box-shadow: 1px 1px 3px 0px #212121;
 }
@@ -36,8 +36,8 @@
   content: '';
   height: 1px;
   display: inline-block;
-  width: 35%;
-  background-color: rgba(0, 0, 0, 0.7);
+  width: 20%;
+  background-color: rgba(0, 0, 0, 0.3);
   margin: 0 1%;
   vertical-align: middle;
 }
@@ -66,17 +66,36 @@
     margin-bottom: 10px;
     padding: 5px 0;
     border-bottom: 1px solid #21212154;
+    h3{font-size: 1.5em}
   }
   .msg-container {
     display: flex;
     min-height: 72%;
     flex-direction: column;
-    overflow-y: scroll;
+    overflow-y: auto;
     font-size: 14px;
   }
 }
-
 .small-chat {
   height: 84vh;
   min-height: 84vh;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }

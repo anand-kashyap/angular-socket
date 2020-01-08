@@ -1,6 +1,6 @@
 <form [formGroup]="messageForm" class="send-msg">
   <div class="form-group">
-    <textarea formControlName="message" #inpt (keyup)="onType(inpt)" class="form-control" cols="10" rows="1"></textarea>
+    <textarea formControlName="message" placeholder="Message" #inpt (keyup)="onType(inpt)" class="form-control" cols="10" rows="1"></textarea>
     <div class="btns">
       <button class="btn send-btn" *ngIf="showSend" [disabled]="loading || checkValid()" type="button"
         (click)="sendMessage()">
