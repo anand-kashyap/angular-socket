@@ -1,6 +1,6 @@
 import { SocketService, Events } from '../socket.service';
 import { ChatService } from '@app/chat.service';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewRef, ViewChild, ElementRef } from '@angular/core';
 import { formatDate } from '@angular/common';
 
 import { ApiService } from '@app/api.service';
@@ -14,8 +14,11 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ChatroomComponent implements OnInit, OnDestroy {
   status = 'away';
+  @ViewChild('scrollbox', { static: true }) box: ElementRef<any>;
   fullDates = [];
   loading = false;
+  eom = false;
+  msgLoading = false;
   hover = [];
   notifyOpen = false;
   typingArr = [];
@@ -25,7 +28,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   user;
   room;
   title = '';
-
+  bottom = true;
+  moreToLoad = 50; // num to get
+  count: number;
   constructor(
     private chatService: ChatService,
     private apiService: ApiService,
@@ -55,17 +60,21 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         this.apiService.getRoomById(roomId, this.user.username).subscribe(res => {
           this.room = res.data;
           this.chatService.room = this.room;
+          this.count = this.room.messages.length;
+          console.log('num of messages: ', this.count);
           this.inits();
         });
       } else {
         return this.chatService.gotoJoin();
       }
     } else {
+      this.count = this.room.messages.length;
+      console.log('num of messages: ', this.count);
       this.inits();
     }
   }
 
-  inits() {
+  addDates() {
     for (let i = 0; i < this.room.messages.length; i++) {
       const msg = this.room.messages[i];
       if (msg.datechange) {
@@ -79,8 +88,11 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         this.fullDates.push(date);
       }
     }
+  }
+
+  inits() {
+    this.addDates();
     this.messages = this.room.messages;
-    console.log('messages', this.messages);
     if (this.room.directMessage) {
       const { members } = this.room;
       this.title = members[0];
@@ -101,6 +113,23 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       }
     }
     console.log('cleared socket');
+  }
+
+  loadOlderMsgs(pos) {
+    // console.log('loading more..', pos);
+    if (pos === 'top') {
+      this.bottom = false;
+      if (!this.eom && !this.msgLoading) {
+        const pagin = {
+          skip: this.count,
+          limit: this.moreToLoad
+        };
+        this.msgLoading = true;
+        this.socketService.sendMessage(Events.events.LOADMSGS, pagin);
+      }
+    } else {
+      this.bottom = true;
+    }
   }
 
   updateActive(onlineUsers: string[]) {
@@ -140,6 +169,8 @@ export class ChatroomComponent implements OnInit, OnDestroy {
           this.fullDates.push(date);
         }
         this.messages.push(message);
+        this.count++;
+        console.log('num of messages: ', this.count);
         if (message.username === this.user.username) {
           // update recent chat observable
           this.apiService.updateRecentChats({ ...this.room }, this.user.username);
@@ -156,6 +187,8 @@ export class ChatroomComponent implements OnInit, OnDestroy {
             if (msg._id === delMessage._id) {
               console.log('deleted message index', i);
               this.messages.splice(i, 1);
+              this.count--;
+              console.log('num of messages: ', this.count);
               if (!(this.cdRef as ViewRef).destroyed) {
                 this.cdRef.detectChanges();
               }
@@ -169,6 +202,47 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         this.updateActive(onlineUsers);
         if (this.user.username !== username) {
           console.log('joined', username);
+        }
+      })
+    );
+    subs.push(
+      this.socketService.onSEvent(events.LOADMSGS).subscribe(({ olderMsgs, count }) => {
+        const num = olderMsgs.length;
+        if (count <= 0) {
+          this.eom = true;
+        }
+        if (num > 0) {
+          let res = this.box.nativeElement.firstElementChild.nextElementSibling;
+          const ofset = res.offsetTop - 100;
+          if (res.classList.contains('new-day')) {
+            // get next if its date change
+            res = res.nextElementSibling;
+          }
+          console.log(res);
+          console.log('date is: ', this.fullDates[0]);
+          const oldDates = [];
+          for (let i = 0; i < num; i++) {
+            const msg = olderMsgs[i];
+            const date = formatDate(new Date(msg.createdAt), 'mediumDate', 'en');
+            if (oldDates.indexOf(date) === -1) {
+              // if changed date not present already
+              olderMsgs.splice(i, 0, { datechange: date });
+              oldDates.push(date);
+              // this.fullDates.unshift(date);
+            }
+          }
+          if (oldDates[oldDates.length - 1] === this.fullDates[0]) {
+            console.log(this.messages[0]);
+            this.messages.splice(0, 1);
+            this.fullDates.splice(0, 1);
+          }
+          this.fullDates = oldDates.concat(this.fullDates);
+          this.messages = olderMsgs.concat(this.messages);
+          this.box.nativeElement.scrollTop = ofset;
+          this.count += olderMsgs.length;
+          this.msgLoading = false;
+        } else {
+          this.msgLoading = false;
         }
       })
     );
