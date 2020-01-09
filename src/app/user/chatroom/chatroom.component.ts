@@ -22,6 +22,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   hover = [];
   notifyOpen = false;
   typingArr = [];
+  lastSeen: string;
 
   subscriptions: Subscription[];
   messages = [];
@@ -90,13 +91,27 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }
   }
 
+  getLastSeen() {
+    // will use more details in future
+    this.apiService.getUserByUname(this.title).subscribe(
+      res => {
+        const { lastSeen } = res.data;
+        this.lastSeen = formatDate(new Date(lastSeen), 'MMM d, y, h:mm a', 'en');
+      },
+      err => {
+        console.error('err occured: ', err);
+      }
+    );
+  }
+
   inits() {
-    this.addDates();
-    this.messages = this.room.messages;
     if (this.room.directMessage) {
       const { members } = this.room;
       this.title = members[0];
+      this.getLastSeen();
     }
+    this.addDates();
+    this.messages = this.room.messages;
     console.log(this.user, 'curRoom', this.room);
     this.socketService.connectNewClient(this.user.username, this.room._id).then((onlineUsers: string[]) => {
       console.log('from croom', onlineUsers);
@@ -149,6 +164,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(msg: string) {
+    this.bottom = true;
     this.socketService.sendMessage(Events.events.NEW_MESSAGE, msg);
   }
 
@@ -272,6 +288,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         this.updateActive(onlineUsers);
         if (this.user.username !== left) {
           console.log('left', left);
+          if (this.room.directMessage) {
+            this.lastSeen = formatDate(new Date(), 'MMM d, y, h:mm a', 'en');
+          }
         }
       })
     );

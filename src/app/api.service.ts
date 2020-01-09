@@ -143,6 +143,13 @@ export class ApiService {
     return this.httpClient.get<any>(getUserDetailsUrl, { headers, params });
   }
 
+  getUserByUname(username) {
+    const getByUnameUrl = this.apiUrl + '/user/getbyUsername';
+    const params = new HttpParams().set('uname', username);
+    const headers = this.addXToken();
+    return this.httpClient.get<any>(getByUnameUrl, { headers, params });
+  }
+
   updateProfile(userInfo) {
     const updateProfileUrl = this.apiUrl + '/user/update-profile';
     userInfo.email = this.chatService.getUserInfo().email;
