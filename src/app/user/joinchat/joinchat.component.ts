@@ -83,7 +83,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   joinRoom(userObj) {
     console.log('to', userObj.username);
     // create or open existing room
-    this.apiService.findOrCreateRoom([this.username, userObj.username]).subscribe(
+    this.apiService.findOrCreateRoom(this.username, [userObj.username]).subscribe(
       res => {
         console.log(res);
         this.openChat(res.data);

@@ -96,7 +96,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     this.apiService.getUserByUname(this.title).subscribe(
       res => {
         const { lastSeen } = res.data;
-        this.lastSeen = formatDate(new Date(lastSeen), 'MMM d, y, h:mm a', 'en');
+        if (lastSeen) {
+          this.lastSeen = formatDate(new Date(lastSeen), 'MMM d, y, h:mm a', 'en');
+        }
       },
       err => {
         console.error('err occured: ', err);

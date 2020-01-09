@@ -66,6 +66,10 @@ export class NotifyComponent implements OnInit {
   ngOnInit() {}
 
   subscribeNotify() {
+    if (!this.apiService.isLoggedIn()) {
+      this.notify(false, false);
+      return;
+    }
     this.swPush
       .requestSubscription({
         serverPublicKey: environment.vapid.publicKey

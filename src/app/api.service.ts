@@ -23,6 +23,10 @@ export class ApiService {
     this.notify.next(val);
   }
 
+  isLoggedIn() {
+    return this.chatService.isLoggedIn();
+  }
+
   checkNotify() {
     return this.openNotify;
   }
@@ -43,6 +47,7 @@ export class ApiService {
   logout() {
     this.setNotify(false);
     this.chatService.clearUser();
+    this.recentUsers = this.newChatsArr = null;
     this.router.navigate(['/']);
   }
 
@@ -157,10 +162,10 @@ export class ApiService {
     return this.httpClient.patch<any>(updateProfileUrl, userInfo, { headers });
   }
 
-  findOrCreateRoom(userNameArr: string[]) {
+  findOrCreateRoom(currentUser: string, userNameArr: string[]) {
     const updateProfileUrl = this.apiUrl + '/room';
     const headers = this.addXToken();
-    return this.httpClient.put<any>(updateProfileUrl, { userNameArr }, { headers });
+    return this.httpClient.put<any>(updateProfileUrl, { currentUser, userNameArr }, { headers });
   }
 
   getRoomById(roomId: string, currentUser = null) {
