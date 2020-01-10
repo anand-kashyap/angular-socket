@@ -48,6 +48,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isMobile();
     this.user = this.chatService.getUserInfo();
     this.room = this.chatService.room;
     this.subscriptions = [

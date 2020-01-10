@@ -25,7 +25,8 @@
       (deleteMsg)="deleteMessage($event)">
     </app-messages-container>
 
-    <app-mobile-messages-container *ngIf="mobile"></app-mobile-messages-container>
+    <app-mobile-messages-container *ngIf="mobile" [messages]="messages" [user]="user" (older)="loadOlderMsgs($event)"
+      (deleteMsg)="deleteMessage($event)"></app-mobile-messages-container>
   </div>
   <!-- end message container -->
 

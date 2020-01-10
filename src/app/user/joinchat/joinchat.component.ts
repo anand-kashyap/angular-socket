@@ -49,7 +49,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
         res => {
           console.log('recent usersList', res);
           this.recentContacts = [...res];
-          console.log(this.recentContacts);
+          // console.log(this.recentContacts);
         },
         err => {
           console.error('err', err);

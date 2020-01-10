@@ -5,10 +5,6 @@
   <div *ngIf="message.username" (mouseover)="hover[i] = true" (mouseout)="hover[i] = false" dropdown [ngClass]="
         message.username === user.username ? 'current-user' : 'other-user'
       ">
-    <!-- <div *ngIf="message.username" (press)="longPress($event)" (mouseover)="hover[i] = true"
-      (mouseout)="hover[i] = false" dropdown [ngClass]="
-        message.username === user.username ? 'current-user' : 'other-user'
-      "> -->
     <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username" [class.d-none]="!hover[i]" class="sticky-more"
       dropdownToggle aria-controls="dropdown-basic" size="xs">
     </fa-icon>

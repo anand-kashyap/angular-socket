@@ -19,6 +19,10 @@ export class MobileMessagesContainerComponent implements OnInit {
     this.deleteMsg.emit(message);
   }
 
+  longPress(msgIndex: number) {
+    console.log('selected msg is: ', this.messages[msgIndex]);
+  }
+
   loadOlderMsgs(eve) {
     console.log('scrolled', eve);
     // this.older.emit(eve);
