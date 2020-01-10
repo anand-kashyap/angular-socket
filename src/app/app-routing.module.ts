@@ -10,6 +10,10 @@ const routes: Routes = [
     data: { checkloggedIn: true }
   },
   {
+    path: 'test',
+    loadChildren: () => import('./test/test.module').then(m => m.TestModule)
+  },
+  {
     path: 'register',
     loadChildren: () => import('./common/register/register.module').then(m => m.RegisterModule),
     canActivate: [AuthGuard],

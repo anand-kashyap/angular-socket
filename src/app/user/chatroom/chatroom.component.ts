@@ -18,8 +18,8 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   fullDates = [];
   loading = false;
   eom = false;
+  mobile = false;
   msgLoading = false;
-  hover = [];
   notifyOpen = false;
   typingArr = [];
   lastSeen: string;
@@ -40,11 +40,11 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {}
 
-  checkMobile(hovered) {
+  isMobile(): boolean {
     if (window.screen.width <= 768) {
-      return null;
+      return (this.mobile = true);
     }
-    return !hovered;
+    return (this.mobile = false);
   }
 
   ngOnInit() {
@@ -106,6 +106,10 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     );
   }
 
+  longPress(ev) {
+    console.log('long pressed: ', ev);
+  }
+
   inits() {
     if (this.room.directMessage) {
       const { members } = this.room;
@@ -114,6 +118,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }
     this.addDates();
     this.messages = this.room.messages;
+    this.cdRef.detectChanges();
     console.log(this.user, 'curRoom', this.room);
     this.socketService.connectNewClient(this.user.username, this.room._id).then((onlineUsers: string[]) => {
       console.log('from croom', onlineUsers);
@@ -161,17 +166,8 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     this.socketService.sendMessage(Events.events.DEL_MESSAGE, message);
   }
 
-  showTyping() {
-    this.socketService.sendMessage(Events.events.TYPING);
-  }
-
-  sendMessage(msg: string) {
+  sendMessage() {
     this.bottom = true;
-    this.socketService.sendMessage(Events.events.NEW_MESSAGE, msg);
-  }
-
-  sendLocation({ lat, long }) {
-    this.socketService.sendMessage(Events.events.LOCATION, { lat, long });
   }
 
   subscribeSocketEvents() {

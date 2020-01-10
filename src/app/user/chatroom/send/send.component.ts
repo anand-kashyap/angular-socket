@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { SocketService, Events } from '@app/user/socket.service';
 
 @Component({
   selector: 'app-send',
@@ -13,19 +14,12 @@ export class SendComponent implements OnInit {
   showSend = false;
   @Input() loading = false;
   @Output() send = new EventEmitter();
-  @Output() location = new EventEmitter();
-  @Output() typing = new EventEmitter();
-  constructor() {}
+  constructor(private socketService: SocketService) {}
 
   ngOnInit() {}
 
   onType(inptEl) {
-    /* if (inptEl.style.height < inptEl.style.maxHeight) {
-      inptEl.style.overflow = 'hidden';
-      inptEl.style.height = 'auto';
-      inptEl.style.height = inptEl.scrollHeight + 'px';
-    } */
-    this.typing.emit();
+    this.socketService.sendMessage(Events.events.TYPING);
     const msg = inptEl.value;
     if (msg.trim() === '') {
       this.showSend = false;
@@ -39,7 +33,8 @@ export class SendComponent implements OnInit {
       this.loading = true;
       const message = this.messageForm.get('message').value;
       console.log(message);
-      this.send.emit(message);
+      this.socketService.sendMessage(Events.events.NEW_MESSAGE, message);
+      this.send.emit();
       this.messageForm.reset();
       this.loading = false;
       this.showSend = false;
@@ -62,7 +57,7 @@ export class SendComponent implements OnInit {
       const lat = position.coords.latitude;
       const long = position.coords.longitude;
       console.log(position);
-      this.location.emit({ lat, long });
+      this.socketService.sendMessage(Events.events.LOCATION, { lat, long });
       this.loading = false;
     });
   }
