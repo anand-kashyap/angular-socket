@@ -37,6 +37,7 @@ export class MobileMessagesContainerComponent implements OnInit {
 
   longPress(msgIndex: number, msg) {
     console.log('selected msg is: ', this.messages[msgIndex]);
+    navigator.vibrate(18);
     this.opts = [...this.allOpts];
     if (msg.username !== this.user.username) {
       this.opts.splice(1, 1);

@@ -12,6 +12,7 @@ import {
   faClone,
   faTrashAlt
 } from '@fortawesome/free-solid-svg-icons';
+import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 // import { fa } from '@fortawesome/free-regular-svg-icons';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -22,6 +23,13 @@ import { HeaderComponent } from './common/header/header.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NotifyComponent } from './common/notify/notify.component';
+
+export class MyHammerConfig extends HammerGestureConfig {
+  overrides = {
+    pinch: { enable: false },
+    rotate: { enable: false }
+  };
+}
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, NotifyComponent],
@@ -36,7 +44,12 @@ import { NotifyComponent } from './common/notify/notify.component';
       registrationStrategy: 'registerWithDelay:8000'
     })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: MyHammerConfig
+    }
+  ],
   entryComponents: [],
   bootstrap: [AppComponent]
 })

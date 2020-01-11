@@ -5,12 +5,6 @@
   <div *ngIf="message.username" (press)="longPress(i, message)" [ngClass]="
         message.username === user.username ? 'current-user' : 'other-user'
       ">
-    <!-- <ul *dropdownMenu class="dropdown-menu dropdown-menu-right sticky-menu" role="menu" aria-labelledby="button-basic">
-      <li role="menuitem" (click)="deleteMessage(message)" class="delete">Delete</li>
-    </ul> -->
-    <!-- <strong class="d-block" *ngIf="message.username !== user.username">{{
-        message.username | uppercase
-      }}</strong> -->
     <!-- need for group chats only -->
     <span [innerHTML]="message.msg"></span>
     <span class="message-date">{{

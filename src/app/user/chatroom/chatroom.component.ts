@@ -234,7 +234,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
             // get next if its date change
             res = res.nextElementSibling;
           }
-          console.log(res);
+          // console.log(res);
           console.log('date is: ', this.fullDates[0]);
           const oldDates = [];
           for (let i = 0; i < num; i++) {
