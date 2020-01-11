@@ -8,7 +8,9 @@ import {
   faUserCircle,
   faPaperPlane,
   faMapMarkerAlt,
-  faEye
+  faEye,
+  faClone,
+  faTrashAlt
 } from '@fortawesome/free-solid-svg-icons';
 // import { fa } from '@fortawesome/free-regular-svg-icons';
 
@@ -35,11 +37,22 @@ import { NotifyComponent } from './common/notify/notify.component';
     })
   ],
   providers: [],
+  entryComponents: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(library: FaIconLibrary) {
     // Add an icon to the library for convenient access in other components
-    library.addIcons(faCoffee, faSearch, faEllipsisV, faUserCircle, faPaperPlane, faMapMarkerAlt, faEye);
+    library.addIcons(
+      faCoffee,
+      faSearch,
+      faEllipsisV,
+      faUserCircle,
+      faPaperPlane,
+      faMapMarkerAlt,
+      faEye,
+      faClone,
+      faTrashAlt
+    );
   }
 }

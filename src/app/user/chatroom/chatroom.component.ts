@@ -150,7 +150,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         this.msgLoading = true;
         this.socketService.sendMessage(Events.events.LOADMSGS, pagin);
       }
-    } else {
+    } else if (pos === 'bottom') {
       this.bottom = true;
     }
   }
@@ -165,6 +165,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   deleteMessage(message) {
     console.log('message to be del', message);
     this.socketService.sendMessage(Events.events.DEL_MESSAGE, message);
+    // this.bottom = false;
   }
 
   sendMessage() {

@@ -10,6 +10,7 @@ import { SendComponent } from './send/send.component';
 import { ScrollTrackerDirective } from '@directives/scrollTracker.directive';
 import { MobileMessagesContainerComponent } from './mobile-messages-container/mobile-messages-container.component';
 import { MessagesContainerComponent } from './messages-container/messages-container.component';
+import { SlideupModule } from '@util/slideup/slideup.module';
 
 const routes: Routes = [{ path: '', component: ChatroomComponent }];
 
@@ -22,6 +23,13 @@ const routes: Routes = [{ path: '', component: ChatroomComponent }];
     MobileMessagesContainerComponent,
     MessagesContainerComponent
   ],
-  imports: [CommonModule, RouterModule.forChild(routes), BsDropdownModule.forRoot(), PreloadModule, RformModule]
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    BsDropdownModule.forRoot(),
+    SlideupModule,
+    PreloadModule,
+    RformModule
+  ]
 })
 export class ChatroomModule {}
