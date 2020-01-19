@@ -1,4 +1,4 @@
-<nav class="navbar navbar-light light-bg">
+<nav class="navbar navbar-light bg-light">
   <a class="navbar-brand" [routerLink]="['/']">Angular Socket</a>
   <ng-container *ngIf="isLoggedIn()">
     <div class="right-unav">
@@ -6,7 +6,7 @@
       <fa-icon icon="user-circle" class="fa-lg pr-2 point" routerLink="/user/update-profile"></fa-icon>
       <!-- </div> -->
       <div>
-        <button class="btn btn-danger" (click)="logout()">Logout</button>
+        <button class="btn btn-primary" (click)="logout()">Logout</button>
       </div>
     </div>
   </ng-container>

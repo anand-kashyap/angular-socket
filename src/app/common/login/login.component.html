@@ -5,7 +5,7 @@
   <div class="row mt-4">
     <div class="col-md-6 m-auto">
       <div class="card">
-        <div class="card-header bg-primary text-light text-center">
+        <div class="card-header bg-primary text-light">
           Login
         </div>
         <div class="card-body">
@@ -32,13 +32,13 @@
               <label class="form-check-label" for="remem">Remember me</label>
             </div>
             <div>
-              <div class="wrap-btn text-center" role="login" aria-label="Login Register">
-                <button type="submit" [disabled]="loader" class="btn btn-danger d-inline-block mb-3"> <span
+              <div class="btn-group" role="login" aria-label="Login Register">
+                <button type="submit" [disabled]="loader" class="btn btn-primary d-inline-block"> <span
                     class="spinner-border spinner-border-sm" *ngIf="loader" role="status">
                     <span class="sr-only">Loading...</span>
                   </span> Login</button>
                 <button type="button" [disabled]="loader" [routerLink]="['/register']"
-                  class="btn btn-signup d-inline-block">Sign Up</button>
+                  class="btn btn-outline-primary d-inline-block ml-1">Sign Up</button>
               </div>
               <a class="float-right" [routerLink]="['/forgot-password']">Forgot Password?</a>
             </div>
