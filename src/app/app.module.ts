@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable } from '@angular/core';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
   faCoffee,
@@ -24,6 +24,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NotifyComponent } from './common/notify/notify.component';
 
+@Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = {
     pinch: { enable: false },
