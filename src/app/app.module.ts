@@ -12,7 +12,7 @@ import {
   faClone,
   faTrashAlt
 } from '@fortawesome/free-solid-svg-icons';
-import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
+import { HAMMER_GESTURE_CONFIG, HammerGestureConfig, HammerModule } from '@angular/platform-browser';
 // import { fa } from '@fortawesome/free-regular-svg-icons';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -38,6 +38,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     BrowserModule,
     FontAwesomeModule,
     AppRoutingModule,
+    HammerModule,
     BrowserAnimationsModule,
     HttpClientModule,
     ServiceWorkerModule.register('./ngsw-worker.js', {
