@@ -11,10 +11,10 @@
     <div class="form-group">
       <label for="user">Search for Users</label>
       <div class="position-relative">
-        <input [(ngModel)]="userinput" typeaheadWaitMs="600" [typeaheadAsync]="true"
-          (typeaheadOnSelect)="joinRoom($event.item)" [typeahead]="usersList" [typeaheadItemTemplate]="usersTemp"
-          [typeaheadMinLength]="3" [adaptivePosition]="true" (typeaheadLoading)="loader = $event"
-          typeaheadOptionField="fullName" class="form-control">
+        <input [(ngModel)]="userinput" typeaheadWaitMs="600" [typeaheadIsFirstItemActive]="false"
+          [typeaheadAsync]="true" (typeaheadOnSelect)="joinRoom($event.item)" [typeahead]="usersList"
+          [typeaheadItemTemplate]="usersTemp" [typeaheadMinLength]="3" [adaptivePosition]="true"
+          (typeaheadLoading)="loader = $event" typeaheadOptionField="fullName" class="form-control">
         <fa-icon icon="search" *ngIf="!loader" class="stick-search"></fa-icon>
         <span class="spinner-border spinner-border-sm stick-loader" *ngIf="loader" role="status">
           <span class="sr-only">Loading...</span>
