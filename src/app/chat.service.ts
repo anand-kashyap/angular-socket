@@ -125,9 +125,6 @@ export class ChatService {
         }
       }
       return msg;
-    } else if (error.status === 401) {
-      this.clearUser();
-      this.router.navigateByUrl('/');
     } else if (error.error.message === undefined) {
       return error.status + ' - ' + error.statusText;
     } else {

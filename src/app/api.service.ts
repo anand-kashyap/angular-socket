@@ -48,6 +48,10 @@ export class ApiService {
     return this.httpClient.post<any>(loginUrl, loginInput);
   }
 
+  getToken() {
+    return this.chatService.getFromLocal('token');
+  }
+
   logout() {
     this.setNotify(false);
     this.chatService.clearUser();
@@ -73,38 +77,29 @@ export class ApiService {
     return this.httpClient.put<any>(resetUrl, resObj);
   }
 
-  addXToken() {
-    return new HttpHeaders({
-      'x-access-token': this.chatService.getFromLocal('token')
-    });
-  }
-
   sendOtp(): Observable<any> {
     const verifyUrl = this.apiUrl + '/user/send-otp';
-    const headers = this.addXToken();
+    // const headers = this.addXToken();
     const email = this.chatService.getUserInfo().email;
-    return this.httpClient.post<any>(verifyUrl, { email }, { headers });
+    return this.httpClient.post<any>(verifyUrl, { email });
   }
 
   confirmOtp(otpInput: any): Observable<any> {
     const confirmOtpUrl = this.apiUrl + '/user/confirm-otp';
-    const headers = this.addXToken();
-    return this.httpClient.post<any>(confirmOtpUrl, otpInput, { headers });
+    return this.httpClient.post<any>(confirmOtpUrl, otpInput);
   }
 
   checkIfUserExists(userString: string) {
     const checkUserUrl = this.apiUrl + '/user/check-username';
     const params = new HttpParams().set('userinput', userString).set('email', this.chatService.getUserInfo().email);
-    const headers = this.addXToken();
-    return this.httpClient.get<any>(checkUserUrl, { headers, params });
+    return this.httpClient.get<any>(checkUserUrl, { params });
   }
 
   getUsersList(userString: string) {
     const searchUserUrl = this.apiUrl + '/user/search-user';
     const params = new HttpParams().set('userinput', userString);
     const body = this.chatService.getUserInfo();
-    const headers = this.addXToken();
-    return this.httpClient.post<any>(searchUserUrl, { user: body }, { headers, params });
+    return this.httpClient.post<any>(searchUserUrl, { user: body }, { params });
   }
 
   updateRecentChats(newRoom, currentUserName: string) {
@@ -126,17 +121,14 @@ export class ApiService {
   getRecentChats(): Observable<any> {
     if (!this.newChatsArr) {
       const recentChatsUrl = `${this.apiUrl}/room/recentChats/${this.chatService.getUserInfo().username}`;
-      const headers = this.addXToken();
-      this.recentUsers = this.httpClient
-        .get<any>(recentChatsUrl, { headers })
-        .pipe(
-          map(resp => {
-            this.newChatsArr = resp.data;
-            return resp.data;
-          }),
-          publishReplay(1),
-          refCount()
-        );
+      this.recentUsers = this.httpClient.get<any>(recentChatsUrl).pipe(
+        map(resp => {
+          this.newChatsArr = resp.data;
+          return resp.data;
+        }),
+        publishReplay(1),
+        refCount()
+      );
       return this.recentUsers;
     } else {
       return new Observable(observer => {
@@ -148,28 +140,24 @@ export class ApiService {
   getUserDetails() {
     const getUserDetailsUrl = this.apiUrl + '/user/user-details';
     const params = new HttpParams().set('email', this.chatService.getUserInfo().email);
-    const headers = this.addXToken();
-    return this.httpClient.get<any>(getUserDetailsUrl, { headers, params });
+    return this.httpClient.get<any>(getUserDetailsUrl, { params });
   }
 
   getUserByUname(username) {
     const getByUnameUrl = this.apiUrl + '/user/getbyUsername';
     const params = new HttpParams().set('uname', username);
-    const headers = this.addXToken();
-    return this.httpClient.get<any>(getByUnameUrl, { headers, params });
+    return this.httpClient.get<any>(getByUnameUrl, { params });
   }
 
   updateProfile(userInfo) {
     const updateProfileUrl = this.apiUrl + '/user/update-profile';
     userInfo.email = this.chatService.getUserInfo().email;
-    const headers = this.addXToken();
-    return this.httpClient.patch<any>(updateProfileUrl, userInfo, { headers });
+    return this.httpClient.patch<any>(updateProfileUrl, userInfo);
   }
 
   findOrCreateRoom(currentUser: string, userNameArr: string[]) {
     const updateProfileUrl = this.apiUrl + '/room';
-    const headers = this.addXToken();
-    return this.httpClient.put<any>(updateProfileUrl, { currentUser, userNameArr }, { headers });
+    return this.httpClient.put<any>(updateProfileUrl, { currentUser, userNameArr });
   }
 
   getRoomById(roomId: string, currentUser = null) {
@@ -178,13 +166,11 @@ export class ApiService {
     if (currentUser) {
       params = { currentUser };
     }
-    const headers = this.addXToken();
-    return this.httpClient.get<any>(getRoomUrl, { headers, params });
+    return this.httpClient.get<any>(getRoomUrl, { params });
   }
 
   saveNotifySubs(notifySub) {
     const getRoomUrl = this.apiUrl + '/user/store-notification/' + this.chatService.getUserInfo().id;
-    const headers = this.addXToken();
-    return this.httpClient.post<any>(getRoomUrl, { data: notifySub }, { headers });
+    return this.httpClient.post<any>(getRoomUrl, { data: notifySub });
   }
 }
