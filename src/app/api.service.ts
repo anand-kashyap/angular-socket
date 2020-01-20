@@ -23,6 +23,10 @@ export class ApiService {
     this.notify.next(val);
   }
 
+  goToUrl(relativeUrl: string) {
+    return this.router.navigateByUrl(relativeUrl);
+  }
+
   isLoggedIn() {
     return this.chatService.isLoggedIn();
   }

@@ -41,7 +41,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     HammerModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    ServiceWorkerModule.register('./ngsw-worker.js', {
+    ServiceWorkerModule.register('./custom-service-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerWithDelay:8000'
     })
