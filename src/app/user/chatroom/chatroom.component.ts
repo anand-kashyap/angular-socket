@@ -192,6 +192,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
           this.apiService.updateRecentChats({ ...this.room }, this.user.username);
         }
         this.loading = false;
+        this.cdRef.detectChanges();
       })
     );
     subs.push(
