@@ -12,7 +12,6 @@ import { ApiService } from 'src/app/api.service';
 export class JoinchatComponent implements OnInit, OnDestroy {
   error = false;
   loader = false;
-  loading = false;
   userinput: string;
   usersList: Observable<any>;
   recentContacts: Array<any>;
@@ -80,10 +79,6 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     });
   }
 
-  refreshing() {
-    this.loading = true;
-    this.getRecentChats().add(() => (this.loading = false));
-  }
   ngOnDestroy() {
     this.errSubscription.unsubscribe();
   }
