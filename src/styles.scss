@@ -6,6 +6,10 @@
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
 
+body {
+  /* Disables pull-to-refresh but allows overscroll glow effects. */
+  overscroll-behavior-y: contain;
+}
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */

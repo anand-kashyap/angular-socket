@@ -12,6 +12,7 @@ import { ApiService } from 'src/app/api.service';
 export class JoinchatComponent implements OnInit, OnDestroy {
   error = false;
   loader = false;
+  loading = false;
   userinput: string;
   usersList: Observable<any>;
   recentContacts: Array<any>;
@@ -45,17 +46,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.username = this.chatService.getUserInfo().username;
     if (this.username) {
-      this.apiService.getRecentChats().subscribe(
-        res => {
-          console.log('recent usersList', res);
-          this.recentContacts = [...res];
-          // console.log(this.recentContacts);
-        },
-        err => {
-          console.error('err', err);
-          this.chatService.showResponseError(err);
-        }
-      );
+      this.getRecentChats();
     }
     this.errMsg = this.chatService.getRouteErrorMsg();
     if (this.errMsg) {
@@ -64,6 +55,19 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     this.subscribeError();
   }
 
+  getRecentChats() {
+    return this.apiService.getRecentChats().subscribe(
+      res => {
+        console.log('recent usersList', res);
+        this.recentContacts = [...res];
+        // console.log(this.recentContacts);
+      },
+      err => {
+        console.error('err', err);
+        this.chatService.showResponseError(err);
+      }
+    );
+  }
   subscribeError() {
     this.errSubscription = this.chatService.getErrorMsg().subscribe(msg => {
       console.log('msg', msg);
@@ -76,6 +80,10 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     });
   }
 
+  refreshing() {
+    this.loading = true;
+    this.getRecentChats().add(() => (this.loading = false));
+  }
   ngOnDestroy() {
     this.errSubscription.unsubscribe();
   }
