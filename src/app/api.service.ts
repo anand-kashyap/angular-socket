@@ -105,9 +105,11 @@ export class ApiService {
   updateRecentChats(newRoom, currentUserName: string) {
     // todo: modify for room instead of dm
     if (this.recentUsers) {
-      for (const [i, room] of this.newChatsArr.entries()) {
+      for (let i = 0; i < this.newChatsArr.length; i++) {
+        const room = this.newChatsArr[i];
         if (room._id === newRoom._id) {
           this.newChatsArr.splice(i, 1);
+          break;
         }
       }
       const index = newRoom.members.indexOf(currentUserName);
