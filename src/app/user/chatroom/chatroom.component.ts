@@ -80,7 +80,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.room.messages.length; i++) {
       const msg = this.room.messages[i];
       if (msg.datechange) {
-        this.fullDates.push(msg.datechange);
+        this.fullDates.push(formatDate(new Date(msg.datechange), 'mediumDate', 'en'));
         continue;
       }
       const date = formatDate(new Date(msg.createdAt), 'mediumDate', 'en');
