@@ -6,12 +6,14 @@ import { RformModule } from '@app/shared/rform.module';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { Routes, RouterModule } from '@angular/router';
+import { PullToRefreshModule } from '@util/pullToRefresh/pullToRef.module';
 
 const routes: Routes = [{ path: '', component: JoinchatComponent }];
 @NgModule({
   declarations: [JoinchatComponent],
   imports: [
     CommonModule,
+    PullToRefreshModule,
     PreloadModule,
     RformModule,
     RouterModule.forChild(routes),

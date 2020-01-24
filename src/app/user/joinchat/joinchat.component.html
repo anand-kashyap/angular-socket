@@ -1,3 +1,4 @@
+<app-pull-refresh [inProgress]="loading" (pulled)="getRecentChats()"></app-pull-refresh>
 <alert type="danger" [isOpen]="error" [dismissOnTimeout]="errTimeout">
   <span [innerHtml]="errMsg"></span>
 </alert>
