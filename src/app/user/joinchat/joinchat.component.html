@@ -35,7 +35,7 @@
       <div class="col-md-12">
         <h5>Recent Chats</h5>
       </div>
-      <div class="col-md-6 recent-container noselect" *ngFor="let contact of recentContacts">
+      <div class="col-md-12 recent-container noselect" *ngFor="let contact of recentContacts">
         <div class="recent-contact" (click)="openChat(contact)">
           <div class="top d-flex justify-content-between">
             <strong>
@@ -47,14 +47,14 @@
               </ng-template>
             </strong>
             <p class="date" *ngIf="contact.messages.length > 0">
-              {{contact.messages[contact.messages.length-1].createdAt | date: 'mediumDate'}}</p>
+              {{contact.messages[contact.messages.length-1].createdAt | recentDate: true}}</p>
           </div>
           <div *ngIf="contact.messages.length > 0">
             <ng-container *ngIf="byMe(contact.messages); else otherUs">
-              <fa-icon icon="arrow-right" class="fa-sm"></fa-icon>
+              <fa-icon [style.color]="'#696868'" icon="arrow-right" class="fa-sm"></fa-icon>
             </ng-container>
             <ng-template #otherUs>
-              <fa-icon icon="arrow-left" class="fa-sm"></fa-icon>
+              <fa-icon [style.color]="'#1976d2'" icon="arrow-left" class="fa-sm"></fa-icon>
             </ng-template>
             {{ (contact.messages[contact.messages.length-1].msg.length>35)? (contact.messages[contact.messages.length-1].msg | slice:0:35)+'...':(contact.messages[contact.messages.length-1].msg) }}
           </div>
