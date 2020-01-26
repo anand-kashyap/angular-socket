@@ -2,7 +2,7 @@
   <span [innerHtml]="errMsg"></span>
 </alert>
 <div class="row">
-  <div class="col-md-6 mx-auto mt-5 joinbox">
+  <div class="col-md-6 mx-auto mt-2 joinbox">
     <h2>Join Chat</h2>
     <p>Hi <strong>{{username}}</strong>!</p>
     <ng-template #usersTemp let-model="item" let-index="index">
@@ -21,19 +21,43 @@
         </span>
       </div>
     </div>
-    <div class="row" *ngIf="recentContacts && recentContacts.length">
+
+
+    <div class="row" *ngIf="fetchRecent">
+      <div class="col-md-12 text-center">
+        <span class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span></span>
+      </div>
+    </div>
+
+
+    <div class="row" *ngIf="recentContacts.length > 0">
       <div class="col-md-12">
         <h5>Recent Chats</h5>
       </div>
       <div class="col-md-6 recent-container noselect" *ngFor="let contact of recentContacts">
-        <div class="recent-contact" (click)="openChat(contact)"><strong>
-            <ng-container *ngIf="contact.directMessage; else Room">
-              {{contact.members[0]}}
+        <div class="recent-contact" (click)="openChat(contact)">
+          <div class="top d-flex justify-content-between">
+            <strong>
+              <ng-container *ngIf="contact.directMessage; else Room">
+                {{contact.members[0]}}
+              </ng-container>
+              <ng-template #Room>
+                {{contact.roomName}}
+              </ng-template>
+            </strong>
+            <p class="date" *ngIf="contact.messages.length > 0">
+              {{contact.messages[contact.messages.length-1].createdAt | date: 'mediumDate'}}</p>
+          </div>
+          <div *ngIf="contact.messages.length > 0">
+            <ng-container *ngIf="byMe(contact.messages); else otherUs">
+              <fa-icon icon="arrow-right" class="fa-sm"></fa-icon>
             </ng-container>
-            <ng-template #Room>
-              {{contact.roomName}}
+            <ng-template #otherUs>
+              <fa-icon icon="arrow-left" class="fa-sm"></fa-icon>
             </ng-template>
-          </strong>
+            {{ (contact.messages[contact.messages.length-1].msg.length>35)? (contact.messages[contact.messages.length-1].msg | slice:0:35)+'...':(contact.messages[contact.messages.length-1].msg) }}
+          </div>
         </div>
       </div>
     </div>

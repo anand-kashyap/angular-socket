@@ -4,8 +4,8 @@ import { ChatroomComponent } from './chatroom.component';
 import { PreloadModule } from '@app/shared/preload.module';
 import { RformModule } from '@app/shared/rform.module';
 import { Routes, RouterModule } from '@angular/router';
-import { RecentDatePipe } from '../recent-date.pipe';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { RecentDateModule } from '@pipes/recent-date.pipe';
 import { SendComponent } from './send/send.component';
 import { ScrollTrackerDirective } from '@directives/scrollTracker.directive';
 import { MobileMessagesContainerComponent } from './mobile-messages-container/mobile-messages-container.component';
@@ -16,7 +16,6 @@ const routes: Routes = [{ path: '', component: ChatroomComponent }];
 
 @NgModule({
   declarations: [
-    RecentDatePipe,
     ScrollTrackerDirective,
     ChatroomComponent,
     SendComponent,
@@ -25,6 +24,7 @@ const routes: Routes = [{ path: '', component: ChatroomComponent }];
   ],
   imports: [
     CommonModule,
+    RecentDateModule,
     RouterModule.forChild(routes),
     BsDropdownModule.forRoot(),
     SlideupModule,

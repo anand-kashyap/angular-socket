@@ -4,6 +4,7 @@ import { JoinchatComponent } from './joinchat.component';
 import { PreloadModule } from '@app/shared/preload.module';
 import { RformModule } from '@app/shared/rform.module';
 import { AlertModule } from 'ngx-bootstrap/alert';
+import { RecentDateModule } from '@pipes/recent-date.pipe';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -13,6 +14,7 @@ const routes: Routes = [{ path: '', component: JoinchatComponent }];
   imports: [
     CommonModule,
     PreloadModule,
+    RecentDateModule,
     RformModule,
     RouterModule.forChild(routes),
     TypeaheadModule.forRoot(),

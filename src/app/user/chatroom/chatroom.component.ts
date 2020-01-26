@@ -197,18 +197,20 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     );
     subs.push(
       this.socketService.onSEvent(events.DEL_MESSAGE).subscribe(delMessage => {
-        for (const index in this.messages) {
-          if (this.messages.hasOwnProperty(index)) {
-            const i = parseInt(index, 10);
-            const msg = this.messages[index];
-            if (msg._id === delMessage._id) {
-              console.log('deleted message index', i);
-              this.messages.splice(i, 1);
+        for (let i = 0; i < this.messages.length; i++) {
+          const msg = this.messages[i];
+          if (msg._id === delMessage._id) {
+            console.log('deleted message index', i);
+            this.messages.splice(i, 1);
+            this.count--;
+            const last = this.messages[this.messages.length - 1];
+            if (last.datechange) {
+              this.messages.pop();
               this.count--;
-              console.log('num of messages: ', this.count);
-              if (!(this.cdRef as ViewRef).destroyed) {
-                this.cdRef.detectChanges();
-              }
+            }
+            console.log('num of messages: ', this.count);
+            if (!(this.cdRef as ViewRef).destroyed) {
+              this.cdRef.detectChanges();
             }
           }
         }

@@ -12,9 +12,10 @@ import { ApiService } from 'src/app/api.service';
 export class JoinchatComponent implements OnInit, OnDestroy {
   error = false;
   loader = false;
+  fetchRecent = true;
   userinput: string;
   usersList: Observable<any>;
-  recentContacts: Array<any>;
+  recentContacts = [];
   errMsg = '';
   errTimeout = 4000;
   username: string;
@@ -59,10 +60,12 @@ export class JoinchatComponent implements OnInit, OnDestroy {
       res => {
         console.log('recent usersList', res);
         this.recentContacts = [...res];
+        this.fetchRecent = false;
         // console.log(this.recentContacts);
       },
       err => {
         console.error('err', err);
+        this.fetchRecent = false;
         this.chatService.showResponseError(err);
       }
     );
@@ -77,6 +80,14 @@ export class JoinchatComponent implements OnInit, OnDestroy {
         this.error = false;
       }, this.errTimeout);
     });
+  }
+
+  byMe(msgArr: any[]) {
+    const last = msgArr[msgArr.length - 1];
+    if (last.username === this.username) {
+      return true;
+    }
+    return false;
   }
 
   ngOnDestroy() {

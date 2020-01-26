@@ -16,15 +16,21 @@
 .recent-contact {
   padding: 5px 10px;
   border-radius: 5px;
-  background: rgba(41, 191, 236, 0.15);
+  background: rgb(193, 241, 255);
   border: 1px solid #29bfec;
   &:hover {
-    background-color: rgba(41, 191, 236, 0.34);
+    background-color: rgba(193, 241, 255, 0.34);
     cursor: pointer;
   }
   &:focus,
   &:active {
     background-color: #29bfec;
+  }
+  .top {
+    margin-bottom: 5px;
+    .date {
+      margin: 0;
+    }
   }
 }
 

@@ -10,6 +10,8 @@ import {
   faMapMarkerAlt,
   faEye,
   faClone,
+  faArrowRight,
+  faArrowLeft,
   faTrashAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig, HammerModule } from '@angular/platform-browser';
@@ -68,6 +70,8 @@ export class AppModule {
       faPaperPlane,
       faMapMarkerAlt,
       faEye,
+      faArrowRight,
+      faArrowLeft,
       faClone,
       faTrashAlt
     );
