@@ -3,7 +3,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
-import { SocketService } from '../socket.service';
 
 @Component({
   selector: 'app-joinchat',
@@ -21,12 +20,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   username: string;
   errSubscription: Subscription;
 
-  constructor(
-    private router: Router,
-    private chatService: ChatService,
-    private socketService: SocketService,
-    private apiService: ApiService
-  ) {
+  constructor(private router: Router, private chatService: ChatService, private apiService: ApiService) {
     this.searchUser();
   }
 
@@ -52,7 +46,6 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     this.username = this.chatService.getUserInfo().username;
     if (this.username) {
       this.getRecentChats();
-      // this.socketService.connectSocket();
     }
     this.errMsg = this.chatService.getRouteErrorMsg();
     if (this.errMsg) {
