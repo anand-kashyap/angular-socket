@@ -2,3 +2,6 @@
   Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque quas, eius saepe animi itaque ad, sapiente
   blanditiis nobis nihil tempore a architecto atque possimus asperiores consequuntur, ipsam ullam iusto voluptatibus?
 </div>
+<button class="btn btn-success" (click)="open=!open">Click</button>
+
+<app-slideup *ngIf="open" [open]="open" (closed)="open = false" [@slideInOutAnimation]="open"></app-slideup>

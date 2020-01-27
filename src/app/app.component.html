@@ -1,5 +1,7 @@
 <div class="container-fluid">
   <app-notify></app-notify>
   <app-header></app-header>
-  <router-outlet></router-outlet>
+  <main [@routerTransition]="getState(o)">
+    <router-outlet #o="outlet"></router-outlet>
+  </main>
 </div>

@@ -14,7 +14,17 @@ interface Opt {
 export class SlideupComponent implements OnInit {
   @Input() open = false;
   @Output() closed = new EventEmitter();
-  @Input() opts: Opt[] = [];
+  @Input() opts: Opt[] = [
+    {
+      label: 'Copy',
+      icon: 'clone'
+    },
+    {
+      label: 'Delete',
+      icon: 'trash-alt',
+      color: '#f44336'
+    }
+  ];
   @HostListener('document:click', ['$event'])
   clickout(event) {
     const elId = event.target.getAttribute('id');

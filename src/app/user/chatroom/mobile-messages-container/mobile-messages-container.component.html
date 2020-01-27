@@ -12,4 +12,5 @@
       }}</span>
   </div>
 </ng-container>
-<app-slideup [opts]="opts" [open]="open" (closed)="closeSlideup($event)"></app-slideup>
+<app-slideup [@slideInOutAnimation]="open" [opts]="opts" [open]="open" (closed)="closeSlideup($event)">
+</app-slideup>

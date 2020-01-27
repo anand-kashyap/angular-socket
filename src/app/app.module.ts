@@ -39,10 +39,10 @@ export class MyHammerConfig extends HammerGestureConfig {
   declarations: [AppComponent, HeaderComponent, NotifyComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FontAwesomeModule,
     AppRoutingModule,
     HammerModule,
-    BrowserAnimationsModule,
     HttpClientModule,
     ServiceWorkerModule.register('./custom-service-worker.js', {
       enabled: environment.production,

@@ -1,9 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { slideInOutAnimation } from '@app/animations/slideInOut';
 
 @Component({
   selector: 'app-mobile-messages-container',
   templateUrl: './mobile-messages-container.component.html',
-  styleUrls: ['./mobile-messages-container.component.scss']
+  styleUrls: ['./mobile-messages-container.component.scss'],
+  animations: [slideInOutAnimation]
 })
 export class MobileMessagesContainerComponent implements OnInit {
   @Input() messages;
