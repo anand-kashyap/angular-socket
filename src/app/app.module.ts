@@ -31,7 +31,8 @@ import { NotifyComponent } from './common/notify/notify.component';
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = {
     pinch: { enable: false },
-    rotate: { enable: false }
+    rotate: { enable: false },
+    press: { time: 500, interval: 700 }
   };
 }
 
