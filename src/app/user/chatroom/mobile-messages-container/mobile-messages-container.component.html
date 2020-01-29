@@ -3,11 +3,12 @@
       message.datechange | date: 'mediumDate' | recentDate
     }}</span>
   <div *ngIf="message.username" (press)="longPress(i, message)" [ngClass]="
-        message.username === user.username ? 'current-user' : 'other-user'
-      ">
-    <img *ngIf="message.image" class="img-thumbnail" [src]="message.image" alt="">
-
-    <span [innerHTML]="message.msg"></span>
+  {'current-user': message.username === user.username,
+  'other-user': message.username !== user.username,
+  'resimg': message.image
+}">
+    <img *ngIf="message.image && message.image.startsWith('data:')" class="prev-image" src="{{message.image}}" alt="">
+    <span *ngIf="message.msg" [innerHTML]="message.msg"></span>
     <span class="message-date">{{
         message.createdAt | date: 'shortTime'
       }}</span>

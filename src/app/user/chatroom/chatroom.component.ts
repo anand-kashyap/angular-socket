@@ -122,11 +122,21 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.messages.length; i++) {
       const msg = this.messages[i];
       if (msg.image && !msg.image.startsWith('data:')) {
-        const dat = await this.apiService.getFile(msg.image).toPromise();
-        if (msg.image.endsWith('.gif')) {
-          this.messages[i].image = 'data:image/gif;base64,' + dat.img;
+        const dat = await this.apiService
+          .getFile(msg.image)
+          .toPromise()
+          .catch(ex => {
+            console.log('ex', ex);
+            return { image: false };
+          });
+        if (!dat.image) {
+          this.messages[i].msg = 'img not found';
         } else {
-          this.messages[i].image = 'data:image/png;base64,' + dat.img;
+          if (msg.image.endsWith('.gif')) {
+            this.messages[i].image = 'data:image/gif;base64,' + dat.img;
+          } else {
+            this.messages[i].image = 'data:image/png;base64,' + dat.img;
+          }
         }
       }
     }
@@ -179,11 +189,11 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         if (res.type === HttpEventType.Response) {
           console.log(res);
           this.loading = false;
-          // setTimeout(() => {
-          this.progress = 0;
-          this.cdRef.detectChanges();
-          this.socketService.sendMessage(Events.events.NEW_MESSAGE, { image: res.body.filename });
-          // }, 800);
+          setTimeout(() => {
+            this.progress = 0;
+            this.cdRef.detectChanges();
+            this.socketService.sendMessage(Events.events.NEW_MESSAGE, { image: res.body.filename });
+          }, 200);
         }
       },
       err => console.error(err)
