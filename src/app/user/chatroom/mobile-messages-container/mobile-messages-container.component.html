@@ -5,9 +5,9 @@
   <div *ngIf="message.username" (press)="longPress(i, message)" [ngClass]="
   {'current-user': message.username === user.username,
   'other-user': message.username !== user.username,
-  'resimg': message.image
+  'resimg-mob': message.image
 }">
-    <img *ngIf="message.image && message.image.startsWith('data:')" class="prev-image" src="{{message.image}}" alt="">
+    <img *ngIf="message.image && message.image.startsWith('data:')" class="prev-image" [src]="message.image" alt="">
     <span *ngIf="message.msg" [innerHTML]="message.msg"></span>
     <span class="message-date">{{
         message.createdAt | date: 'shortTime'

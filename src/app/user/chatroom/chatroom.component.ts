@@ -127,9 +127,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
           .toPromise()
           .catch(ex => {
             console.log('ex', ex);
-            return { image: false };
+            return { img: false };
           });
-        if (!dat.image) {
+        if (!dat.img) {
           this.messages[i].msg = 'img not found';
         } else {
           if (msg.image.endsWith('.gif')) {
