@@ -21,15 +21,15 @@
     (loadOld)="loadOlderMsgs($event)" class="msg-container">
     <span *ngIf="msgLoading">Loading more...</span>
 
-    <app-messages-container *ngIf="!mobile" [messages]="messages" [user]="user" (older)="loadOlderMsgs($event)"
-      (deleteMsg)="deleteMessage($event)">
+    <app-messages-container [progress]="progress" *ngIf="!mobile" [messages]="messages" [user]="user"
+      (older)="loadOlderMsgs($event)" (deleteMsg)="deleteMessage($event)">
     </app-messages-container>
 
-    <app-mobile-messages-container *ngIf="mobile" [messages]="messages" [user]="user" (older)="loadOlderMsgs($event)"
-      (deleteMsg)="deleteMessage($event)"></app-mobile-messages-container>
+    <app-mobile-messages-container [progress]="progress" *ngIf="mobile" [messages]="messages" [user]="user"
+      (older)="loadOlderMsgs($event)" (deleteMsg)="deleteMessage($event)"></app-mobile-messages-container>
   </div>
   <!-- end message container -->
 
-  <app-send [loading]="loading" (send)="sendMessage()">
+  <app-send [loading]="loading" (fileUp)="fileUpload($event)" (send)="sendMessage()">
   </app-send>
 </div>

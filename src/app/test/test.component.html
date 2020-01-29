@@ -1,7 +1,18 @@
-<div (press)="longClicked($event)" (tap)="tap($event)" class="long-click">
+<div class="mt-2">
+  <p>Image Upload</p>
+  <div class="form-group">
+    <input type="file" (change)="uploadFile($event)" class="form-control" name="image">
+    <button class="btn btn-success" (click)="send()">Click</button>
+  </div>
+</div>
+<!-- Progress Bar -->
+<div class="progress form-group" *ngIf="progress > 0">
+  <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progress">
+  </div>
+</div>
+<!-- <div (press)="longClicked($event)" (tap)="tap($event)" class="long-click">
   Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque quas, eius saepe animi itaque ad, sapiente
   blanditiis nobis nihil tempore a architecto atque possimus asperiores consequuntur, ipsam ullam iusto voluptatibus?
-</div>
-<button class="btn btn-success" (click)="open=!open">Click</button>
-
-<app-slideup *ngIf="open" [open]="open" (closed)="open = false" [@slideInOutAnimation]="open"></app-slideup>
+</div> -->
+<!-- <button class="btn btn-success" (click)="open=!open">Click</button> -->
+<!-- <app-slideup *ngIf="open" [open]="open" (closed)="open = false" [@slideInOutAnimation]="open"></app-slideup> -->

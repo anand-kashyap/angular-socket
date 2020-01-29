@@ -82,6 +82,17 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     });
   }
 
+  lastMsg(msgArr: any[]) {
+    const last = msgArr[msgArr.length - 1];
+    if (last.image) {
+      return 'Image';
+    }
+    if (last.msg.length > 35) {
+      return last.msg.slice(0, 35) + '...';
+    }
+    return last.msg;
+  }
+
   byMe(msgArr: any[]) {
     const last = msgArr[msgArr.length - 1];
     if (last.username === this.username) {

@@ -7,6 +7,10 @@
         (click)="sendMessage()">
         <fa-icon icon="paper-plane" class="fa-lg"></fa-icon>
       </button>
+      <input hidden type="file" #up (change)="sendImage($event, up)" />
+      <button class="btn img-btn" *ngIf="!showSend" [disabled]="loading" type="button" (click)="up.click()">
+        <fa-icon icon="file-image" class="fa-lg"></fa-icon>
+      </button>
       <!-- ! will work on location button later -->
       <!-- <button class="btn loc-btn" *ngIf="!showSend" [disabled]="loading" type="button" (click)="sendLocation()">
         <fa-icon icon="map-marker-alt" class="fa-lg"></fa-icon>

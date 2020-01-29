@@ -5,12 +5,17 @@
   <div *ngIf="message.username" (press)="longPress(i, message)" [ngClass]="
         message.username === user.username ? 'current-user' : 'other-user'
       ">
-    <!-- need for group chats only -->
+    <img *ngIf="message.image" class="img-thumbnail" [src]="message.image" alt="">
+
     <span [innerHTML]="message.msg"></span>
     <span class="message-date">{{
         message.createdAt | date: 'shortTime'
       }}</span>
   </div>
 </ng-container>
+<div class="progress form-group" *ngIf="progress > 0">
+  <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progress">
+  </div>
+</div>
 <app-slideup [@slideInOutAnimation]="open" [opts]="opts" [open]="open" (closed)="closeSlideup($event)">
 </app-slideup>

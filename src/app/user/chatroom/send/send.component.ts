@@ -14,6 +14,7 @@ export class SendComponent implements OnInit {
   showSend = false;
   @Input() loading = false;
   @Output() send = new EventEmitter();
+  @Output() fileUp = new EventEmitter();
   constructor(private socketService: SocketService) {}
 
   ngOnInit() {}
@@ -28,12 +29,25 @@ export class SendComponent implements OnInit {
     this.showSend = true;
   }
 
+  sendImage(ev, el) {
+    console.log(ev.target.files);
+    let file = ev.target.files;
+    if (file.length > 0) {
+      file = file[0];
+      console.log(file);
+      const img = new FormData();
+      img.append('file', file, file.name);
+      this.fileUp.emit(img);
+      el.value = '';
+    }
+  }
+
   sendMessage() {
     if (this.messageForm.valid && !this.loading) {
       this.loading = true;
       const message = this.messageForm.get('message').value;
       console.log(message);
-      this.socketService.sendMessage(Events.events.NEW_MESSAGE, message);
+      this.socketService.sendMessage(Events.events.NEW_MESSAGE, { msg: message });
       this.send.emit();
       this.messageForm.reset();
       this.loading = false;

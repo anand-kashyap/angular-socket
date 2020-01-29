@@ -6,6 +6,8 @@ import { formatDate } from '@angular/common';
 import { ApiService } from '@app/api.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-chatroom',
@@ -14,6 +16,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ChatroomComponent implements OnInit, OnDestroy {
   status = 'away';
+  filesRoot = environment.baseUrl + '/uploads';
+  progress = 0;
   @ViewChild('scrollbox', { static: true }) box: ElementRef<any>;
   fullDates = [];
   loading = false;
@@ -29,7 +33,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   user;
   room;
   title = '';
-  bottom = true;
+  bottom = false;
   moreToLoad = 50; // num to get
   count: number;
   constructor(
@@ -107,11 +111,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     );
   }
 
-  longPress(ev) {
-    console.log('long pressed: ', ev);
-  }
-
-  inits() {
+  async inits() {
     if (this.room.directMessage) {
       const { members } = this.room;
       this.title = members[0];
@@ -119,6 +119,18 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }
     this.addDates();
     this.messages = this.room.messages;
+    for (let i = 0; i < this.messages.length; i++) {
+      const msg = this.messages[i];
+      if (msg.image && !msg.image.startsWith('data:')) {
+        const dat = await this.apiService.getFile(msg.image).toPromise();
+        if (msg.image.endsWith('.gif')) {
+          this.messages[i].image = 'data:image/gif;base64,' + dat.img;
+        } else {
+          this.messages[i].image = 'data:image/png;base64,' + dat.img;
+        }
+      }
+    }
+    this.bottom = true;
     this.cdRef.detectChanges();
     console.log(this.user, 'curRoom', this.room);
     this.socketService.connectNewClient(this.user.username, this.room._id).then((onlineUsers: string[]) => {
@@ -155,6 +167,29 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }
   }
 
+  fileUpload(file: FormData) {
+    this.loading = true;
+    this.apiService.uploadFile(file).subscribe(
+      (res: HttpEvent<any>) => {
+        if (res.type === HttpEventType.UploadProgress) {
+          this.progress = Math.round((res.loaded / res.total) * 100);
+          this.cdRef.detectChanges();
+          console.log(`Uploaded! ${this.progress}%`);
+        }
+        if (res.type === HttpEventType.Response) {
+          console.log(res);
+          this.loading = false;
+          // setTimeout(() => {
+          this.progress = 0;
+          this.cdRef.detectChanges();
+          this.socketService.sendMessage(Events.events.NEW_MESSAGE, { image: res.body.filename });
+          // }, 800);
+        }
+      },
+      err => console.error(err)
+    );
+  }
+
   updateActive(onlineUsers: string[]) {
     if (this.room.directMessage) {
       const oId = onlineUsers.indexOf(this.title); // other username
@@ -164,7 +199,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   deleteMessage(message) {
     console.log('message to be del', message);
-    this.socketService.sendMessage(Events.events.DEL_MESSAGE, message);
+    this.socketService.sendMessage(Events.events.DEL_MESSAGE, { _id: message._id });
     // this.bottom = false;
   }
 
@@ -176,11 +211,26 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     const subs = [];
     const events = Events.events;
     subs.push(
-      this.socketService.onSEvent(events.NEW_MESSAGE).subscribe(message => {
+      this.socketService.onSEvent(events.NEW_MESSAGE).subscribe(async message => {
         console.log(message);
+        if (message.image) {
+          const dat = await this.apiService
+            .getFile(message.image)
+            .toPromise()
+            .catch(e => {
+              console.log(e);
+              message.msg = 'not found';
+            });
+          if (message.image.endsWith('.gif')) {
+            message.image = 'data:image/gif;base64,' + dat.img;
+          } else {
+            message.image = 'data:image/png;base64,' + dat.img;
+          }
+        }
         const date = formatDate(new Date(), 'mediumDate', 'en');
         const found = this.fullDates.indexOf(date);
         if (found === -1) {
+          console.log('adding date..');
           this.messages.push({ datechange: message.createdAt });
           this.fullDates.push(date);
         }

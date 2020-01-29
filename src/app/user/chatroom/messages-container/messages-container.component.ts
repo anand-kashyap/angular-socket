@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-messages-container',
@@ -7,20 +8,16 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class MessagesContainerComponent implements OnInit {
   @Input() messages;
+  @Input() progress = 0;
   @Input() user;
   @Output() older = new EventEmitter();
   @Output() deleteMsg = new EventEmitter();
   hover = [];
-  constructor() {}
+  constructor(private sanit: DomSanitizer) {}
 
   ngOnInit() {}
 
   deleteMessage(message) {
     this.deleteMsg.emit(message);
-  }
-
-  loadOlderMsgs(eve) {
-    console.log('scrolled', eve);
-    // this.older.emit(eve);
   }
 }

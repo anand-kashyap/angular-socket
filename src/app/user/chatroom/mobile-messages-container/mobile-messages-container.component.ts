@@ -9,6 +9,7 @@ import { slideInOutAnimation } from '@app/animations/slideInOut';
 })
 export class MobileMessagesContainerComponent implements OnInit {
   @Input() messages;
+  @Input() progress = 0;
   @Input() user;
   @Output() older = new EventEmitter();
   @Output() deleteMsg = new EventEmitter();
@@ -71,10 +72,5 @@ export class MobileMessagesContainerComponent implements OnInit {
     document.addEventListener('copy', listener, false);
     document.execCommand('copy');
     document.removeEventListener('copy', listener, false);
-  }
-
-  loadOlderMsgs(eve) {
-    console.log('scrolled', eve);
-    // this.older.emit(eve);
   }
 }

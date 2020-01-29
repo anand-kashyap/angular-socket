@@ -175,4 +175,14 @@ export class ApiService {
     const getRoomUrl = this.apiUrl + '/user/store-notification/' + this.chatService.getUserInfo().id;
     return this.httpClient.post<any>(getRoomUrl, { data: notifySub });
   }
+
+  uploadFile(file): Observable<any> {
+    const uploadUrl = this.apiUrl + '/files/upload';
+    return this.httpClient.post<any>(uploadUrl, file, { reportProgress: true, observe: 'events' });
+  }
+
+  getFile(name: string): Observable<any> {
+    const getUrl = this.apiUrl + '/files/' + name;
+    return this.httpClient.get<any>(getUrl);
+  }
 }

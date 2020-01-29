@@ -56,7 +56,7 @@
             <ng-template #otherUs>
               <fa-icon [style.color]="'#1976d2'" icon="arrow-left" class="fa-sm"></fa-icon>
             </ng-template>
-            {{ (contact.messages[contact.messages.length-1].msg.length>35)? (contact.messages[contact.messages.length-1].msg | slice:0:35)+'...':(contact.messages[contact.messages.length-1].msg) }}
+            {{ lastMsg(contact.messages) }}
           </div>
         </div>
       </div>
