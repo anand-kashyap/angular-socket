@@ -67,3 +67,21 @@
     cursor: pointer;
   }
 }
+
+.resimg-mob {
+  // min-height: 150px;
+  max-width: 50%;
+  padding: 0;
+}
+.prev-image {
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  max-width: 100%;
+  height: auto;
+}
+
+.zoomed-img {
+  max-width: 100%;
+  display: block;
+  margin: auto;
+}

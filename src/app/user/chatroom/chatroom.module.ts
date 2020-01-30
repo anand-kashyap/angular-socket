@@ -5,6 +5,7 @@ import { PreloadModule } from '@app/shared/preload.module';
 import { RformModule } from '@app/shared/rform.module';
 import { Routes, RouterModule } from '@angular/router';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { RecentDateModule } from '@pipes/recent-date.pipe';
 import { SendComponent } from './send/send.component';
 import { ScrollTrackerDirective } from '@directives/scrollTracker.directive';
@@ -26,6 +27,7 @@ const routes: Routes = [{ path: '', component: ChatroomComponent }];
     CommonModule,
     RecentDateModule,
     RouterModule.forChild(routes),
+    ModalModule.forRoot(),
     BsDropdownModule.forRoot(),
     SlideupModule,
     PreloadModule,

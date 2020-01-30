@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { slideInOutAnimation } from '@app/animations/slideInOut';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-mobile-messages-container',
@@ -9,6 +10,7 @@ import { slideInOutAnimation } from '@app/animations/slideInOut';
 })
 export class MobileMessagesContainerComponent implements OnInit {
   @Input() messages;
+  @Input() fileRoot;
   @Input() progress = 0;
   @Input() user;
   @Output() older = new EventEmitter();
@@ -32,9 +34,11 @@ export class MobileMessagesContainerComponent implements OnInit {
       }
     }
   ];
+  modalRef: BsModalRef;
   opts;
+  imgPath: string;
   hover = [];
-  constructor() {}
+  constructor(private modalService: BsModalService) {}
 
   ngOnInit() {}
 
@@ -72,5 +76,10 @@ export class MobileMessagesContainerComponent implements OnInit {
     document.addEventListener('copy', listener, false);
     document.execCommand('copy');
     document.removeEventListener('copy', listener, false);
+  }
+
+  openModal(template: TemplateRef<any>, imgPath: string) {
+    this.imgPath = imgPath;
+    this.modalRef = this.modalService.show(template);
   }
 }

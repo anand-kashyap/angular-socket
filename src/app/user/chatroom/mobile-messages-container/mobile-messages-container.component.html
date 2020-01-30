@@ -7,7 +7,8 @@
   'other-user': message.username !== user.username,
   'resimg-mob': message.image
 }">
-    <img *ngIf="message.image && message.image.startsWith('data:')" class="prev-image" [src]="message.image" alt="">
+    <img *ngIf="message.image" (click)="openModal(template, fileRoot+ message.image)" class="prev-image no-select"
+      [src]="fileRoot+ message.image" alt="">
     <span *ngIf="message.msg" [innerHTML]="message.msg"></span>
     <span class="message-date">{{
         message.createdAt | date: 'shortTime'
@@ -15,8 +16,20 @@
   </div>
 </ng-container>
 <div class="progress form-group" *ngIf="progress > 0">
-  <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progress">
+  <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" [style.width.%]="progress">
   </div>
 </div>
 <app-slideup [@slideInOutAnimation]="open" [opts]="opts" [open]="open" (closed)="closeSlideup($event)">
 </app-slideup>
+
+<ng-template #template>
+  <div class="modal-header">
+    <!-- <h4 class="modal-title pull-left">Modal</h4> -->
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <img class="zoomed-img" [src]="imgPath" alt="" srcset="">
+  </div>
+</ng-template>

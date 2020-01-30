@@ -16,7 +16,7 @@ import { environment } from '@env/environment';
 })
 export class ChatroomComponent implements OnInit, OnDestroy {
   status = 'away';
-  filesRoot = environment.baseUrl + '/uploads';
+  fileRoot = environment.baseUrl + '/uploads/';
   progress = 0;
   @ViewChild('scrollbox', { static: true }) box: ElementRef<any>;
   fullDates = [];
@@ -119,27 +119,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }
     this.addDates();
     this.messages = this.room.messages;
-    for (let i = 0; i < this.messages.length; i++) {
-      const msg = this.messages[i];
-      if (msg.image && !msg.image.startsWith('data:')) {
-        const dat = await this.apiService
-          .getFile(msg.image)
-          .toPromise()
-          .catch(ex => {
-            console.log('ex', ex);
-            return { img: false };
-          });
-        if (!dat.img) {
-          this.messages[i].msg = 'img not found';
-        } else {
-          if (msg.image.endsWith('.gif')) {
-            this.messages[i].image = 'data:image/gif;base64,' + dat.img;
-          } else {
-            this.messages[i].image = 'data:image/png;base64,' + dat.img;
-          }
-        }
-      }
-    }
     this.bottom = true;
     this.cdRef.detectChanges();
     console.log(this.user, 'curRoom', this.room);
@@ -209,7 +188,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   deleteMessage(message) {
     console.log('message to be del', message);
-    this.socketService.sendMessage(Events.events.DEL_MESSAGE, { _id: message._id });
+    this.socketService.sendMessage(Events.events.DEL_MESSAGE, message);
     // this.bottom = false;
   }
 
@@ -223,20 +202,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     subs.push(
       this.socketService.onSEvent(events.NEW_MESSAGE).subscribe(async message => {
         console.log(message);
-        if (message.image) {
-          const dat = await this.apiService
-            .getFile(message.image)
-            .toPromise()
-            .catch(e => {
-              console.log(e);
-              message.msg = 'not found';
-            });
-          if (message.image.endsWith('.gif')) {
-            message.image = 'data:image/gif;base64,' + dat.img;
-          } else {
-            message.image = 'data:image/png;base64,' + dat.img;
-          }
-        }
         const date = formatDate(new Date(), 'mediumDate', 'en');
         const found = this.fullDates.indexOf(date);
         if (found === -1) {
