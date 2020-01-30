@@ -177,7 +177,7 @@ export class ApiService {
   }
 
   uploadFile(file): Observable<any> {
-    const uploadUrl = this.apiUrl + '/files/upload';
+    const uploadUrl = this.apiUrl + '/files/upload?ngsw-bypass=true';
     return this.httpClient.post<any>(uploadUrl, file, { reportProgress: true, observe: 'events' });
   }
 
