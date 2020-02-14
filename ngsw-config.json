@@ -14,8 +14,27 @@
       "installMode": "lazy",
       "updateMode": "prefetch",
       "resources": {
-        "files": ["/assets/**", "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"],
-        "urls": ["https://angular-socket-pwa.herokuapp.com/uploads/*.*"]
+        "files": ["/assets/**", "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "uploads",
+      "urls": ["https://angular-socket-pwa.herokuapp.com/uploads/*.*"],
+      "cacheConfig": {
+        "maxSize": 20,
+        "maxAge": "30d",
+        "strategy": "performance"
+      }
+    },
+    {
+      "name": "api",
+      "urls": ["https://angular-socket-pwa.herokuapp.com/**"],
+      "cacheConfig": {
+        "maxSize": 50,
+        "maxAge": "1d",
+        "strategy": "freshness"
       }
     }
   ]
