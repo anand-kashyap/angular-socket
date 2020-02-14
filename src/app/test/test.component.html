@@ -1,15 +1,3 @@
-<div class="mt-2">
-  <p>Image Upload</p>
-  <div class="form-group">
-    <input type="file" accept="image/*" (change)="uploadFile($event)" class="form-control" name="image">
-    <button class="btn btn-success" (click)="send()">Click</button>
-  </div>
-</div>
-<!-- Progress Bar -->
-<div class="progress form-group" *ngIf="progress > 0">
-  <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progress">
-  </div>
-</div>
 <!-- <img src="http://localhost:3000/uploads/211ea392-b88c-41fb-9a5a-f70bd6f3465f.png" alt="" srcset=""> -->
 <!-- <div (press)="longClicked($event)" (tap)="tap($event)" class="long-click">
   Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque quas, eius saepe animi itaque ad, sapiente

@@ -30,7 +30,7 @@
     },
     {
       "name": "api",
-      "urls": ["https://angular-socket-pwa.herokuapp.com/**"],
+      "urls": ["https://angular-socket-pwa.herokuapp.com/user/**", "https://angular-socket-pwa.herokuapp.com/room/**"],
       "cacheConfig": {
         "maxSize": 50,
         "maxAge": "1d",
