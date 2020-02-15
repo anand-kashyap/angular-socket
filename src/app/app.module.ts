@@ -27,7 +27,8 @@ import { HeaderComponent } from './common/header/header.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NotifyComponent } from './common/notify/notify.component';
-
+import { PullRefComponent } from '@util/pullref/pull-ref.component';
+import { PullrefDirective } from '@util/pullref/pullref.directive';
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = {
@@ -38,7 +39,7 @@ export class MyHammerConfig extends HammerGestureConfig {
 }
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, NotifyComponent],
+  declarations: [AppComponent, HeaderComponent, NotifyComponent, PullRefComponent, PullrefDirective],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

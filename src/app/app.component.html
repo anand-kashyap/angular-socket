@@ -1,7 +1,9 @@
 <div class="container-fluid">
   <app-notify></app-notify>
   <app-header></app-header>
-  <main [@routerTransition]="getState(o)">
+  <app-pull-ref [txt]="pullTxt" [height]="pullrefHeight" (pull)="onPull($event)" [inProgress]="true">
+  </app-pull-ref>
+  <main appPullref (pulling)=pulling($event) (pullComplete)="pullComp($event)" [@routerTransition]="getState(o)">
     <router-outlet #o="outlet"></router-outlet>
   </main>
 </div>
