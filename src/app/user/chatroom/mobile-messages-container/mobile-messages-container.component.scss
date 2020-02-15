@@ -77,8 +77,11 @@
   padding: 0.25rem;
   border-radius: 0.25rem;
   max-width: 100%;
-  min-height: 38px;
-  height: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  height: 160px;
+  width: 250px;
 }
 
 .zoomed-img {

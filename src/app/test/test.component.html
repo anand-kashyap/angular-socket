@@ -5,3 +5,7 @@
 </div> -->
 <!-- <button class="btn btn-success" (click)="open=!open">Click</button> -->
 <!-- <app-slideup *ngIf="open" [open]="open" (closed)="open = false" [@slideInOutAnimation]="open"></app-slideup> -->
+
+
+<app-pull-ref (pull)="onPull($event)" [inProgress]="isInProgress"></app-pull-ref>
+<h3>pull to refresh</h3>

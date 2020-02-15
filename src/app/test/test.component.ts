@@ -10,6 +10,7 @@ import { ApiService } from '@app/api.service';
 })
 export class TestComponent implements OnInit {
   open = false;
+  isInProgress = false;
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {}
@@ -20,5 +21,11 @@ export class TestComponent implements OnInit {
 
   tap(eve) {
     console.log('tapped: ', eve);
+  }
+
+  onPull(val) {
+    console.log('pulled', val);
+
+    this.isInProgress = true;
   }
 }

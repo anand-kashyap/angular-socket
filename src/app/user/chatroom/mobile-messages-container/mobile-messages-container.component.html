@@ -7,8 +7,8 @@
   'other-user': message.username !== user.username,
   'resimg-mob': message.image
 }">
-    <img *ngIf="message.image" (click)="openModal(template, fileRoot+ message.image)" class="prev-image no-select"
-      [src]="fileRoot+ message.image" alt="">
+    <div *ngIf="message.image" (click)="openModal(template, fileRoot+ message.image)" class="prev-image"
+      [style.backgroundImage]="'url('+fileRoot+ message.image+')'"></div>
     <span *ngIf="message.msg" [innerHTML]="message.msg"></span>
     <span class="message-date">{{
         message.createdAt | date: 'shortTime'
