@@ -13,7 +13,7 @@ import {
   faClone,
   faArrowRight,
   faArrowLeft,
-  faTrashAlt
+  faTrashAlt, faCircleNotch
 } from '@fortawesome/free-solid-svg-icons';
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig, HammerModule } from '@angular/platform-browser';
 // import { fa } from '@fortawesome/free-regular-svg-icons';
@@ -27,8 +27,9 @@ import { HeaderComponent } from './common/header/header.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NotifyComponent } from './common/notify/notify.component';
-import { PullRefComponent } from '@util/pullref/pull-ref.component';
-import { PullrefDirective } from '@util/pullref/pullref.directive';
+// import { PullRefComponent } from '@util/pullref/pull-ref.component';
+// import { PullrefDirective } from '@util/pullref/pullref.directive';
+import { PullToRefreshModule } from '@util/npmPullref/pull-to-refresh.module';
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = {
@@ -39,11 +40,12 @@ export class MyHammerConfig extends HammerGestureConfig {
 }
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, NotifyComponent, PullRefComponent, PullrefDirective],
+  declarations: [AppComponent, HeaderComponent, NotifyComponent, /* PullRefComponent, PullrefDirective */],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
+    PullToRefreshModule,
     AppRoutingModule,
     HammerModule,
     HttpClientModule,
@@ -77,7 +79,7 @@ export class AppModule {
       faArrowRight,
       faArrowLeft,
       faClone,
-      faTrashAlt
+      faTrashAlt, faCircleNotch
     );
   }
 }

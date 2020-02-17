@@ -11,9 +11,12 @@ import { ApiService } from '@app/api.service';
 export class TestComponent implements OnInit {
   open = false;
   isInProgress = false;
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('initsss');
+
+  }
 
   longClicked(eve) {
     console.log('Long clicked btn: ', eve);

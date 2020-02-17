@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { setTheme } from 'ngx-bootstrap/utils';
 import { routerTransition } from './animations/routerTransition';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,17 +12,28 @@ import { routerTransition } from './animations/routerTransition';
 export class AppComponent implements OnInit {
   pullrefHeight: number;
   pullTxt: string;
-  constructor() {
+  noPull = false;
+  constructor(private router: Router) {
     setTheme('bs4');
   }
-  ngOnInit() {}
+  ngOnInit() {
+    this.router.events.subscribe((res) => {
+      // console.log(this.router.url, "Current URL");
+      if (this.router.url.startsWith('/user/chat')) {
+        this.noPull = true;
+      } else {
+        this.noPull = false;
+      }
+    })
+  }
 
   getState(outlet) {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData.state;
   }
 
-  onPull(val) {
-    console.log(val);
+  onPull(r) {
+    // console.log(r);
+    r.activated.instance.ngOnInit();
   }
 
   pulling(height) {

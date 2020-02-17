@@ -10,13 +10,13 @@ import { ApiService } from 'src/app/api.service';
   styleUrls: ['./joinchat.component.scss']
 })
 export class JoinchatComponent implements OnInit, OnDestroy {
-  error = false;
-  loader = false;
-  fetchRecent = true;
+  error;
+  loader;
+  fetchRecent;
   userinput: string;
   usersList: Observable<any>;
-  recentContacts = [];
-  errMsg = '';
+  recentContacts;
+  errMsg;
   errTimeout = 4000;
   username: string;
   errSubscription: Subscription;
@@ -44,6 +44,10 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.userinput = this.errMsg = this.username = '';
+    this.error = this.loader = false;
+    this.fetchRecent = true;
+    this.recentContacts = []; this.errSubscription = null;
     this.username = this.chatService.getUserInfo().username;
     if (this.username) {
       this.getRecentChats();
