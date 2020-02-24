@@ -1,5 +1,8 @@
 <div class="container-fluid">
   <app-notify></app-notify>
   <app-header></app-header>
-  <router-outlet></router-outlet>
+  <pull-to-refresh *ngIf="!noPull" (refresh)="onPull(o)"></pull-to-refresh>
+  <main [@routerTransition]="getState(o)">
+    <router-outlet #o="outlet"></router-outlet>
+  </main>
 </div>

@@ -1,9 +1,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@app/*": ["./src/app/*"],
+      "@util/*": ["./src/app/utils/comp/*"],
+      "@pipes/*": ["./src/app/utils/pipes/*"],
+      "@directives/*": ["./src/app/utils/directives/*"],
       "@env/*": ["./src/environments/*"]
     },
     "outDir": "./dist/out-tsc",

@@ -6,7 +6,7 @@
       "name": "app",
       "installMode": "prefetch",
       "resources": {
-        "files": ["/favicon.ico", "/index.html", "/*.css", "/*.js", "/assets/icons/**"]
+        "files": ["/favicon.ico", "/index.html", "/*.css", "/*.js", "/assets/icons/**", "/manifest.webmanifest"]
       }
     },
     {
@@ -15,6 +15,27 @@
       "updateMode": "prefetch",
       "resources": {
         "files": ["/assets/**", "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "uploads",
+      "urls": ["https://angular-socket-pwa.herokuapp.com/uploads/*.*"],
+      "cacheConfig": {
+        "maxSize": 20,
+        "maxAge": "30d",
+        "strategy": "performance",
+        "timeout": "3s"
+      }
+    },
+    {
+      "name": "api",
+      "urls": ["https://angular-socket-pwa.herokuapp.com/user/**", "https://angular-socket-pwa.herokuapp.com/room/**"],
+      "cacheConfig": {
+        "maxSize": 50,
+        "maxAge": "1d",
+        "strategy": "freshness"
       }
     }
   ]

@@ -1,14 +1,20 @@
 <form [formGroup]="messageForm" class="send-msg">
   <div class="form-group">
-    <textarea formControlName="message" #inpt (keyup)="onType(inpt)" class="form-control" cols="10" rows="1"></textarea>
+    <textarea formControlName="message" placeholder="Message" #inpt (keyup)="onType(inpt)" class="form-control"
+      cols="10" rows="1"></textarea>
     <div class="btns">
       <button class="btn send-btn" *ngIf="showSend" [disabled]="loading || checkValid()" type="button"
         (click)="sendMessage()">
         <fa-icon icon="paper-plane" class="fa-lg"></fa-icon>
       </button>
-      <button class="btn loc-btn" *ngIf="!showSend" [disabled]="loading" type="button" (click)="sendLocation()">
-        <fa-icon icon="map-marker-alt" class="fa-lg"></fa-icon>
+      <input hidden type="file" accept="image/*" #up (change)="sendImage($event, up)" />
+      <button class="btn img-btn" *ngIf="!showSend" [disabled]="loading" type="button" (click)="up.click()">
+        <fa-icon icon="file-image" class="fa-lg"></fa-icon>
       </button>
+      <!-- ! will work on location button later -->
+      <!-- <button class="btn loc-btn" *ngIf="!showSend" [disabled]="loading" type="button" (click)="sendLocation()">
+        <fa-icon icon="map-marker-alt" class="fa-lg"></fa-icon>
+      </button> -->
     </div>
   </div>
 </form>

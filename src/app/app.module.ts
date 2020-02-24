@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable } from '@angular/core';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
   faCoffee,
@@ -7,38 +7,79 @@ import {
   faEllipsisV,
   faUserCircle,
   faPaperPlane,
-  faMapMarkerAlt
+  faMapMarkerAlt,
+  faFileImage,
+  faEye,
+  faClone,
+  faArrowRight,
+  faArrowLeft,
+  faTrashAlt, faCircleNotch
 } from '@fortawesome/free-solid-svg-icons';
+import { HAMMER_GESTURE_CONFIG, HammerGestureConfig, HammerModule } from '@angular/platform-browser';
 // import { fa } from '@fortawesome/free-regular-svg-icons';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth.interceptor';
 import { HeaderComponent } from './common/header/header.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NotifyComponent } from './common/notify/notify.component';
+// import { PullRefComponent } from '@util/pullref/pull-ref.component';
+// import { PullrefDirective } from '@util/pullref/pullref.directive';
+import { PullToRefreshModule } from '@util/npmPullref/pull-to-refresh.module';
+@Injectable()
+export class MyHammerConfig extends HammerGestureConfig {
+  overrides = {
+    pinch: { enable: false },
+    rotate: { enable: false },
+    press: { time: 500, interval: 700 }
+  };
+}
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, NotifyComponent],
+  declarations: [AppComponent, HeaderComponent, NotifyComponent, /* PullRefComponent, PullrefDirective */],
   imports: [
     BrowserModule,
-    FontAwesomeModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
+    FontAwesomeModule,
+    PullToRefreshModule,
+    AppRoutingModule,
+    HammerModule,
     HttpClientModule,
-    ServiceWorkerModule.register('./ngsw-worker.js', {
+    ServiceWorkerModule.register('./custom-service-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerWithDelay:8000'
     })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: MyHammerConfig
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
+  entryComponents: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(library: FaIconLibrary) {
     // Add an icon to the library for convenient access in other components
-    library.addIcons(faCoffee, faSearch, faEllipsisV, faUserCircle, faPaperPlane, faMapMarkerAlt);
+    library.addIcons(
+      faFileImage,
+      faCoffee,
+      faSearch,
+      faEllipsisV,
+      faUserCircle,
+      faPaperPlane,
+      faMapMarkerAlt,
+      faEye,
+      faArrowRight,
+      faArrowLeft,
+      faClone,
+      faTrashAlt, faCircleNotch
+    );
   }
 }

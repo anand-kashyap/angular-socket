@@ -4,6 +4,9 @@
       {{title}}
     </h3>
     <span class="badge badge-pill" [ngClass]="status == 'active' ? 'badge-success': 'badge-danger'">{{status}}</span>
+    <span class="pl-2 last-seen" *ngIf="status === 'away' && lastSeen">
+      <fa-icon icon="eye"></fa-icon> {{lastSeen}}
+    </span>
     <ng-container *ngIf="typingArr.length > 0">
       <span class="text-success pl-2" *ngIf="!room.directMessage;else dm">{{typingArr.join(', ')}} is typing...</span>
       <ng-template #dm>
@@ -12,33 +15,21 @@
     </ng-container>
 
   </div>
-  <!-- <span class="new-day">Aug 13, 2019</span> -->
-  <div #scrollbox [scrollTop]="scrollbox.scrollHeight" class="msg-container">
-    <ng-container *ngFor="let message of messages; let i=index">
-      <span *ngIf="message.datechange && i !== messages.length-1" class="new-day">{{
-        message.datechange | date: 'mediumDate' | recentDate
-      }}</span>
-      <div *ngIf="message.username" (mouseover)="hover[i] = true" (mouseout)="hover[i] = false" dropdown [ngClass]="
-          message.username === user.username ? 'current-user' : 'other-user'
-        ">
-        <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username" [class.d-none]="checkMobile(hover[i])"
-          class="sticky-more" dropdownToggle aria-controls="dropdown-basic" size="xs">
-        </fa-icon>
-        <ul *dropdownMenu class="dropdown-menu dropdown-menu-right sticky-menu" role="menu"
-          aria-labelledby="button-basic">
-          <li role="menuitem" (click)="deleteMessage(message)" class="delete">Delete</li>
-        </ul>
-        <!-- <strong class="d-block" *ngIf="message.username !== user.username">{{
-          message.username | uppercase
-        }}</strong> -->
-        <!-- need for group chats only -->
-        <span [innerHTML]="message.msg"></span>
-        <span class="message-date">{{
-          message.createdAt | date: 'shortTime'
-        }}</span>
-      </div>
-    </ng-container>
+
+  <!-- start message container -->
+  <div #scrollbox [scrollTop]="bottom ? scrollbox.scrollHeight : null" appScrollTracker
+    (loadOld)="loadOlderMsgs($event)" class="msg-container">
+    <span *ngIf="msgLoading">Loading more...</span>
+
+    <app-messages-container [fileRoot]="fileRoot" [progress]="progress" *ngIf="!mobile" [messages]="messages"
+      [user]="user" (older)="loadOlderMsgs($event)" (deleteMsg)="deleteMessage($event)">
+    </app-messages-container>
+
+    <app-mobile-messages-container [fileRoot]="fileRoot" [progress]="progress" *ngIf="mobile" [messages]="messages"
+      [user]="user" (older)="loadOlderMsgs($event)" (deleteMsg)="deleteMessage($event)"></app-mobile-messages-container>
   </div>
-  <app-send [loading]="loading" (typing)="showTyping()" (send)="sendMessage($event)" (location)="sendLocation($event)">
+  <!-- end message container -->
+
+  <app-send [loading]="loading" (fileUp)="fileUpload($event)" (send)="sendMessage()">
   </app-send>
 </div>

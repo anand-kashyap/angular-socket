@@ -18,7 +18,7 @@ const routes: Routes = [
     path: 'chat/:roomId',
     loadChildren: () => import('./chatroom/chatroom.module').then(m => m.ChatroomModule),
     canActivate: [AuthGuard, ChatroomGuard],
-    data: { checkjoin: true, checkUsername: true }
+    data: { checkjoin: true, checkUsername: true, state: 'chat-open' }
   },
   {
     path: 'update-profile',

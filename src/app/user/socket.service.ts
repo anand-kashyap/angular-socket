@@ -13,7 +13,8 @@ export class Events {
     NEW_CLIENT: 'newClient',
     TYPING: 'typing',
     LEFT_CLIENT: 'clientLeft',
-    LOCATION: 'sendLocation'
+    LOCATION: 'sendLocation',
+    LOADMSGS: 'loadMsgs'
   };
 }
 @Injectable({

@@ -10,12 +10,13 @@ import { ApiService } from 'src/app/api.service';
   styleUrls: ['./joinchat.component.scss']
 })
 export class JoinchatComponent implements OnInit, OnDestroy {
-  error = false;
-  loader = false;
+  error;
+  loader;
+  fetchRecent;
   userinput: string;
   usersList: Observable<any>;
-  recentContacts: Array<any>;
-  errMsg = '';
+  recentContacts;
+  errMsg;
   errTimeout = 4000;
   username: string;
   errSubscription: Subscription;
@@ -43,19 +44,13 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.userinput = this.errMsg = this.username = '';
+    this.error = this.loader = false;
+    this.fetchRecent = true;
+    this.recentContacts = []; this.errSubscription = null;
     this.username = this.chatService.getUserInfo().username;
     if (this.username) {
-      this.apiService.getRecentChats().subscribe(
-        res => {
-          console.log('recent usersList', res);
-          this.recentContacts = [...res];
-          console.log(this.recentContacts);
-        },
-        err => {
-          console.error('err', err);
-          this.chatService.showResponseError(err);
-        }
-      );
+      this.getRecentChats();
     }
     this.errMsg = this.chatService.getRouteErrorMsg();
     if (this.errMsg) {
@@ -64,6 +59,21 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     this.subscribeError();
   }
 
+  getRecentChats() {
+    return this.apiService.getRecentChats().subscribe(
+      res => {
+        console.log('recent usersList', res);
+        this.recentContacts = [...res];
+        this.fetchRecent = false;
+        // console.log(this.recentContacts);
+      },
+      err => {
+        console.error('err', err);
+        this.fetchRecent = false;
+        this.chatService.showResponseError(err);
+      }
+    );
+  }
   subscribeError() {
     this.errSubscription = this.chatService.getErrorMsg().subscribe(msg => {
       console.log('msg', msg);
@@ -76,6 +86,25 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     });
   }
 
+  lastMsg(msgArr: any[]) {
+    const last = msgArr[msgArr.length - 1];
+    if (last.image) {
+      return 'Image';
+    }
+    if (last.msg.length > 35) {
+      return last.msg.slice(0, 35) + '...';
+    }
+    return last.msg;
+  }
+
+  byMe(msgArr: any[]) {
+    const last = msgArr[msgArr.length - 1];
+    if (last.username === this.username) {
+      return true;
+    }
+    return false;
+  }
+
   ngOnDestroy() {
     this.errSubscription.unsubscribe();
   }
@@ -83,7 +112,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   joinRoom(userObj) {
     console.log('to', userObj.username);
     // create or open existing room
-    this.apiService.findOrCreateRoom([this.username, userObj.username]).subscribe(
+    this.apiService.findOrCreateRoom(this.username, [userObj.username]).subscribe(
       res => {
         console.log(res);
         this.openChat(res.data);

@@ -1,0 +1,36 @@
+#overlay {
+  background-color: rgba(0, 0, 0, 0.32);
+  position: fixed; /* Sit on top of the page content */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  .from-bottom {
+    z-index: 3;
+    background-color: #f3f3f3;
+    position: absolute;
+    margin: 0;
+    bottom: 0;
+    width: 100%;
+    list-style-type: none;
+    padding: 8px 16px;
+    padding-bottom: 0;
+    // border: 1px solid #795548;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom: none;
+    li {
+      text-align: center;
+      font-size: 1.2em;
+      padding: 20px 15px;
+      // border-bottom: solid 1px #795548;
+    }
+    li:active,
+    li:focus {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+}

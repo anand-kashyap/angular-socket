@@ -6,6 +6,9 @@
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
 
+body {
+  overscroll-behavior-y: none;
+}
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
