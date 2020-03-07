@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 
 import { environment } from '@env/environment';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, Subject, Subscription } from 'rxjs';
 
 export class Events {
   public static events = {
@@ -14,7 +14,8 @@ export class Events {
     TYPING: 'typing',
     LEFT_CLIENT: 'clientLeft',
     LOCATION: 'sendLocation',
-    LOADMSGS: 'loadMsgs'
+    LOADMSGS: 'loadMsgs',
+    ACTIVE: 'active'
   };
 }
 @Injectable({
@@ -24,13 +25,21 @@ export class SocketService {
   socket: SocketIOClient.Socket;
   socketUrl = environment.socketUrl;
   isLoggedIn = false;
-
+  joined = false;
+  onlineUsers: string[];
+  onlineSub = new Subject<any>();
   constructor(private chatService: ChatService, private router: Router) {
     this.connectSocket();
   }
 
   connectSocket() {
     this.socket = io.connect(this.socketUrl);
+    this.socket.emit('active', this.chatService.getUserInfo().username);
+    this.onSEvent(Events.events.ACTIVE).subscribe(online => {
+      this.onlineUsers = online;
+      console.log('online users', online);
+      this.onlineSub.next(online);
+    });
   }
 
   loggedIn(): boolean {
@@ -45,9 +54,14 @@ export class SocketService {
       this.connectSocket();
     }
     return new Promise((res, rej) => {
-      this.socket.emit('join', user, online => {
-        res(online);
-      });
+      if (!this.joined) {
+        this.joined = true;
+        this.socket.emit('join', user, online => {
+          res(online);
+        });
+      } else {
+        res(this.onlineUsers);
+      }
     });
   }
 
@@ -66,14 +80,6 @@ export class SocketService {
       });
     });
   }
-
-  /*  onNewMessage() {
-    return new Observable((observer: Observer<any>) => {
-      this.socket.on('newMessage', (message: { msg: string; username: string; date: Date }) => {
-        observer.next(message);
-      });
-    });
-  } */
 
   logout() {
     this.disconnect();

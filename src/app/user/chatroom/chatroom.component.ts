@@ -126,13 +126,14 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     console.log(this.user, 'curRoom', this.room);
     this.socketService.connectNewClient(this.user.username, this.room._id).then((onlineUsers: string[]) => {
       console.log('from croom', onlineUsers);
-      this.updateActive([...onlineUsers]);
+      this.updateActive(onlineUsers);
+      // this.updateActive([...onlineUsers]);
       this.subscribeSocketEvents();
     });
   }
 
   ngOnDestroy() {
-    this.socketService.disconnect();
+    // this.socketService.disconnect();
     if (this.subscriptions && this.subscriptions.length) {
       for (const sub of this.subscriptions) {
         sub.unsubscribe();
@@ -215,10 +216,10 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         this.messages.push(message);
         this.count++;
         console.log('num of messages: ', this.count);
-        if (message.username === uname) {
+        /* if (message.username === uname) {
           // update recent chat observable
           this.apiService.updateRecentChats({ ...this.room }, uname);
-        }
+        } */
         this.loading = false;
         this.cdRef.detectChanges();
       })
@@ -244,12 +245,17 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         }
       })
     );
-    subs.push(
+    /* subs.push(
       this.socketService.onSEvent(events.NEW_CLIENT).subscribe(({ username, onlineUsers }) => {
-        this.updateActive(onlineUsers);
+        // this.updateActive(onlineUsers);
         if (uname !== username) {
           console.log('joined', username);
         }
+      })
+    ); */
+    subs.push(
+      this.socketService.onlineSub.subscribe(onlineUsers => {
+        this.updateActive(onlineUsers);
       })
     );
     subs.push(
@@ -313,9 +319,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         }
       })
     );
-    subs.push(
+    /* subs.push(
       this.socketService.onSEvent(events.LEFT_CLIENT).subscribe(({ onlineUsers, left }) => {
-        this.updateActive(onlineUsers);
+        // this.updateActive(onlineUsers);
         if (uname !== left) {
           console.log('left', left);
           if (this.room.directMessage) {
@@ -323,7 +329,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
           }
         }
       })
-    );
+    ); */
     this.subscriptions.concat(subs);
   }
 }

@@ -20,7 +20,7 @@ export class SendComponent implements OnInit {
   ngOnInit() {}
 
   onType(inptEl) {
-    this.socketService.sendMessage(Events.events.TYPING);
+    // this.socketService.sendMessage(Events.events.TYPING);
     const msg = inptEl.value;
     if (msg.trim() === '') {
       this.showSend = false;
