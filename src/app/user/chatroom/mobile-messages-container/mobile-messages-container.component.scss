@@ -1,73 +1,3 @@
-.other-user {
-  background: #4f85b5a6;
-  align-self: flex-start;
-  box-shadow: -1px 1px 3px 0px #212121;
-}
-.current-user {
-  background: #77c889;
-  align-self: flex-end;
-  box-shadow: 1px 1px 3px 0px #212121;
-}
-/* .msg-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 72%;
-  overflow-y: auto;
-  font-size: 14px;
-} */
-:host {
-  display: flex;
-  flex-direction: column;
-}
-.current-user,
-.other-user {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  min-width: 25%;
-  max-width: 90%;
-  padding: 12px 10px;
-  padding-bottom: 20px;
-  border-radius: 5px;
-  display: inline-block;
-  position: relative;
-  margin: 8px 5px;
-}
-.message-date {
-  position: absolute;
-  bottom: 3px;
-  right: 5px;
-  font-size: 0.6rem;
-  font-weight: 500;
-}
-.new-day {
-  text-align: center;
-}
-.new-day::before,
-.new-day::after {
-  content: '';
-  height: 1px;
-  display: inline-block;
-  width: 20%;
-  background-color: rgba(0, 0, 0, 0.3);
-  margin: 0 1%;
-  vertical-align: middle;
-}
-.sticky-more {
-  position: absolute;
-  top: -3px;
-  padding: 2px 5px;
-  right: 1px;
-}
-.sticky-menu {
-  right: 10px !important;
-  top: 2px !important;
-  .delete {
-    color: red;
-    padding: 0 8px;
-    cursor: pointer;
-  }
-}
-
 .resimg-mob {
   // min-height: 150px;
   max-width: 50%;
@@ -82,10 +12,4 @@
   background-size: contain;
   height: 160px;
   width: 250px;
-}
-
-.zoomed-img {
-  max-width: 100%;
-  display: block;
-  margin: auto;
 }

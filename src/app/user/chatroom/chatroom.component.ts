@@ -61,7 +61,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       })
     ];
     if (!this.room) {
-      const roomId = this.route.snapshot.params.roomId;
+      const { roomId } = this.route.snapshot.params;
       if (roomId) {
         this.apiService.getRoomById(roomId, this.user.username).subscribe(res => {
           this.room = res.data;
@@ -111,7 +111,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     );
   }
 
-  async inits() {
+  inits() {
     if (this.room.directMessage) {
       const { members } = this.room;
       this.title = members[0];
@@ -119,8 +119,10 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }
     this.addDates();
     this.messages = this.room.messages;
-    this.bottom = true;
-    this.cdRef.detectChanges();
+    setTimeout(() => {
+      this.bottom = true;
+    }, 0);
+    // this.cdRef.detectChanges();
     console.log(this.user, 'curRoom', this.room);
     this.socketService.connectNewClient(this.user.username, this.room._id).then((onlineUsers: string[]) => {
       console.log('from croom', onlineUsers);
@@ -198,9 +200,10 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   subscribeSocketEvents() {
     const subs = [];
-    const events = Events.events;
+    const { events } = Events;
+    const { username: uname } = this.user;
     subs.push(
-      this.socketService.onSEvent(events.NEW_MESSAGE).subscribe(async message => {
+      this.socketService.onSEvent(events.NEW_MESSAGE).subscribe(message => {
         console.log(message);
         const date = formatDate(new Date(), 'mediumDate', 'en');
         const found = this.fullDates.indexOf(date);
@@ -212,9 +215,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         this.messages.push(message);
         this.count++;
         console.log('num of messages: ', this.count);
-        if (message.username === this.user.username) {
+        if (message.username === uname) {
           // update recent chat observable
-          this.apiService.updateRecentChats({ ...this.room }, this.user.username);
+          this.apiService.updateRecentChats({ ...this.room }, uname);
         }
         this.loading = false;
         this.cdRef.detectChanges();
@@ -244,13 +247,16 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     subs.push(
       this.socketService.onSEvent(events.NEW_CLIENT).subscribe(({ username, onlineUsers }) => {
         this.updateActive(onlineUsers);
-        if (this.user.username !== username) {
+        if (uname !== username) {
           console.log('joined', username);
         }
       })
     );
     subs.push(
-      this.socketService.onSEvent(events.LOADMSGS).subscribe(({ olderMsgs, count }) => {
+      this.socketService.onSEvent(events.LOADMSGS).subscribe(({ olderMsgs, count, username }) => {
+        if (uname !== username) {
+          return;
+        }
         const num = olderMsgs.length;
         if (count <= 0) {
           this.eom = true;
@@ -292,29 +298,25 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     );
     subs.push(
       this.socketService.onSEvent(events.TYPING).subscribe(username => {
-        if (this.user.username !== username) {
+        if (uname !== username) {
           const found = this.typingArr.indexOf(username);
           let timer;
           if (found === -1) {
             this.typingArr.push(username);
-            timer = setTimeout(() => {
-              const olF = this.typingArr.indexOf(username);
-              this.typingArr.splice(olF, 1);
-            }, 2000);
           } else {
             clearTimeout(timer);
-            timer = setTimeout(() => {
-              const olF = this.typingArr.indexOf(username);
-              this.typingArr.splice(olF, 1);
-            }, 2000);
           }
+          timer = setTimeout(() => {
+            const olF = this.typingArr.indexOf(username);
+            this.typingArr.splice(olF, 1);
+          }, 2000);
         }
       })
     );
     subs.push(
       this.socketService.onSEvent(events.LEFT_CLIENT).subscribe(({ onlineUsers, left }) => {
         this.updateActive(onlineUsers);
-        if (this.user.username !== left) {
+        if (uname !== left) {
           console.log('left', left);
           if (this.room.directMessage) {
             this.lastSeen = formatDate(new Date(), 'MMM d, y, h:mm a', 'en');
