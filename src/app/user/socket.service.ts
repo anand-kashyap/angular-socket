@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 
 import { environment } from '@env/environment';
-import { Observable, Observer, Subject, Subscription } from 'rxjs';
+import { Observable, Observer, Subject, Subscription, bindCallback } from 'rxjs';
 
 export class Events {
   public static events = {
@@ -25,8 +25,8 @@ export class SocketService {
   socket: SocketIOClient.Socket;
   socketUrl = environment.socketUrl;
   isLoggedIn = false;
-  joined = false;
   onlineUsers: string[];
+  subs = [];
   onlineSub = new Subject<any>();
   constructor(private chatService: ChatService, private router: Router) {
     this.connectSocket();
@@ -35,7 +35,7 @@ export class SocketService {
   connectSocket() {
     this.socket = io.connect(this.socketUrl);
     this.socket.emit('active', this.chatService.getUserInfo().username);
-    this.onSEvent(Events.events.ACTIVE).subscribe(online => {
+    this.socket.on(Events.events.ACTIVE, online => {
       this.onlineUsers = online;
       console.log('online users', online);
       this.onlineSub.next(online);
@@ -54,14 +54,9 @@ export class SocketService {
       this.connectSocket();
     }
     return new Promise((res, rej) => {
-      if (!this.joined) {
-        this.joined = true;
-        this.socket.emit('join', user, online => {
-          res(online);
-        });
-      } else {
-        res(this.onlineUsers);
-      }
+      this.socket.emit('join', user, online => {
+        res(online);
+      });
     });
   }
 
@@ -73,11 +68,16 @@ export class SocketService {
     this.socket.emit(key, message, environment.production);
   }
 
-  onSEvent(event: string) {
+  onSEvent(event: string): any {
+    // const fn = bindCallback(this.socket.on);
+    // return fn(event);
     return new Observable((observer: Observer<any>) => {
-      this.socket.on(event, message => {
+      const fn = message => {
         observer.next(message);
-      });
+      };
+      this.socket.on(event, fn);
+      this.subs.push({ event, fn });
+      // return this.socket.off(event, fn);
     });
   }
 
@@ -90,5 +90,11 @@ export class SocketService {
   disconnect() {
     this.sendMessage('logout');
     this.socket.disconnect();
+  }
+  leave() {
+    this.sendMessage('leave');
+    for (const li of this.subs) {
+      this.socket.removeListener(li.event, li.fn);
+    }
   }
 }

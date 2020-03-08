@@ -133,7 +133,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.socketService.disconnect();
+    this.socketService.leave();
     if (this.subscriptions && this.subscriptions.length) {
       for (const sub of this.subscriptions) {
         sub.unsubscribe();
