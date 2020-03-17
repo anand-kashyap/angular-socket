@@ -24,6 +24,7 @@ export class Events {
 export class SocketService {
   socket: SocketIOClient.Socket;
   socketUrl = environment.socketUrl;
+  connected;
   isLoggedIn = false;
   onlineUsers: string[];
   subs = [];

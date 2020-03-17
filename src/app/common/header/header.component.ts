@@ -9,14 +9,10 @@ import { environment } from '@env/environment';
 })
 export class HeaderComponent implements OnInit {
   prod: boolean;
-  constructor(private chatService: ChatService, private apiService: ApiService) {}
+  constructor(public chatService: ChatService, private apiService: ApiService) {}
 
   ngOnInit() {
     this.prod = environment.production;
-  }
-
-  isLoggedIn() {
-    return this.chatService.isLoggedIn();
   }
 
   logout() {

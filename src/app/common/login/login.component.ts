@@ -47,9 +47,6 @@ export class LoginComponent implements OnInit {
     if (this.errMsg) {
       this.error = true;
     }
-    const l = this.chatService.isLoggedIn();
-    console.log(l);
-
     // this.errorMessage = this.authService.getErrorMessage();
   }
 

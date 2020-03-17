@@ -28,7 +28,7 @@ export class ApiService {
   }
 
   isLoggedIn() {
-    return this.chatService.isLoggedIn();
+    return this.chatService.isLoggedIn;
   }
 
   checkNotify() {

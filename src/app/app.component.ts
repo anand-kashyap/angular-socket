@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { setTheme } from 'ngx-bootstrap/utils';
 import { routerTransition } from './animations/routerTransition';
 import { Router } from '@angular/router';
+import { ChatService } from './chat.service';
 
 @Component({
   selector: 'app-root',
@@ -9,22 +10,23 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.scss'],
   animations: [routerTransition]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   pullrefHeight: number;
   pullTxt: string;
   noPull = false;
-  constructor(private router: Router) {
+  constructor(private router: Router, private cService: ChatService) {
     setTheme('bs4');
   }
   ngOnInit() {
-    this.router.events.subscribe((res) => {
+    // this.cService.isLoggedIn;
+    this.router.events.subscribe(res => {
       // console.log(this.router.url, "Current URL");
-      if (this.router.url.startsWith('/user/chat')) {
-        this.noPull = true;
-      } else {
-        this.noPull = false;
-      }
-    })
+      this.noPull = this.router.url.startsWith('/user/chat');
+    });
+  }
+
+  ngOnDestroy() {
+    console.log('app destroyed');
   }
 
   getState(outlet) {

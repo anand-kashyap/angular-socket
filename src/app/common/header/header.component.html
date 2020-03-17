@@ -1,6 +1,6 @@
 <nav class="navbar navbar-light bg-light">
   <a class="navbar-brand" [routerLink]="['/']">Angular Socket</a>
-  <ng-container *ngIf="isLoggedIn()">
+  <ng-container *ngIf="chatService.isLoggedIn">
     <div class="right-unav">
       <!-- <div class="point" routerLink="/user/update-profile"> -->
       <fa-icon icon="user-circle" class="fa-lg pr-2 point" routerLink="/user/update-profile"></fa-icon>

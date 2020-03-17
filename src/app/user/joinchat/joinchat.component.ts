@@ -107,6 +107,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log('join destroyed');
     this.errSubscription.unsubscribe();
   }
 

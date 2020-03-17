@@ -11,8 +11,8 @@ export class ChatService {
   private proom;
   constructor(private router: Router) {}
 
-  isLoggedIn() {
-    return this.getUserInfo() || false;
+  get isLoggedIn() {
+    return this.getUserInfo() ? true : false;
   }
 
   clearUser() {

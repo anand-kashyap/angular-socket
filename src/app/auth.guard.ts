@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const loggedIn = this.chatService.isLoggedIn();
+    const loggedIn = this.chatService.isLoggedIn;
     if (loggedIn) {
       if (next.data.checkVerified) {
         const { isVerified } = this.chatService.getUserInfo();
