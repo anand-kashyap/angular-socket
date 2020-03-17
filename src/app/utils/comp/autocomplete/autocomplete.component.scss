@@ -1,0 +1,9 @@
+.drop-list {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  li:hover {
+    background-color: #e7f5f9;
+    cursor: pointer;
+  }
+}

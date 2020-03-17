@@ -5,23 +5,17 @@
   <div class="col-md-6 mx-auto mt-2 joinbox">
     <!-- <h2>Join Chat</h2> -->
     <p>Hi <strong>{{username}}</strong>!</p>
-    <ng-template #usersTemp let-model="item" let-index="index">
-      <p>{{model.fullName}} (username: {{model.username}})</p>
-    </ng-template>
     <div class="form-group">
       <label for="user">Search for Users</label>
       <div class="position-relative">
-        <input [(ngModel)]="userinput" [typeaheadIsFirstItemActive]="false" [typeaheadAsync]="true"
-          (typeaheadOnSelect)="joinRoom($event.item)" [typeahead]="usersList" [typeaheadItemTemplate]="usersTemp"
-          [typeaheadMinLength]="3" [adaptivePosition]="true" (typeaheadLoading)="loader = $event"
-          typeaheadOptionField="fullName" class="form-control">
+        <app-autocomplete [dropList]="userListNew" (selectedOption)="joinRoom($event)" (getListAsync)="searchUserNew($event)">
+        </app-autocomplete>
         <fa-icon icon="search" *ngIf="!loader" class="stick-search"></fa-icon>
         <span class="spinner-border spinner-border-sm stick-loader" *ngIf="loader" role="status">
           <span class="sr-only">Loading...</span>
         </span>
       </div>
     </div>
-
 
     <div class="row" *ngIf="fetchRecent">
       <div class="col-md-12 text-center">

@@ -1,9 +1,10 @@
 import { ChatService } from '../../chat.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
 import { SocketService } from '../socket.service';
+import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-joinchat',
   templateUrl: './joinchat.component.html',
@@ -14,7 +15,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   loader;
   fetchRecent;
   userinput: string;
-  usersList: Observable<any>;
+  userListNew: Array<any> = [];
   recentContacts;
   errMsg;
   errTimeout = 4000;
@@ -26,26 +27,20 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     private chatService: ChatService,
     private apiService: ApiService,
     private socketService: SocketService
-  ) {
-    this.searchUser();
-  }
+  ) {}
 
-  searchUser() {
-    this.usersList = new Observable((observer: any) => {
-      this.loader = true;
-      this.apiService
-        .getUsersList(this.userinput)
-        .subscribe(
-          res => {
-            console.log('usersList', res);
-            observer.next(res.data);
-          },
-          err => {
-            console.error(err);
-          }
-        )
-        .add(() => (this.loader = false));
-    });
+  searchUserNew(text) {
+    console.log('innew outsear', text);
+    this.loader = true;
+    this.apiService
+      .getUsersList(text)
+      .pipe(map(r => r.data))
+      .subscribe(res => {
+        // this.userListNew = [...res];
+        this.userListNew = res;
+        this.loader = false;
+        console.log(res);
+      });
   }
 
   ngOnInit() {

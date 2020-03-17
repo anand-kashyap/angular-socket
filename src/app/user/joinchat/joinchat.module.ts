@@ -5,8 +5,9 @@ import { PreloadModule } from '@app/shared/preload.module';
 import { RformModule } from '@app/shared/rform.module';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { RecentDateModule } from '@pipes/recent-date.pipe';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+// import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { Routes, RouterModule } from '@angular/router';
+import { AutocompleteModule } from '@util/autocomplete/autocomplete.module';
 
 const routes: Routes = [{ path: '', component: JoinchatComponent }];
 @NgModule({
@@ -16,8 +17,9 @@ const routes: Routes = [{ path: '', component: JoinchatComponent }];
     PreloadModule,
     RecentDateModule,
     RformModule,
+    AutocompleteModule,
     RouterModule.forChild(routes),
-    TypeaheadModule.forRoot(),
+    // TypeaheadModule.forRoot(),
     AlertModule.forRoot()
   ]
 })

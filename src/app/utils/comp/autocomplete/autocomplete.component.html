@@ -1,0 +1,9 @@
+<div class="form-group">
+  <input type="text" class="form-control" #ref (click)="shouldShowList = true">
+  <ul *ngIf="shouldShowList" class="list-group drop-list">
+    <li class="list-group-item" [class.active]="i + 1 === selected"
+      (click)="shouldShowList = true;selectedOption.emit(obj)" *ngFor="let obj of dropList;let i=index"
+      [innerHTML]="getName(obj)"></li>
+  </ul>
+  <small *ngIf="options.helpText" id="searchHelp" class="form-text text-muted">{{options.helpText}}</small>
+</div>
