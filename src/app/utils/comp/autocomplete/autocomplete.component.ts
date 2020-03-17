@@ -31,7 +31,6 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterViewInit {
   searchVal = '';
   selected = 0;
   shouldShowList = false;
-  // todo: click select; on blur close; dropdown absolute value
   @ViewChild('ref') ref: ElementRef;
   private subscription: Subscription;
   constructor(private elementRef: ElementRef) {}
@@ -45,14 +44,12 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterViewInit {
       helpText: ''
     };
     this.options = { ...defOpts, ...this.options };
-    console.log('gonna call');
   }
 
   ngAfterViewInit() {
     const term$ = fromEvent<any>(this.ref.nativeElement, 'keyup').pipe(
       map(event => {
         const { key } = event;
-        console.log(key);
         if (this.dropList.length > 0) {
           // tslint:disable-next-line
           key === 'ArrowDown' && this.selected < this.dropList.length && this.selected++;

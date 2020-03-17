@@ -96,8 +96,11 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }
   }
 
-  getLastSeen() {
+  getLastSeen(first = false) {
     // will use more details in future
+    if (first && this.status === 'active') {
+      return;
+    }
     this.apiService.getUserByUname(this.title).subscribe(
       res => {
         const { lastSeen } = res.data;
@@ -115,7 +118,8 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     if (this.room.directMessage) {
       const { members } = this.room;
       this.title = members[0];
-      this.getLastSeen();
+      this.updateActive(this.socketService.onlineUsers);
+      this.getLastSeen(true);
     }
     this.addDates();
     this.messages = this.room.messages;
@@ -126,7 +130,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     console.log(this.user, 'curRoom', this.room);
     this.socketService.connectNewClient(this.user.username, this.room._id).then((onlineUsers: string[]) => {
       console.log('from croom', onlineUsers);
-      this.updateActive(onlineUsers);
+      // this.updateActive(onlineUsers);
       // this.updateActive([...onlineUsers]);
       this.subscribeSocketEvents();
     });
@@ -134,7 +138,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.socketService.leave();
-    if (this.subscriptions && this.subscriptions.length) {
+    if (this.subscriptions) {
       for (const sub of this.subscriptions) {
         sub.unsubscribe();
       }

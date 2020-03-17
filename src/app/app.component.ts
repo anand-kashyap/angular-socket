@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { setTheme } from 'ngx-bootstrap/utils';
 import { routerTransition } from './animations/routerTransition';
 import { Router } from '@angular/router';
-import { ChatService } from './chat.service';
+import { SocketService } from './user/socket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -14,11 +15,16 @@ export class AppComponent implements OnInit, OnDestroy {
   pullrefHeight: number;
   pullTxt: string;
   noPull = false;
-  constructor(private router: Router, private cService: ChatService) {
+  connected: Subscription;
+  constructor(private router: Router, private sService: SocketService) {
     setTheme('bs4');
   }
   ngOnInit() {
-    // this.cService.isLoggedIn;
+    if (this.sService.isLoggedIn) {
+      // setactive via socket
+      this.connected = this.sService.connectSocket().subscribe(onli => console.log(onli));
+      console.log('set active');
+    }
     this.router.events.subscribe(res => {
       // console.log(this.router.url, "Current URL");
       this.noPull = this.router.url.startsWith('/user/chat');
@@ -26,7 +32,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('app destroyed');
+    console.log('remove active');
+    // tslint:disable-next-line: no-unused-expression
+    this.connected && this.connected.unsubscribe();
   }
 
   getState(outlet) {

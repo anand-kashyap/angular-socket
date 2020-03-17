@@ -25,35 +25,34 @@ export class SocketService {
   socket: SocketIOClient.Socket;
   socketUrl = environment.socketUrl;
   connected;
-  isLoggedIn = false;
   onlineUsers: string[];
-  subs = [];
   onlineSub = new Subject<any>();
   constructor(private chatService: ChatService, private router: Router) {
-    this.connectSocket();
+    // this.connectSocket();
   }
 
   connectSocket() {
-    this.socket = io.connect(this.socketUrl);
-    this.socket.emit('active', this.chatService.getUserInfo().username);
-    this.socket.on(Events.events.ACTIVE, online => {
-      this.onlineUsers = online;
-      console.log('online users', online);
-      this.onlineSub.next(online);
+    return new Observable(obs => {
+      const socket = io.connect(this.socketUrl);
+      socket.emit('active', this.chatService.getUserInfo().username);
+      socket.on(Events.events.ACTIVE, online => {
+        this.onlineUsers = online;
+        console.log('online users', online);
+        obs.next(online);
+        this.onlineSub.next(online);
+      });
+      return () => socket.disconnect();
     });
   }
 
-  loggedIn(): boolean {
-    return this.isLoggedIn;
+  isLoggedIn(): boolean {
+    return this.chatService.isLoggedIn;
   }
 
   connectNewClient(username: string, room: string) {
-    console.log('socket connected', this.socket);
+    // console.log('socket connected', this.socket);
     const user = { username, room };
-    console.log('user info', user);
-    if (this.socket.disconnected) {
-      this.connectSocket();
-    }
+    this.socket = io.connect(this.socketUrl);
     return new Promise((res, rej) => {
       this.socket.emit('join', user, online => {
         res(online);
@@ -77,7 +76,7 @@ export class SocketService {
         observer.next(message);
       };
       this.socket.on(event, fn);
-      this.subs.push({ event, fn });
+      // this.subs.push({ event, fn });
       // return this.socket.off(event, fn);
     });
   }
@@ -94,8 +93,6 @@ export class SocketService {
   }
   leave() {
     this.sendMessage('leave');
-    for (const li of this.subs) {
-      this.socket.removeListener(li.event, li.fn);
-    }
+    this.socket.disconnect();
   }
 }
