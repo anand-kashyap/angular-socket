@@ -13,7 +13,7 @@
     "start": "node server.js",
     "pretty": "prettier --write \"./**/*.ts\"",
     "prettys": "prettier --write",
-    "build": "ng build",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
