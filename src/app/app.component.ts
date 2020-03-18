@@ -20,10 +20,14 @@ export class AppComponent implements OnInit, OnDestroy {
     setTheme('bs4');
   }
   ngOnInit() {
+    this.sService.loggedIn$.subscribe(isActive => {
+      if (isActive && !this.connected) {
+        this.connected = this.sService.connectSocket().subscribe(onli => console.log(onli));
+        console.log('set active');
+      }
+    });
     if (this.sService.isLoggedIn()) {
-      // setactive via socket
-      this.connected = this.sService.connectSocket().subscribe(onli => console.log(onli));
-      console.log('set active');
+      this.sService.loggedIn$.next(true);
     }
     this.router.events.subscribe(res => {
       // console.log(this.router.url, "Current URL");

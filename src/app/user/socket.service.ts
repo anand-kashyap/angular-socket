@@ -27,6 +27,7 @@ export class SocketService {
   connected;
   onlineUsers: string[];
   onlineSub = new Subject<any>();
+  loggedIn$ = new Subject<any>();
   constructor(private chatService: ChatService, private router: Router) {
     // this.connectSocket();
   }

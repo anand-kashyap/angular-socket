@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
 import { ChatService } from '../../chat.service';
+import { SocketService } from '@app/user/socket.service';
 
 @Component({
   selector: 'app-login',
@@ -40,7 +41,12 @@ export class LoginComponent implements OnInit {
     ]
   };
 
-  constructor(private chatService: ChatService, private apiService: ApiService, private router: Router) {}
+  constructor(
+    private chatService: ChatService,
+    private apiService: ApiService,
+    private router: Router,
+    private socketService: SocketService
+  ) {}
 
   ngOnInit(): void {
     this.errMsg = this.chatService.getRouteErrorMsg();
@@ -78,6 +84,7 @@ export class LoginComponent implements OnInit {
             this.apiService.setNotify(true); // open notify popup
           }
           this.chatService.setInLocal('token', response.token);
+          this.socketService.loggedIn$.next(true);
           console.log(token);
           this.router.navigateByUrl('/user');
           /* if (token.isAdmin) {

@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { environment } from '../environments/environment';
 
 import { map, publishReplay, refCount } from 'rxjs/operators';
+import { SocketService } from './user/socket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,12 @@ export class ApiService {
   recentUsers: Observable<any>;
   private notify = new Subject<boolean>();
   private openNotify = new Subject<boolean>(); // get user object
-  constructor(private httpClient: HttpClient, private router: Router, private chatService: ChatService) {}
+  constructor(
+    private httpClient: HttpClient,
+    private router: Router,
+    private chatService: ChatService,
+    private socketService: SocketService
+  ) {}
 
   notifyMethod(val: boolean) {
     this.notify.next(val);
@@ -55,6 +61,7 @@ export class ApiService {
   logout() {
     this.setNotify(false);
     this.chatService.clearUser();
+    this.socketService.loggedIn$.next(false);
     this.recentUsers = this.newChatsArr = null;
     this.router.navigate(['/']);
   }
