@@ -13,7 +13,6 @@
     "start": "node server.js",
     "pretty": "prettier --write \"./**/*.ts\"",
     "prettys": "prettier --write",
-    "heroku-postbuild": "ng build -c=production --aot",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -78,7 +77,7 @@
     "tslint": "~5.15.0"
   },
   "engines": {
-    "node": "12.5.0",
-    "npm": "6.10.1"
+    "node": "12.13.0",
+    "yarn": "1.22.4"
   }
 }
