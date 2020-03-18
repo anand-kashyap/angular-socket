@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
     setTheme('bs4');
   }
   ngOnInit() {
-    if (this.sService.isLoggedIn) {
+    if (this.sService.isLoggedIn()) {
       // setactive via socket
       this.connected = this.sService.connectSocket().subscribe(onli => console.log(onli));
       console.log('set active');
