@@ -25,7 +25,7 @@ export class SocketService {
   socket: SocketIOClient.Socket;
   socketUrl = environment.socketUrl;
   connected;
-  onlineUsers: string[];
+  onlineUsers = [];
   onlineSub = new Subject<any>();
   loggedIn$ = new Subject<any>();
   constructor(private chatService: ChatService, private router: Router) {

@@ -1,14 +1,22 @@
 //Install express server
 express = require('express'),
   compression = require('compression'),
-  enforce = require('express-sslify'),
+  // enforce = require('express-sslify'),
   path = require('path');
 
 const app = express();
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
+// app.use(enforce.HTTPS({ trustProtoHeader: true }));
 app.use(compression());
 // Serve only the static files form the dist director
 app.use(express.static('../public'));
+
+app.use(function (req, res, next) {
+  console.log('req.secure', req.secure, req.url);
+  if (!req.secure) {
+    return res.redirect(`https://angular-socket.back4app.io${req.url}`);
+  }
+  next();
+});
 
 app.get('/*', function (req, res) {
 
