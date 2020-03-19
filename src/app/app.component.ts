@@ -19,6 +19,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private sService: SocketService) {
     setTheme('bs4');
   }
+
+  // todo disconnect active socket on logout
   ngOnInit() {
     this.sService.loggedIn$.subscribe(isActive => {
       if (isActive && !this.connected) {
