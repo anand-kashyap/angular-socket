@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "Angular Socket": {
+      "applicationId": "aqjOx918XBH8bVRj9AQWgBliL1gPM4GQpeDOelR0"
+    },
+    "_default": {
+      "link": "Angular Socket"
+    }
+  }
+}

@@ -2,6 +2,7 @@
 
 # compiled output
 /tmp
+/public
 /out-tsc
 # Only exists if Bazel was run
 /bazel-out
