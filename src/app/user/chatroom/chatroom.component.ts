@@ -16,7 +16,7 @@ import { environment } from '@env/environment';
 })
 export class ChatroomComponent implements OnInit, OnDestroy {
   status = 'away';
-  fileRoot = environment.baseUrl + '/uploads/';
+  fileRoot = environment.socketUrl + '/uploads/';
   progress = 0;
   @ViewChild('scrollbox', { static: true }) box: ElementRef<any>;
   fullDates = [];
