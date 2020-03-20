@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 
 import { environment } from '@env/environment';
-import { Observable, Observer, Subject, Subscription, bindCallback } from 'rxjs';
+import { Observable, Observer, Subject, Subscription } from 'rxjs';
 
 export class Events {
   public static events = {
@@ -25,6 +25,7 @@ export class SocketService {
   socket: SocketIOClient.Socket;
   socketUrl = environment.socketUrl;
   connected;
+  subs = [];
   onlineUsers = [];
   onlineSub = new Subject<any>();
   loggedIn$ = new Subject<any>();
@@ -34,15 +35,15 @@ export class SocketService {
 
   connectSocket() {
     return new Observable(obs => {
-      const socket = io.connect(this.socketUrl);
-      socket.emit('active', this.chatService.getUserInfo().username);
-      socket.on(Events.events.ACTIVE, online => {
+      this.socket = io.connect(this.socketUrl);
+      this.socket.emit('active', this.chatService.getUserInfo().username);
+      this.socket.on(Events.events.ACTIVE, online => {
         this.onlineUsers = online;
         console.log('online users', online);
         obs.next(online);
         this.onlineSub.next(online);
       });
-      return () => socket.disconnect();
+      return () => this.socket.disconnect();
     });
   }
 
@@ -53,7 +54,8 @@ export class SocketService {
   connectNewClient(username: string, room: string) {
     // console.log('socket connected', this.socket);
     const user = { username, room };
-    this.socket = io.connect(this.socketUrl);
+    this.subs = [];
+    // this.socket = io.connect(this.socketUrl);
     return new Promise((res, rej) => {
       this.socket.emit('join', user, online => {
         res(online);
@@ -70,30 +72,19 @@ export class SocketService {
   }
 
   onSEvent(event: string): any {
-    // const fn = bindCallback(this.socket.on);
-    // return fn(event);
+    // return fromEvent(this.socket, event);
     return new Observable((observer: Observer<any>) => {
       const fn = message => {
         observer.next(message);
       };
       this.socket.on(event, fn);
-      // this.subs.push({ event, fn });
-      // return this.socket.off(event, fn);
+      return () => {
+        this.socket.off(event);
+      };
     });
   }
 
-  logout() {
-    this.disconnect();
-    this.chatService.clearUser();
-    this.router.navigateByUrl('/');
-  }
-
-  disconnect() {
-    this.sendMessage('logout');
-    this.socket.disconnect();
-  }
   leave() {
-    this.sendMessage('leave');
-    this.socket.disconnect();
+    this.sendMessage('left');
   }
 }

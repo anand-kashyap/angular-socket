@@ -139,11 +139,11 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.socketService.leave();
     if (this.subscriptions) {
+      console.log('clearing socket');
       for (const sub of this.subscriptions) {
         sub.unsubscribe();
       }
     }
-    console.log('cleared socket');
   }
 
   loadOlderMsgs(pos) {
@@ -334,6 +334,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         }
       })
     ); */
-    this.subscriptions.concat(subs);
+    this.subscriptions.push(...subs);
+    // console.log('subs', subs, this.subscriptions.length);
   }
 }
