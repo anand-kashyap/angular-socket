@@ -24,12 +24,12 @@ export class AppComponent implements OnInit {
     this.showConfig();
     this.sService.loggedIn$.subscribe(isActive => {
       if (isActive && !this.connected) {
-        this.connected = this.sService.connectSocket().subscribe(onli => console.log(onli));
-        console.log('set active');
+        this.connected = this.sService.connectSocket().subscribe();
+        // console.log('set active');
       } else {
         this.connected.unsubscribe();
         this.connected = null;
-        console.log('remove active');
+        // console.log('remove active');
       }
     });
     if (this.sService.isLoggedIn()) {

@@ -1,10 +1,9 @@
-import { Router } from '@angular/router';
 import { ChatService } from '../chat.service';
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 
 import { environment } from '@env/environment';
-import { Observable, Observer, Subject, Subscription } from 'rxjs';
+import { Observable, Subject, fromEvent } from 'rxjs';
 
 export class Events {
   public static events = {
@@ -29,20 +28,21 @@ export class SocketService {
   onlineUsers = [];
   onlineSub = new Subject<any>();
   loggedIn$ = new Subject<any>();
-  constructor(private chatService: ChatService, private router: Router) {
-    // this.connectSocket();
-  }
+  constructor(private chatService: ChatService) {}
 
   connectSocket() {
     return new Observable(obs => {
       this.socket = io.connect(this.socketUrl);
       this.socket.emit('active', this.chatService.getUserInfo().username);
-      this.socket.on(Events.events.ACTIVE, online => {
-        this.onlineUsers = online;
-        console.log('online users', online);
-        obs.next(online);
-        this.onlineSub.next(online);
-      });
+      this.onSEvent(Events.events.ACTIVE).subscribe(
+        online => {
+          this.onlineUsers = online;
+          console.log('online users', online);
+          obs.next(online);
+          this.onlineSub.next(online);
+        },
+        err => console.error(err)
+      );
       return () => this.socket.disconnect();
     });
   }
@@ -56,7 +56,7 @@ export class SocketService {
     const user = { username, room };
     this.subs = [];
     // this.socket = io.connect(this.socketUrl);
-    return new Promise((res, rej) => {
+    return new Promise(res => {
       this.socket.emit('join', user, online => {
         res(online);
       });
@@ -71,20 +71,12 @@ export class SocketService {
     this.socket.emit(key, message, environment.production);
   }
 
-  onSEvent(event: string): any {
-    // return fromEvent(this.socket, event);
-    return new Observable((observer: Observer<any>) => {
-      const fn = message => {
-        observer.next(message);
-      };
-      this.socket.on(event, fn);
-      return () => {
-        this.socket.off(event);
-      };
-    });
+  onSEvent(event: string): Observable<any> {
+    return fromEvent(this.socket, event);
   }
 
   leave() {
     this.sendMessage('left');
+    console.log('socket', this.socket);
   }
 }

@@ -127,9 +127,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       this.bottom = true;
     }, 0);
     // this.cdRef.detectChanges();
-    console.log(this.user, 'curRoom', this.room);
+    console.log('curRoom', this.room);
     this.socketService.connectNewClient(this.user.username, this.room._id).then((onlineUsers: string[]) => {
-      console.log('from croom', onlineUsers);
+      // console.log('from croom', onlineUsers);
       // this.updateActive(onlineUsers);
       // this.updateActive([...onlineUsers]);
       this.subscribeSocketEvents();
@@ -323,17 +323,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         }
       })
     );
-    /* subs.push(
-      this.socketService.onSEvent(events.LEFT_CLIENT).subscribe(({ onlineUsers, left }) => {
-        // this.updateActive(onlineUsers);
-        if (uname !== left) {
-          console.log('left', left);
-          if (this.room.directMessage) {
-            this.lastSeen = formatDate(new Date(), 'MMM d, y, h:mm a', 'en');
-          }
-        }
-      })
-    ); */
     this.subscriptions.push(...subs);
     // console.log('subs', subs, this.subscriptions.length);
   }
