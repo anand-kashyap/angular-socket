@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { environment } from '@env/environment';
+import { debounceTime, tap, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chatroom',
@@ -25,7 +26,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   mobile = false;
   msgLoading = false;
   notifyOpen = false;
-  typingArr = [];
+  typingJs = {};
   lastSeen: string;
 
   subscriptions: Subscription[];
@@ -128,12 +129,8 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }, 0);
     // this.cdRef.detectChanges();
     console.log('curRoom', this.room);
-    this.socketService.connectNewClient(this.user.username, this.room._id).then((onlineUsers: string[]) => {
-      // console.log('from croom', onlineUsers);
-      // this.updateActive(onlineUsers);
-      // this.updateActive([...onlineUsers]);
-      this.subscribeSocketEvents();
-    });
+    this.socketService.connectNewClient(this.user.username, this.room._id);
+    this.subscribeSocketEvents();
   }
 
   ngOnDestroy() {
@@ -203,6 +200,10 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     this.bottom = true;
   }
 
+  getTypingArr() {
+    return Object.keys(this.typingJs);
+  }
+
   subscribeSocketEvents() {
     const subs = [];
     const { events } = Events;
@@ -249,16 +250,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         }
       })
     );
-    /* subs.push(
-      this.socketService.onSEvent(events.NEW_CLIENT).subscribe(({ username, onlineUsers }) => {
-        // this.updateActive(onlineUsers);
-        if (uname !== username) {
-          console.log('joined', username);
-        }
-      })
-    ); */
     subs.push(
       this.socketService.onlineSub.subscribe(onlineUsers => {
+        console.log('oinlin', onlineUsers);
         this.updateActive(onlineUsers);
       })
     );
@@ -307,21 +301,16 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       })
     );
     subs.push(
-      this.socketService.onSEvent(events.TYPING).subscribe(username => {
-        if (uname !== username) {
-          const found = this.typingArr.indexOf(username);
-          let timer;
-          if (found === -1) {
-            this.typingArr.push(username);
-          } else {
-            clearTimeout(timer);
-          }
-          timer = setTimeout(() => {
-            const olF = this.typingArr.indexOf(username);
-            this.typingArr.splice(olF, 1);
-          }, 2000);
-        }
-      })
+      this.socketService
+        .onSEvent(events.TYPING)
+        .pipe(
+          filter(username => uname !== username),
+          tap(username => (this.typingJs[username] = true)),
+          debounceTime(1000)
+        )
+        .subscribe(username => {
+          delete this.typingJs[username];
+        })
     );
     this.subscriptions.push(...subs);
     // console.log('subs', subs, this.subscriptions.length);

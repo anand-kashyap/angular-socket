@@ -7,8 +7,9 @@
     <span class="pl-2 last-seen" *ngIf="status === 'away' && lastSeen">
       <fa-icon icon="eye"></fa-icon> {{lastSeen}}
     </span>
-    <ng-container *ngIf="typingArr.length > 0">
-      <span class="text-success pl-2" *ngIf="!room.directMessage;else dm">{{typingArr.join(', ')}} is typing...</span>
+    <ng-container *ngIf="getTypingArr().length > 0">
+      <span class="text-success pl-2" *ngIf="!room.directMessage;else dm">{{getTypingArr().join(', ')}} is
+        typing...</span>
       <ng-template #dm>
         <span class="text-success pl-2">typing...</span>
       </ng-template>

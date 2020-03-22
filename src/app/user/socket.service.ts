@@ -24,7 +24,6 @@ export class SocketService {
   socket: SocketIOClient.Socket;
   socketUrl = environment.socketUrl;
   connected;
-  subs = [];
   onlineUsers = [];
   onlineSub = new Subject<any>();
   loggedIn$ = new Subject<any>();
@@ -54,13 +53,7 @@ export class SocketService {
   connectNewClient(username: string, room: string) {
     // console.log('socket connected', this.socket);
     const user = { username, room };
-    this.subs = [];
-    // this.socket = io.connect(this.socketUrl);
-    return new Promise(res => {
-      this.socket.emit('join', user, online => {
-        res(online);
-      });
-    });
+    this.socket.emit('join', user);
   }
 
   sendMessage(key: string, message: string | object = '') {
