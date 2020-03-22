@@ -186,7 +186,12 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   updateActive(onlineUsers: string[]) {
     if (this.room.directMessage) {
       const oId = onlineUsers.indexOf(this.title); // other username
-      this.status = oId === -1 ? 'away' : 'active';
+      if (oId === -1) {
+        this.status = 'away';
+        this.lastSeen = formatDate(new Date(), 'MMM d, y, h:mm a', 'en');
+        return;
+      }
+      this.status = 'active';
     }
   }
 
@@ -205,10 +210,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   }
 
   subscribeSocketEvents() {
-    const subs = [];
     const { events } = Events;
     const { username: uname } = this.user;
-    subs.push(
+    const subs = [
       this.socketService.onSEvent(events.NEW_MESSAGE).subscribe(message => {
         console.log(message);
         const date = formatDate(new Date(), 'mediumDate', 'en');
@@ -227,9 +231,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         } */
         this.loading = false;
         this.cdRef.detectChanges();
-      })
-    );
-    subs.push(
+      }),
       this.socketService.onSEvent(events.DEL_MESSAGE).subscribe(delMessage => {
         for (let i = 0; i < this.messages.length; i++) {
           const msg = this.messages[i];
@@ -248,15 +250,11 @@ export class ChatroomComponent implements OnInit, OnDestroy {
             }
           }
         }
-      })
-    );
-    subs.push(
+      }),
       this.socketService.onlineSub.subscribe(onlineUsers => {
         console.log('oinlin', onlineUsers);
         this.updateActive(onlineUsers);
-      })
-    );
-    subs.push(
+      }),
       this.socketService.onSEvent(events.LOADMSGS).subscribe(({ olderMsgs, count, username }) => {
         if (uname !== username) {
           return;
@@ -298,20 +296,18 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         } else {
           this.msgLoading = false;
         }
-      })
-    );
-    subs.push(
+      }),
       this.socketService
         .onSEvent(events.TYPING)
         .pipe(
           filter(username => uname !== username),
           tap(username => (this.typingJs[username] = true)),
-          debounceTime(1000)
+          debounceTime(500)
         )
         .subscribe(username => {
           delete this.typingJs[username];
         })
-    );
+    ];
     this.subscriptions.push(...subs);
     // console.log('subs', subs, this.subscriptions.length);
   }
