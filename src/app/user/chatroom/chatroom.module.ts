@@ -12,6 +12,7 @@ import { ScrollTrackerDirective } from '@directives/scrollTracker.directive';
 import { MobileMessagesContainerComponent } from './mobile-messages-container/mobile-messages-container.component';
 import { MessagesContainerComponent } from './messages-container/messages-container.component';
 import { SlideupModule } from '@util/slideup/slideup.module';
+import { ProgressBarModule } from '@util/progress-bar/progress-bar.module';
 
 const routes: Routes = [{ path: '', component: ChatroomComponent }];
 
@@ -23,6 +24,7 @@ const routes: Routes = [{ path: '', component: ChatroomComponent }];
     MobileMessagesContainerComponent,
     MessagesContainerComponent
   ],
+  exports: [MessagesContainerComponent],
   imports: [
     CommonModule,
     RecentDateModule,
@@ -30,6 +32,7 @@ const routes: Routes = [{ path: '', component: ChatroomComponent }];
     ModalModule.forRoot(),
     BsDropdownModule.forRoot(),
     SlideupModule,
+    ProgressBarModule,
     PreloadModule,
     RformModule
   ]

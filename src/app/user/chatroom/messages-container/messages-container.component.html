@@ -2,13 +2,13 @@
   <span *ngIf="message.datechange && i !== messages.length-1" class="new-day">{{
       message.datechange | date: 'mediumDate' | recentDate
     }}</span>
-  <div *ngIf="message.username" (mouseover)="hover[i] = true" (mouseout)="hover[i] = false" dropdown [ngClass]="
+  <div *ngIf="message.username" dropdown class="user" [ngClass]="
   {'current-user': message.username === user.username,
   'other-user': message.username !== user.username,
   'resimg': message.image
 }">
-    <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username" [class.d-none]="!hover[i]" class="sticky-more"
-      dropdownToggle aria-controls="dropdown-basic" size="xs">
+    <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username" class="sticky-more" dropdownToggle
+      aria-controls="dropdown-basic" size="xs">
     </fa-icon>
     <ul *dropdownMenu class="dropdown-menu dropdown-menu-right sticky-menu" role="menu" aria-labelledby="button-basic">
       <li role="menuitem" (click)="deleteMessage(message)" class="delete">Delete</li>
@@ -25,11 +25,7 @@
       }}</span>
   </div>
 </ng-container>
-<div class="progress form-group" *ngIf="progress > 0">
-  <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" [style.width.%]="progress">
-  </div>
-</div>
-
+<app-progress-bar [progress]="progress"></app-progress-bar>
 <ng-template #template>
   <div class="modal-header">
     <!-- <h4 class="modal-title pull-left">Modal</h4> -->

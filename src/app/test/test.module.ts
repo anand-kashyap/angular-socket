@@ -5,12 +5,11 @@ import { TestRoutingModule } from './test-routing.module';
 import { TestComponent } from './test.component';
 import { HomeComponent } from './testAnim/home.component';
 import { AboutComponent } from './testAnim/about.component';
-import { SlideupModule } from '@util/slideup/slideup.module';
-import { AutocompleteModule } from '@util/autocomplete/autocomplete.module';
 import { RformModule } from '@app/shared/rform.module';
+import { ChatroomModule } from '../user/chatroom/chatroom.module';
 
 @NgModule({
   declarations: [TestComponent, HomeComponent, AboutComponent],
-  imports: [CommonModule, RformModule, SlideupModule, TestRoutingModule, AutocompleteModule]
+  imports: [CommonModule, RformModule, TestRoutingModule, ChatroomModule]
 })
 export class TestModule {}
