@@ -9,7 +9,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { RecentDateModule } from '@pipes/recent-date.pipe';
 import { SendComponent } from './send/send.component';
 import { ScrollTrackerDirective } from '@directives/scrollTracker.directive';
-import { MobileMessagesContainerComponent } from './mobile-messages-container/mobile-messages-container.component';
 import { MessagesContainerComponent } from './messages-container/messages-container.component';
 import { SlideupModule } from '@util/slideup/slideup.module';
 import { ProgressBarModule } from '@util/progress-bar/progress-bar.module';
@@ -17,13 +16,7 @@ import { ProgressBarModule } from '@util/progress-bar/progress-bar.module';
 const routes: Routes = [{ path: '', component: ChatroomComponent }];
 
 @NgModule({
-  declarations: [
-    ScrollTrackerDirective,
-    ChatroomComponent,
-    SendComponent,
-    MobileMessagesContainerComponent,
-    MessagesContainerComponent
-  ],
+  declarations: [ScrollTrackerDirective, ChatroomComponent, SendComponent, MessagesContainerComponent],
   exports: [MessagesContainerComponent],
   imports: [
     CommonModule,

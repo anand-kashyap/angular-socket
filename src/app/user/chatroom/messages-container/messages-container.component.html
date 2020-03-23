@@ -2,17 +2,22 @@
   <span *ngIf="message.datechange && i !== messages.length-1" class="new-day">{{
       message.datechange | date: 'mediumDate' | recentDate
     }}</span>
-  <div *ngIf="message.username" dropdown class="user" [ngClass]="
+  <div *ngIf="message.username" (press)="longPress(i, message)" dropdown class="user" [ngClass]="
   {'current-user': message.username === user.username,
   'other-user': message.username !== user.username,
   'resimg': message.image
 }">
-    <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username" class="sticky-more" dropdownToggle
-      aria-controls="dropdown-basic" size="xs">
-    </fa-icon>
-    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right sticky-menu" role="menu" aria-labelledby="button-basic">
-      <li role="menuitem" (click)="deleteMessage(message)" class="delete">Delete</li>
-    </ul>
+    <!-- *for desktop -->
+    <ng-container *ngIf="!isMobile">
+      <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username" class="sticky-more" dropdownToggle
+        aria-controls="dropdown-basic" size="xs">
+      </fa-icon>
+      <ul *dropdownMenu class="dropdown-menu dropdown-menu-right sticky-menu" role="menu"
+        aria-labelledby="button-basic">
+        <li role="menuitem" (click)="deleteMessage(message)" class="delete">Delete</li>
+      </ul>
+    </ng-container>
+
     <!-- <strong class="d-block" *ngIf="message.username !== user.username">{{
         message.username | uppercase
       }}</strong> -->
@@ -26,6 +31,10 @@
   </div>
 </ng-container>
 <app-progress-bar [progress]="progress"></app-progress-bar>
+
+<!-- *for mobile -->
+<app-slideup [@slideInOutAnimation]="open" [opts]="opts" [open]="open" (closed)="closeSlideup($event)">
+</app-slideup>
 <ng-template #template>
   <div class="modal-header">
     <!-- <h4 class="modal-title pull-left">Modal</h4> -->

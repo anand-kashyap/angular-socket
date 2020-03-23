@@ -77,9 +77,24 @@
     max-width: 50%;
     padding: 0;
   }
-  .zoomed-img {
-    max-width: 100%;
-    display: block;
-    margin: auto;
+}
+.zoomed-img {
+  max-width: 100%;
+  display: block;
+  margin: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  :host {
+    .user {
+      .prev-image {
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        height: auto;
+        width: unset;
+      }
+    }
   }
 }

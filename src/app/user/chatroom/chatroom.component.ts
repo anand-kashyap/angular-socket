@@ -45,15 +45,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {}
 
-  isMobile(): boolean {
-    if (window.screen.width <= 768) {
-      return (this.mobile = true);
-    }
-    return (this.mobile = false);
-  }
-
   ngOnInit() {
-    this.isMobile();
     this.user = this.chatService.getUserInfo();
     this.room = this.chatService.room;
     this.subscriptions = [
