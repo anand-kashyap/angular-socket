@@ -5,11 +5,12 @@ import { RformModule } from '@app/shared/rform.module';
 
 import { Routes, RouterModule } from '@angular/router';
 import { ResetPasswordComponent } from './reset-password.component';
+import { SpinnerModule } from '@util/spinner/spinner.module';
 
 const routes: Routes = [{ path: '', component: ResetPasswordComponent }];
 
 @NgModule({
   declarations: [ResetPasswordComponent],
-  imports: [CommonModule, RformModule, PreloadModule, RouterModule.forChild(routes)]
+  imports: [CommonModule, RformModule, SpinnerModule, PreloadModule, RouterModule.forChild(routes)]
 })
 export class ResetPasswordModule {}

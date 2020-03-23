@@ -3,7 +3,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
-import { SocketService } from '../socket.service';
 import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-joinchat',
@@ -22,12 +21,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   username: string;
   errSubscription: Subscription;
 
-  constructor(
-    private router: Router,
-    private chatService: ChatService,
-    private apiService: ApiService,
-    private socketService: SocketService
-  ) {}
+  constructor(private router: Router, private chatService: ChatService, private apiService: ApiService) {}
 
   searchUserNew(text) {
     console.log('innew outsear', text);

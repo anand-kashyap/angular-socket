@@ -1,6 +1,6 @@
 import { ApiService } from '../../api.service';
 import { Router } from '@angular/router';
-import { Component, OnInit, /* Renderer2, ElementRef, ViewChild */ } from '@angular/core';
+import { Component, OnInit /* Renderer2, ElementRef, ViewChild */ } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ChatService } from '../../chat.service';
 
@@ -34,7 +34,9 @@ export class VerifyAccountComponent implements OnInit {
   };
   constructor(
     private chatService: ChatService,
-    private apiService: ApiService, /* private renderer: Renderer2, */ private router: Router) { }
+    private apiService: ApiService,
+    /* private renderer: Renderer2, */ private router: Router
+  ) {}
 
   ngOnInit() {
     this.sendOtp();
@@ -51,62 +53,65 @@ export class VerifyAccountComponent implements OnInit {
         // this.renderer.setProperty(this.resendButton.nativeElement, 'innerText', 'Resend');
         clearInterval(timer);
       } else {
-        this.resendTime = d.setSeconds(d.getSeconds() - 1 );
+        this.resendTime = d.setSeconds(d.getSeconds() - 1);
       }
     }, 1000);
   }
 
   sendOtp() {
     this.isResend = false;
-    this.apiService.sendOtp().subscribe(res => {
-      this.successMsg = res.message;
-      this.otpSent = true;
-      if (res.attempt < 3) {
-        this.setTimer();
+    this.apiService.sendOtp().subscribe(
+      res => {
+        this.successMsg = res.message;
+        this.otpSent = true;
+        if (res.attempt < 3) {
+          this.setTimer();
+        }
+      },
+      err => {
+        this.otpSent = true;
+        if (err.status === 400) {
+          this.resendTime = null;
+        } else {
+          this.isResend = true;
+        }
+        this.errorMessage = this.chatService.showResponseError(err);
       }
-    }, err => {
-      this.otpSent = true;
-      if (err.status === 400) {
-        this.resendTime = null;
-      } else {
-        this.isResend = true;
-      }
-      this.errorMessage = this.chatService.showResponseError(err);
-    });
+    );
   }
 
   getErrors(formcontrol: string) {
-    return this.chatService.getErrors(
-      formcontrol,
-      this.verifyForm,
-      this.verifyValidations
-    );
+    return this.chatService.getErrors(formcontrol, this.verifyForm, this.verifyValidations);
   }
 
   getInvalidCondition(formControl: string) {
-    return (
-      this.verifyForm.get(formControl).invalid &&
-      this.verifyForm.get(formControl).dirty
-    );
+    return this.verifyForm.get(formControl).invalid && this.verifyForm.get(formControl).dirty;
   }
 
   verifyOtp() {
     if (this.verifyForm.valid) {
+      this.loader = true;
       const otpInput = {
         email: this.chatService.getUserInfo().email,
         otp: this.verifyForm.value.otp
       };
-      this.apiService.confirmOtp(otpInput).subscribe(res => {
-        this.successMsg = 'otp confirmed';
-        this.otpSent = false;
-        const user = this.chatService.getUserInfo();
-        user.isVerified = true;
-        this.chatService.setUserInfo(user);
-        this.router.navigateByUrl('/user');
-      }, err => {
-        this.otpSent = true;
-        this.errorMessage = this.chatService.showResponseError(err);
-      });
+      this.apiService
+        .confirmOtp(otpInput)
+        .subscribe(
+          res => {
+            this.successMsg = 'otp confirmed';
+            this.otpSent = false;
+            const user = this.chatService.getUserInfo();
+            user.isVerified = true;
+            this.chatService.setUserInfo(user);
+            this.router.navigateByUrl('/user');
+          },
+          err => {
+            this.otpSent = true;
+            this.errorMessage = this.chatService.showResponseError(err);
+          }
+        )
+        .add(() => (this.loader = false));
     } else {
       this.chatService.markFieldsAsDirty(this.verifyForm);
     }

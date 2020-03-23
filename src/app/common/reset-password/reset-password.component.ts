@@ -72,6 +72,7 @@ export class ResetPasswordComponent implements OnInit {
 
   resetPassword() {
     if (this.resetPasswordForm.valid) {
+      this.loader = true;
       const body = this.resetPasswordForm.value;
       delete body.confirmPassword;
       console.log(body);
@@ -98,7 +99,10 @@ export class ResetPasswordComponent implements OnInit {
             }
           }
         )
-        .add(() => this.resetPasswordForm.enable());
+        .add(() => {
+          this.loader = false;
+          this.resetPasswordForm.enable();
+        });
     } else {
       this.validateService.markFieldsAsDirty(this.resetPasswordForm);
     }

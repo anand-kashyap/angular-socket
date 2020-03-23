@@ -16,37 +16,42 @@ export class ForgotPasswordComponent implements OnInit {
   });
 
   forgotValidations = {
-    email: [{
-      type: 'required',
-      message: 'Email is required'
-    }]
+    email: [
+      {
+        type: 'required',
+        message: 'Email is required'
+      }
+    ]
   };
-  constructor(private chatService: ChatService, private apiService: ApiService) { }
+  constructor(private chatService: ChatService, private apiService: ApiService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   isInvalid(control: string) {
     return this.chatService.isInvalid(this.forgotForm, control);
   }
 
   getErrors(formcontrol: string) {
-    return this.chatService.getErrors(
-      formcontrol,
-      this.forgotForm,
-      this.forgotValidations
-    );
+    return this.chatService.getErrors(formcontrol, this.forgotForm, this.forgotValidations);
   }
 
   sendMail() {
     if (this.forgotForm.valid) {
+      this.loader = true;
       const email = this.forgotForm.value.email;
       this.forgotForm.disable();
-      this.apiService.forgotPass(email).subscribe(res => {
-        this.errorMessage = res.message;
-      }, err => this.errorMessage = this.chatService.showResponseError(err)).add(() => {
-        this.forgotForm.enable();
-      });
+      this.apiService
+        .forgotPass(email)
+        .subscribe(
+          res => {
+            this.errorMessage = res.message;
+          },
+          err => (this.errorMessage = this.chatService.showResponseError(err))
+        )
+        .add(() => {
+          this.forgotForm.enable();
+          this.loader = false;
+        });
     } else {
       this.chatService.markFieldsAsDirty(this.forgotForm);
     }

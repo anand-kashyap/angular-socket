@@ -8,7 +8,8 @@
     <div class="form-group">
       <label for="user">Search for Users</label>
       <div class="position-relative">
-        <app-autocomplete [dropList]="userListNew" (selectedOption)="joinRoom($event)" (getListAsync)="searchUserNew($event)">
+        <app-autocomplete [dropList]="userListNew" (selectedOption)="joinRoom($event)"
+          (getListAsync)="searchUserNew($event)">
         </app-autocomplete>
         <fa-icon icon="search" *ngIf="!loader" class="stick-search"></fa-icon>
         <span class="spinner-border spinner-border-sm stick-loader" *ngIf="loader" role="status">
@@ -19,8 +20,7 @@
 
     <div class="row" *ngIf="fetchRecent">
       <div class="col-md-12 text-center">
-        <span class="spinner-border" role="status">
-          <span class="sr-only">Loading...</span></span>
+        <app-spinner [show]="fetchRecent"></app-spinner>
       </div>
     </div>
 

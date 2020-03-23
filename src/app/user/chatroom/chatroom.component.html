@@ -23,7 +23,7 @@
     <span *ngIf="msgLoading">Loading more...</span>
 
     <app-messages-container [fileRoot]="fileRoot" [progress]="progress" [messages]="messages" [user]="user"
-      (older)="loadOlderMsgs($event)" (deleteMsg)="deleteMessage($event)">
+      (deleteMsg)="deleteMessage($event)">
     </app-messages-container>
   </div>
   <!-- end message container -->

@@ -8,6 +8,7 @@ import { RecentDateModule } from '@pipes/recent-date.pipe';
 // import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { Routes, RouterModule } from '@angular/router';
 import { AutocompleteModule } from '@util/autocomplete/autocomplete.module';
+import { SpinnerModule } from '@util/spinner/spinner.module';
 
 const routes: Routes = [{ path: '', component: JoinchatComponent }];
 @NgModule({
@@ -18,6 +19,7 @@ const routes: Routes = [{ path: '', component: JoinchatComponent }];
     RecentDateModule,
     RformModule,
     AutocompleteModule,
+    SpinnerModule,
     RouterModule.forChild(routes),
     // TypeaheadModule.forRoot(),
     AlertModule.forRoot()

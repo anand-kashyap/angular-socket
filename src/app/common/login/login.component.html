@@ -33,10 +33,10 @@
             </div>
             <div>
               <div class="btn-group" role="login" aria-label="Login Register">
-                <button type="submit" [disabled]="loader" class="btn btn-primary d-inline-block"> <span
-                    class="spinner-border spinner-border-sm" *ngIf="loader" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </span> Login</button>
+                <button type="submit" [disabled]="loader" class="btn btn-primary d-inline-block">
+                  <app-spinner [show]="loader" size="sm"></app-spinner>
+                  Login
+                </button>
                 <button type="button" [disabled]="loader" [routerLink]="['/register']"
                   class="btn btn-outline-primary d-inline-block ml-1">Sign Up</button>
               </div>

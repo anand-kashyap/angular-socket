@@ -13,7 +13,6 @@ export class MessagesContainerComponent implements OnInit {
   @Input() fileRoot;
   @Input() progress = 0;
   @Input() user;
-  @Output() older = new EventEmitter();
   @Output() deleteMsg = new EventEmitter();
   open = false;
   isMobile = false;

@@ -1,0 +1,6 @@
+<span class="spinner-border" [ngClass]="{
+  'spinner-border-sm': size === 'sm',
+  'd-block': block
+}" *ngIf="show" role="status">
+  <span class="sr-only">Loading...</span>
+</span>

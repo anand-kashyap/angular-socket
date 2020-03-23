@@ -5,10 +5,11 @@ import { RformModule } from '@app/shared/rform.module';
 
 import { Routes, RouterModule } from '@angular/router';
 import { RegisterComponent } from './register.component';
+import { SpinnerModule } from '@util/spinner/spinner.module';
 
 const routes: Routes = [{ path: '', component: RegisterComponent }];
 @NgModule({
   declarations: [RegisterComponent],
-  imports: [CommonModule, RformModule, PreloadModule, RouterModule.forChild(routes)]
+  imports: [CommonModule, RformModule, SpinnerModule, PreloadModule, RouterModule.forChild(routes)]
 })
 export class RegisterModule {}
