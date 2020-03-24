@@ -111,7 +111,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     if (this.room.directMessage) {
       const { members } = this.room;
       this.title = members[0];
-      this.updateActive(this.socketService.onlineUsers);
       this.getLastSeen(true);
     }
     this.addDates();

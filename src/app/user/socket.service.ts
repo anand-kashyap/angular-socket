@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 
 import { environment } from '@env/environment';
-import { Observable, Subject, fromEvent } from 'rxjs';
+import { Observable, Subject, fromEvent, BehaviorSubject } from 'rxjs';
 
 export class Events {
   public static events = {
@@ -23,9 +23,7 @@ export class Events {
 export class SocketService {
   socket: SocketIOClient.Socket;
   socketUrl = environment.socketUrl;
-  connected;
-  onlineUsers = [];
-  onlineSub = new Subject<any>();
+  onlineSub = new BehaviorSubject<any>([]);
   loggedIn$ = new Subject<any>();
   constructor(private chatService: ChatService) {}
 
@@ -35,7 +33,6 @@ export class SocketService {
       this.socket.emit('active', this.chatService.getUserInfo().username);
       this.onSEvent(Events.events.ACTIVE).subscribe(
         online => {
-          this.onlineUsers = online;
           console.log('online users', online);
           obs.next(online);
           this.onlineSub.next(online);
