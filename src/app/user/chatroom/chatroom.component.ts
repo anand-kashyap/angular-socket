@@ -20,7 +20,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   fileRoot = environment.socketUrl + '/uploads/';
   progress = 0;
   @ViewChild('scrollbox', { static: true }) box: ElementRef<any>;
-  fullDates = [];
   loading = false;
   eom = false;
   mobile = false;
@@ -73,22 +72,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }
   }
 
-  addDates() {
-    for (let i = 0; i < this.room.messages.length; i++) {
-      const msg = this.room.messages[i];
-      if (msg.datechange) {
-        this.fullDates.push(formatDate(new Date(msg.datechange), 'mediumDate', 'en'));
-        continue;
-      }
-      const date = formatDate(new Date(msg.createdAt), 'mediumDate', 'en');
-      if (this.fullDates.indexOf(date) === -1) {
-        // if changed date present already
-        this.room.messages.splice(i, 0, { datechange: date });
-        this.fullDates.push(date);
-      }
-    }
-  }
-
   getLastSeen(first = false) {
     // will use more details in future
     if (first && this.status === 'active') {
@@ -98,7 +81,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       res => {
         const { lastSeen } = res.data;
         if (lastSeen) {
-          this.lastSeen = formatDate(new Date(lastSeen), 'MMM d, y, h:mm a', 'en');
+          this.lastSeen = this.getLastSeenDate(lastSeen);
         }
       },
       err => {
@@ -113,23 +96,21 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       this.title = members[0];
       this.getLastSeen(true);
     }
-    this.addDates();
+    this.socketService.addDates(this.room);
     this.messages = this.room.messages;
     setTimeout(() => {
       this.bottom = true;
     }, 0);
     // this.cdRef.detectChanges();
     console.log('curRoom', this.room);
-    this.socketService.joinRoom(this.user.username, this.room.id);
+    this.socketService.joinRoom(this.user.username, this.room.id, this.room.members);
     this.subscribeSocketEvents();
   }
 
   ngOnDestroy() {
-    if (this.subscriptions) {
-      console.log('clearing socket');
-      for (const sub of this.subscriptions) {
-        sub.unsubscribe();
-      }
+    console.log('clearing socket');
+    for (const sub of this.subscriptions) {
+      sub.unsubscribe();
     }
   }
 
@@ -173,12 +154,15 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     );
   }
 
+  getLastSeenDate(date = new Date()) {
+    return formatDate(new Date(date), 'MMM d, y, h:mm a', 'en');
+  }
   updateActive(onlineUsers: string[]) {
     if (this.room.directMessage) {
       const oId = onlineUsers.indexOf(this.title); // other username
       if (oId === -1) {
         this.status = 'away';
-        this.lastSeen = formatDate(new Date(), 'MMM d, y, h:mm a', 'en');
+        this.lastSeen = this.getLastSeenDate();
         return;
       }
       this.status = 'active';

@@ -41,7 +41,7 @@ export class SocketService {
         err => console.error(err)
       );
       this.onNewMessage();
-      // this.onDelMessage();
+      this.onDelMessage();
       // this.onTyping();
       return () => this.socket.disconnect();
     });
@@ -51,8 +51,8 @@ export class SocketService {
     return this.chatService.isLoggedIn;
   }
 
-  joinRoom(username: string, room: string) {
-    this.socket.emit(Events.events.JOIN, { username, room });
+  joinRoom(username: string, room: string, otherUsernames: string[]) {
+    this.socket.emit(Events.events.JOIN, { username, room, otherUsernames });
   }
 
   sendMessage(key: string, message: string | object = '') {
@@ -68,6 +68,7 @@ export class SocketService {
   }
 
   addDates(room) {
+    room.fullDates = room.fullDates || {};
     for (let i = 0; i < room.messages.length; i++) {
       const msg = room.messages[i];
       if (msg.datechange) {
@@ -111,7 +112,7 @@ export class SocketService {
       console.log('num of messages: ', curRoom.count);
       allRooms[roomId] = curRoom;
       this.latRoomIndex = Object.keys(allRooms).indexOf(roomId);
-      console.log('indeed', Object.keys(allRooms), roomId);
+      // console.log('indeed', Object.keys(allRooms), roomId);
       // allRooms.latRoomId = roomId;
       this.rooms$.next(allRooms);
     });
@@ -126,7 +127,7 @@ export class SocketService {
       const { messages = [] } = curRoom;
       for (let i = 0; i < messages.length; i++) {
         const msg = messages[i];
-        if (msg.id === delMessage.id) {
+        if (msg._id === delMessage._id) {
           console.log('deleted message index', i);
           messages.splice(i, 1);
           count--;
@@ -142,7 +143,9 @@ export class SocketService {
           break;
         }
       }
-      allRooms[roomId] = { ...allRooms[roomId], messages, count };
+      console.log(allRooms[roomId], messages, count);
+      allRooms[roomId].messages = messages;
+      allRooms[roomId].count = count;
       this.rooms$.next(allRooms);
     });
   }
