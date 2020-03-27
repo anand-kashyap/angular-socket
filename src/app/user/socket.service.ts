@@ -124,7 +124,7 @@ export class SocketService {
       const allRooms = this.rooms$.value;
       const curRoom = allRooms[roomId] || {};
       let { count = 0 } = curRoom;
-      const { messages = [] } = curRoom;
+      const { messages = [], fullDates } = curRoom;
       for (let i = 0; i < messages.length; i++) {
         const msg = messages[i];
         if (msg._id === delMessage._id) {
@@ -133,6 +133,10 @@ export class SocketService {
           count--;
           const last = messages[messages.length - 1];
           if (last.datechange) {
+            const dDate = this.getDate(last.datechange);
+            if (fullDates[dDate]) {
+              delete fullDates[dDate];
+            }
             messages.pop();
             count--;
           }
@@ -143,7 +147,7 @@ export class SocketService {
           break;
         }
       }
-      console.log(allRooms[roomId], messages, count);
+      // console.log(allRooms[roomId], messages, count);
       allRooms[roomId].messages = messages;
       allRooms[roomId].count = count;
       this.rooms$.next(allRooms);
