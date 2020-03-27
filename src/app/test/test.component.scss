@@ -1,15 +1,9 @@
-.long-click {
-  height: 200px;
-  background-color: lightblue;
-  margin: 20px 0;
-}
-
-.bottom {
-  bottom: 0;
-  height: 100px;
-  position: absolute;
-  height: 100px;
-  width: 70%;
-  margin-left: 10%;
-  background-color: red;
+.test {
+  list-style-type: none;
+  li {
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px 0;
+    background-color: cadetblue;
+  }
 }

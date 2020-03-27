@@ -37,7 +37,6 @@ export class MessagesContainerComponent implements OnInit {
   opts;
   imgPath: string;
   modalRef: BsModalRef;
-  hover = [];
   constructor(private modalService: BsModalService) {}
 
   ngOnInit() {

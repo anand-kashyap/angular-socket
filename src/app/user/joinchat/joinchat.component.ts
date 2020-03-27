@@ -1,9 +1,10 @@
 import { ChatService } from '../../chat.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, noop, pipe } from 'rxjs';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
-import { map } from 'rxjs/operators';
+import { map, tap, delay } from 'rxjs/operators';
+import { SocketService } from '../socket.service';
 @Component({
   selector: 'app-joinchat',
   templateUrl: './joinchat.component.html',
@@ -20,8 +21,14 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   errTimeout = 4000;
   username: string;
   errSubscription: Subscription;
+  roomSub: Subscription;
 
-  constructor(private router: Router, private chatService: ChatService, private apiService: ApiService) {}
+  constructor(
+    private router: Router,
+    private sService: SocketService,
+    private chatService: ChatService,
+    private apiService: ApiService
+  ) {}
 
   searchUserNew(text) {
     console.log('innew outsear', text);
@@ -40,11 +47,23 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userinput = this.errMsg = this.username = '';
     this.error = this.loader = false;
-    this.fetchRecent = true;
     this.recentContacts = [];
     this.errSubscription = null;
     this.username = this.chatService.getUserInfo().username;
-    if (this.username) {
+    this.roomSub = this.sService.getAllRooms().subscribe(rooms => {
+      const index = this.sService.latRoomIndex;
+      const arRooms = Object.values(rooms);
+      if (index) {
+        const lat = arRooms.splice(index, 1);
+        console.log('lat', lat, index, arRooms);
+        this.sService.latRoomIndex = null;
+        this.recentContacts = [lat[0], ...arRooms];
+        return;
+      }
+      this.recentContacts = arRooms;
+    });
+    if (this.recentContacts.length < 2) {
+      this.fetchRecent = true;
       this.getRecentChats();
     }
     this.errMsg = this.chatService.getRouteErrorMsg();
@@ -55,30 +74,41 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   }
 
   getRecentChats() {
-    return this.apiService.getRecentChats().subscribe(
-      res => {
-        console.log('recent usersList', res);
-        this.recentContacts = [...res];
-        this.fetchRecent = false;
-        // console.log(this.recentContacts);
-      },
-      err => {
-        console.error('err', err);
-        this.fetchRecent = false;
-        this.chatService.showResponseError(err);
-      }
-    );
+    return this.apiService
+      .getRecentChats()
+      .pipe(
+        tap((res: Array<any>) => {
+          console.log('recent usersList', res);
+          const resJs = res.reduce((json, v) => {
+            json[v.id] = v;
+            json[v.id].count = v.messages.length;
+            return json;
+          }, {});
+          this.sService.rooms$.next(resJs);
+          // console.log(this.recentContacts);
+        })
+      )
+      .subscribe(
+        noop,
+        err => {
+          console.error('err', err);
+          this.chatService.showResponseError(err);
+        },
+        () => (this.fetchRecent = false)
+      );
   }
   subscribeError() {
-    this.errSubscription = this.chatService.getErrorMsg().subscribe(msg => {
-      console.log('msg', msg);
-      this.errMsg = msg;
-      // if (this.errMsg) {
-      this.error = true;
-      setTimeout(() => {
-        this.error = false;
-      }, this.errTimeout);
-    });
+    this.errSubscription = this.chatService
+      .getErrorMsg()
+      .pipe(
+        tap(msg => {
+          console.log('msg', msg);
+          this.errMsg = msg;
+          this.error = true;
+        }),
+        delay(this.errTimeout)
+      )
+      .subscribe(() => (this.error = false));
   }
 
   lastMsg(msgArr: any[]) {
@@ -92,17 +122,14 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     return last.msg;
   }
 
-  byMe(msgArr: any[]) {
-    const last = msgArr[msgArr.length - 1];
-    if (last.username === this.username) {
-      return true;
-    }
-    return false;
+  byMe(lastMessage) {
+    return lastMessage.username === this.username;
   }
 
   ngOnDestroy() {
     console.log('join destroyed');
     this.errSubscription.unsubscribe();
+    this.roomSub.unsubscribe();
   }
 
   joinRoom(userObj) {
@@ -118,7 +145,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   }
 
   openChat(room) {
-    this.chatService.room = room;
-    this.router.navigateByUrl(`/user/chat/${room._id}`);
+    // this.chatService.room = room;
+    this.router.navigateByUrl(`/user/chat/${room.id}`);
   }
 }

@@ -14,7 +14,6 @@ import { SocketService } from './user/socket.service';
 })
 export class ApiService {
   private apiUrl = environment.socketUrl;
-  private newChatsArr;
   recentUsers: Observable<any>;
   private notify = new Subject<boolean>();
   private openNotify = new Subject<boolean>(); // get user object
@@ -62,7 +61,7 @@ export class ApiService {
     this.setNotify(false);
     this.chatService.clearUser();
     this.socketService.loggedIn$.next(false);
-    this.recentUsers = this.newChatsArr = null;
+    this.recentUsers = null;
     this.router.navigate(['/']);
   }
 
@@ -109,41 +108,9 @@ export class ApiService {
     return this.httpClient.post<any>(searchUserUrl, { user: body }, { params });
   }
 
-  updateRecentChats(newRoom, currentUserName: string) {
-    // todo: modify for room instead of dm
-    if (this.recentUsers) {
-      for (let i = 0; i < this.newChatsArr.length; i++) {
-        const room = this.newChatsArr[i];
-        if (room._id === newRoom._id) {
-          this.newChatsArr.splice(i, 1);
-          break;
-        }
-      }
-      const index = newRoom.members.indexOf(currentUserName);
-      if (index !== -1) {
-        newRoom.members.splice(index, 1);
-      }
-      this.newChatsArr.unshift(newRoom);
-    }
-  }
-
   getRecentChats(): Observable<any> {
-    if (!this.newChatsArr) {
-      const recentChatsUrl = `${this.apiUrl}/room/recentChats/${this.chatService.getUserInfo().username}`;
-      this.recentUsers = this.httpClient.get<any>(recentChatsUrl).pipe(
-        map(resp => {
-          this.newChatsArr = resp.data;
-          return resp.data;
-        }),
-        publishReplay(1),
-        refCount()
-      );
-      return this.recentUsers;
-    } else {
-      return new Observable(observer => {
-        observer.next([...this.newChatsArr]);
-      });
-    }
+    const rurl = `${this.apiUrl}/room/recentChats/${this.chatService.getUserInfo().username}`;
+    return this.httpClient.get<any>(rurl).pipe(map(r => r.data));
   }
 
   getUserDetails() {

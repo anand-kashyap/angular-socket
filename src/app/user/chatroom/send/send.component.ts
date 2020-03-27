@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { SocketService, Events } from '@app/user/socket.service';
+import { SocketService } from '@app/user/socket.service';
+import { Events } from '@app/models/main';
 
 @Component({
   selector: 'app-send',

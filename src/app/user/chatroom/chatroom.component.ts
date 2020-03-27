@@ -1,6 +1,7 @@
-import { SocketService, Events } from '../socket.service';
+import { SocketService } from '../socket.service';
+import { Events } from '@app/models/main';
 import { ChatService } from '@app/chat.service';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { formatDate } from '@angular/common';
 
 import { ApiService } from '@app/api.service';
@@ -8,7 +9,6 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { environment } from '@env/environment';
-import { debounceTime, tap, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chatroom',
@@ -36,7 +36,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   title = '';
   bottom = false;
   moreToLoad = 50; // num to get
-  count: number;
+  // count: number;
   constructor(
     private chatService: ChatService,
     private apiService: ApiService,
@@ -45,31 +45,31 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.user = this.chatService.getUserInfo();
-    this.room = this.chatService.room;
     this.subscriptions = [
       this.apiService.getNotify().subscribe(opened => {
         this.notifyOpen = opened;
       })
     ];
-    if (!this.room) {
-      const { roomId } = this.route.snapshot.params;
-      if (roomId) {
-        this.apiService.getRoomById(roomId, this.user.username).subscribe(res => {
-          this.room = res.data;
-          this.chatService.room = this.room;
-          this.count = this.room.messages.length;
-          console.log('num of messages: ', this.count);
-          this.inits();
-        });
-      } else {
-        return this.chatService.gotoJoin();
+    const { roomId } = this.route.snapshot.params;
+    if (roomId) {
+      this.socketService.getRoom$(roomId).subscribe(room => {
+        this.room = room;
+        this.cdRef.detectChanges();
+      });
+      if (!this.room) {
+        const { data } = await this.apiService
+          .getRoomById(roomId, this.user.username)
+          .toPromise()
+          .catch(e => console.error(e));
+        this.room = data;
+        this.socketService.addRoom(roomId, this.room);
       }
-    } else {
-      this.count = this.room.messages.length;
-      console.log('num of messages: ', this.count);
+      console.log('room messages: ', this.room);
       this.inits();
+    } else {
+      return this.chatService.gotoJoin();
     }
   }
 
@@ -120,12 +120,11 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }, 0);
     // this.cdRef.detectChanges();
     console.log('curRoom', this.room);
-    this.socketService.connectNewClient(this.user.username, this.room._id);
+    this.socketService.joinRoom(this.user.username, this.room.id);
     this.subscribeSocketEvents();
   }
 
   ngOnDestroy() {
-    this.socketService.leave();
     if (this.subscriptions) {
       console.log('clearing socket');
       for (const sub of this.subscriptions) {
@@ -140,7 +139,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       this.bottom = false;
       if (!this.eom && !this.msgLoading) {
         const pagin = {
-          skip: this.count,
+          skip: this.room.count,
           limit: this.moreToLoad
         };
         this.msgLoading = true;
@@ -204,50 +203,13 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     const { events } = Events;
     const { username: uname } = this.user;
     const subs = [
-      this.socketService.onSEvent(events.NEW_MESSAGE).subscribe(message => {
-        console.log(message);
-        const date = formatDate(new Date(), 'mediumDate', 'en');
-        const found = this.fullDates.indexOf(date);
-        if (found === -1) {
-          console.log('adding date..');
-          this.messages.push({ datechange: message.createdAt });
-          this.fullDates.push(date);
-        }
-        this.messages.push(message);
-        this.count++;
-        console.log('num of messages: ', this.count);
-        /* if (message.username === uname) {
-          // update recent chat observable
-          this.apiService.updateRecentChats({ ...this.room }, uname);
-        } */
-        this.loading = false;
-        this.cdRef.detectChanges();
-      }),
-      this.socketService.onSEvent(events.DEL_MESSAGE).subscribe(delMessage => {
-        for (let i = 0; i < this.messages.length; i++) {
-          const msg = this.messages[i];
-          if (msg._id === delMessage._id) {
-            console.log('deleted message index', i);
-            this.messages.splice(i, 1);
-            this.count--;
-            const last = this.messages[this.messages.length - 1];
-            if (last.datechange) {
-              this.messages.pop();
-              this.count--;
-            }
-            console.log('num of messages: ', this.count);
-            if (!(this.cdRef as ViewRef).destroyed) {
-              this.cdRef.detectChanges();
-            }
-          }
-        }
-      }),
       this.socketService.onlineSub.subscribe(onlineUsers => {
         console.log('oinlin', onlineUsers);
         this.updateActive(onlineUsers);
       }),
       this.socketService.onSEvent(events.LOADMSGS).subscribe(({ olderMsgs, count, username }) => {
-        if (uname !== username) {
+        return;
+        /* if (uname !== username) {
           return;
         }
         const num = olderMsgs.length;
@@ -286,20 +248,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
           this.msgLoading = false;
         } else {
           this.msgLoading = false;
-        }
-      }),
-      this.socketService
-        .onSEvent(events.TYPING)
-        .pipe(
-          filter(username => uname !== username),
-          tap(username => (this.typingJs[username] = true)),
-          debounceTime(500)
-        )
-        .subscribe(username => {
-          delete this.typingJs[username];
-        })
+        } */
+      })
     ];
     this.subscriptions.push(...subs);
-    // console.log('subs', subs, this.subscriptions.length);
   }
 }
