@@ -55,7 +55,11 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     if (roomId) {
       this.socketService.getRoom$(roomId).subscribe(room => {
         this.room = room;
-        this.cdRef.detectChanges();
+        if (this.messages.length > 0) {
+          this.messages = this.room.messages;
+        }
+        console.log('called sub');
+        // this.cdRef.detectChanges();
       });
       if (!this.room) {
         const { data } = await this.apiService
@@ -123,6 +127,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
           skip: this.room.count,
           limit: this.moreToLoad
         };
+        console.log('pagin', pagin);
         this.msgLoading = true;
         this.socketService.sendMessage(Events.events.LOADMSGS, pagin);
       }
@@ -191,11 +196,8 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         console.log('oinlin', onlineUsers);
         this.updateActive(onlineUsers);
       }),
-      this.socketService.onSEvent(events.LOADMSGS).subscribe(({ olderMsgs, count, username }) => {
-        return;
-        /* if (uname !== username) {
-          return;
-        }
+      this.socketService.onSEvent(events.LOADMSGS).subscribe(({ olderMsgs, count, roomId }) => {
+        // console.log('olderMsgs', olderMsgs, count);
         const num = olderMsgs.length;
         if (count <= 0) {
           this.eom = true;
@@ -208,31 +210,36 @@ export class ChatroomComponent implements OnInit, OnDestroy {
             res = res.nextElementSibling;
           }
           // console.log(res);
-          console.log('date is: ', this.fullDates[0]);
-          const oldDates = [];
-          for (let i = 0; i < num; i++) {
+          const allRooms = this.socketService.rooms$.value;
+          const curRoom = allRooms[roomId];
+          const firstDate = Object.keys(curRoom.fullDates)[0];
+          console.log('date is: ', Object.keys(curRoom.fullDates)[0]);
+          const oldDates = {};
+          for (let i = 0; i < olderMsgs.length - 1; i++) {
             const msg = olderMsgs[i];
-            const date = formatDate(new Date(msg.createdAt), 'mediumDate', 'en');
-            if (oldDates.indexOf(date) === -1) {
+            const date = this.socketService.getDate(msg.createdAt);
+            if (!oldDates[date]) {
               // if changed date not present already
               olderMsgs.splice(i, 0, { datechange: date });
-              oldDates.push(date);
-              // this.fullDates.unshift(date);
+              oldDates[date] = true;
             }
           }
-          if (oldDates[oldDates.length - 1] === this.fullDates[0]) {
-            console.log(this.messages[0]);
-            this.messages.splice(0, 1);
-            this.fullDates.splice(0, 1);
+          if (Object.keys(oldDates)[Object.keys(oldDates).length - 1] === firstDate) {
+            console.log(curRoom.messages[0]);
+            curRoom.messages.splice(0, 1);
+            delete curRoom.fullDates[firstDate];
           }
-          this.fullDates = oldDates.concat(this.fullDates);
-          this.messages = olderMsgs.concat(this.messages);
+          curRoom.fullDates = { ...oldDates, ...curRoom.fullDates };
+          curRoom.messages = [...olderMsgs, ...curRoom.messages];
           this.box.nativeElement.scrollTop = ofset;
-          this.count += olderMsgs.length;
+          curRoom.count += num;
+          allRooms[roomId] = curRoom;
+          console.log('allRooms', allRooms);
+          this.socketService.rooms$.next(allRooms);
           this.msgLoading = false;
         } else {
           this.msgLoading = false;
-        } */
+        }
       })
     ];
     this.subscriptions.push(...subs);
