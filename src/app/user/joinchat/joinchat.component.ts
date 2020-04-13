@@ -47,7 +47,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userinput = this.errMsg = this.username = '';
     this.error = this.loader = false;
-    this.recentContacts = [];
+    this.recentContacts = []; // todo typing fix
     this.errSubscription = null;
     this.username = this.chatService.getUserInfo().username;
     this.roomSub = this.sService.getAllRooms().subscribe(rooms => {

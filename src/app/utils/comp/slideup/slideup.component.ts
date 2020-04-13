@@ -1,5 +1,7 @@
 import { Component, OnInit, HostListener, Input, Output, EventEmitter } from '@angular/core';
 // import { UtilService } from '../util.service';
+import { slideInOutAnimation, parentIf } from '@app/animations/slideInOut';
+
 interface Opt {
   label: string;
   icon?: string;
@@ -9,7 +11,8 @@ interface Opt {
 @Component({
   selector: 'app-slideup',
   templateUrl: './slideup.component.html',
-  styleUrls: ['./slideup.component.scss']
+  styleUrls: ['./slideup.component.scss'],
+  animations: [parentIf, slideInOutAnimation]
 })
 export class SlideupComponent implements OnInit {
   @Input() open = false;

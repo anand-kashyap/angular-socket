@@ -1,5 +1,5 @@
-<div id="overlay" *ngIf="open">
-  <ul class="from-bottom">
+<div id="overlay" [@parentIf] *ngIf="open">
+  <ul class="from-bottom" [@slideInOutAnimation]>
     <li class="noselect" [style.color]="opt.color || null" *ngFor="let opt of opts; let i=index"
       (click)="selectedOption(opt.label)">
       <fa-icon [icon]="opt.icon" class="pr-2" *ngIf="opt.icon">

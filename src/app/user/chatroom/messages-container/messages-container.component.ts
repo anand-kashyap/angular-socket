@@ -1,12 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { slideInOutAnimation } from '@app/animations/slideInOut';
 
 @Component({
   selector: 'app-messages-container',
   templateUrl: './messages-container.component.html',
-  styleUrls: ['./messages-container.component.scss'],
-  animations: [slideInOutAnimation]
+  styleUrls: ['./messages-container.component.scss']
 })
 export class MessagesContainerComponent implements OnInit {
   @Input() messages;
@@ -90,5 +88,10 @@ export class MessagesContainerComponent implements OnInit {
   openModal(template: TemplateRef<any>, imgPath: string) {
     this.imgPath = imgPath;
     this.modalRef = this.modalService.show(template);
+  }
+
+  showDefImg(imageEl, msg) {
+    imageEl.src = '/assets/images/notfoundre.png';
+    msg.noimg = true;
   }
 }
