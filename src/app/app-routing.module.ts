@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, RouteReuseStrategy } from '@angular/router';
 import { AuthGuard } from './auth.guard';
+import { CustomReuse } from './CustomReuse';
 
 const routes: Routes = [
   {
@@ -39,13 +40,19 @@ const routes: Routes = [
   },
   {
     path: 'user',
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule),
-    data: { state: 'root-user' }
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+    // data: { state: 'root-user' }
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
+  providers: [
+    {
+      provide: RouteReuseStrategy,
+      useClass: CustomReuse
+    }
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
