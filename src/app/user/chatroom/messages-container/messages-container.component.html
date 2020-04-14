@@ -21,8 +21,9 @@
     <!-- <strong class="d-block" *ngIf="message.username !== user.username">{{
         message.username | uppercase
       }}</strong> -->
-    <img *ngIf="message.image" #im (error)="showDefImg(im, message)" (click)="!message.noimg && openModal(template, fileRoot+ message.image)"
-      class="prev-image" [src]="fileRoot+ message.image" alt="">
+    <img *ngIf="message.image" #im (error)="showDefImg(im, message)"
+      (click)="!message.noimg && openModal(template, fileRoot+ message.image)" class="prev-image"
+      [src]="fileRoot+ message.image" alt="">
     <!-- need for group chats only -->
     <span *ngIf="message.msg" [innerHTML]="message.msg"></span>
     <span class="message-date">{{

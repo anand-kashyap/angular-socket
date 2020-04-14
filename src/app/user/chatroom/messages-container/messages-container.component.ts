@@ -57,7 +57,6 @@ export class MessagesContainerComponent implements OnInit {
     document.execCommand('copy');
     document.removeEventListener('copy', listener, false);
   }
-
   longPress(msgIndex: number, msg) {
     if (!this.isMobile) {
       return;

@@ -47,11 +47,19 @@ export class AppComponent implements OnInit {
       .pipe(
         tap(v => {
           if (v instanceof NavigationEnd) {
-            this.noPull = this.router.url.startsWith('/user/join');
+            const { url } = this.router;
+            this.noPull = url.startsWith('/user/join');
             if (this.noPull) {
               this.renderer.addClass(this.document.body, 'scrollbe');
             } else {
               this.renderer.removeClass(this.document.body, 'scrollbe');
+            }
+            const isMobile = window.screen.width < 600;
+            const ischat = url.startsWith('/user/chat');
+            if (isMobile && ischat) {
+              this.renderer.setAttribute(this.document.body, 'oncontextmenu', 'return false;');
+            } else {
+              this.renderer.removeAttribute(this.document.body, 'oncontextmenu');
             }
           }
           return v;
