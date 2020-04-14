@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, Renderer2 } from '@angular/core';
 import { setTheme } from 'ngx-bootstrap/utils';
 import { RouterAnimations } from './animations/routerTransition';
-import { Router, ActivatedRoute, RoutesRecognized, NavigationEnd } from '@angular/router';
+import { Router, RoutesRecognized, NavigationEnd } from '@angular/router';
 import { SocketService } from './user/socket.service';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { environment } from '@env/environment';
-import { startWith, pairwise, map, filter, tap } from 'rxjs/operators';
+import { pairwise, map, filter, tap } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,12 @@ export class AppComponent implements OnInit {
   noPull = false;
   connected: Subscription;
   animationState = 1;
-  constructor(private router: Router, private sService: SocketService) {
+  constructor(
+    private router: Router,
+    private sService: SocketService,
+    @Inject(DOCUMENT) private document: Document,
+    private renderer: Renderer2
+  ) {
     setTheme('bs4');
   }
 
@@ -42,6 +48,11 @@ export class AppComponent implements OnInit {
         tap(v => {
           if (v instanceof NavigationEnd) {
             this.noPull = this.router.url.startsWith('/user/join');
+            if (this.noPull) {
+              this.renderer.addClass(this.document.body, 'scrollbe');
+            } else {
+              this.renderer.removeClass(this.document.body, 'scrollbe');
+            }
           }
           return v;
         }),
