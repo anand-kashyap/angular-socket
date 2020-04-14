@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { setTheme } from 'ngx-bootstrap/utils';
 import { RouterAnimations } from './animations/routerTransition';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RoutesRecognized, NavigationEnd } from '@angular/router';
 import { SocketService } from './user/socket.service';
 import { Subscription, Observable } from 'rxjs';
 import { environment } from '@env/environment';
@@ -40,12 +40,12 @@ export class AppComponent implements OnInit {
     this.router.events
       .pipe(
         tap(v => {
-          if (v.constructor.name === 'NavigationEnd') {
+          if (v instanceof NavigationEnd) {
             this.noPull = this.router.url.startsWith('/user/join');
           }
           return v;
         }),
-        filter(v => v.constructor.name === 'RoutesRecognized'),
+        filter(v => v instanceof RoutesRecognized),
         pairwise(),
         map(([prev, curr]) => {
           // start and end
