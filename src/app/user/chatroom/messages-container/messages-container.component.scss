@@ -88,6 +88,11 @@
   /* For mobile phones: */
   :host {
     .user {
+      &:hover {
+        .sticky-more {
+          display: none;
+        }
+      }
       .prev-image {
         background-repeat: no-repeat;
         background-position: center;

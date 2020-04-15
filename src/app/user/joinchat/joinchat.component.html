@@ -44,7 +44,7 @@
               {{contact.messages[contact.messages.length-1].createdAt | recentDate: true}}</p>
           </div>
           <div *ngIf="contact.messages.length > 0">
-            <ng-container *ngIf="byMe(contact.lastMessage); else otherUs">
+            <ng-container *ngIf="byMe(contact.messages[contact.messages.length-1]); else otherUs">
               <fa-icon [style.color]="'#696868'" icon="arrow-right" class="fa-sm"></fa-icon>
             </ng-container>
             <ng-template #otherUs>

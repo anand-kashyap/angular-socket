@@ -8,15 +8,12 @@
   'resimg': message.image
 }">
     <!-- *for desktop -->
-    <ng-container *ngIf="!isMobile">
-      <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username" class="sticky-more" dropdownToggle
-        aria-controls="dropdown-basic" size="xs">
-      </fa-icon>
-      <ul *dropdownMenu class="dropdown-menu dropdown-menu-right sticky-menu" role="menu"
-        aria-labelledby="button-basic">
-        <li role="menuitem" (click)="deleteMessage(message)" class="delete">Delete</li>
-      </ul>
-    </ng-container>
+    <fa-icon icon="ellipsis-v" *ngIf="message.username === user.username" class="sticky-more" dropdownToggle
+      aria-controls="dropdown-basic" size="xs">
+    </fa-icon>
+    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right sticky-menu" role="menu" aria-labelledby="button-basic">
+      <li role="menuitem" (click)="deleteMessage(message)" class="delete">Delete</li>
+    </ul>
 
     <!-- <strong class="d-block" *ngIf="message.username !== user.username">{{
         message.username | uppercase
