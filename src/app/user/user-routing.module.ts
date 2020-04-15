@@ -12,18 +12,18 @@ const routes: Routes = [
     path: 'join',
     loadChildren: () => import('./joinchat/joinchat.module').then(m => m.JoinchatModule),
     canActivate: [AuthGuard],
-    data: { checkjoin: true, checkUsername: true, state: true }
+    data: { checkjoin: true, checkUsername: true }
   },
   {
     path: 'chat/:roomId',
     loadChildren: () => import('./chatroom/chatroom.module').then(m => m.ChatroomModule),
     canActivate: [AuthGuard, ChatroomGuard],
-    data: { checkjoin: true, checkUsername: true, state: 'chat-open' }
+    data: { checkjoin: true, checkUsername: true }
   },
   {
     path: 'update-profile',
     loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule),
-    // data: { state: true },
+    // data:  },
     canActivate: [AuthGuard]
   }
 ];
