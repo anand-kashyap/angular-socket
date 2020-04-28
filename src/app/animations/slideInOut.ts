@@ -16,3 +16,17 @@ export const slideInOutAnimation =
     ]),
     transition(':leave', [animate('0.23s', style({ transform: 'translateY(100%)' }))])
   ]);
+
+export const slidelrAnimation =
+  // trigger name for attaching this animation to an element using the [@triggerName] syntax
+  trigger('slidelrAnimation', [
+    // end state styles for route container (host)
+    transition(':enter', [
+      style({ transform: 'translateX(100%)', position: 'fixed', width: '100%' }),
+      animate('.25s', style({ transform: 'translateX(0)' }))
+    ]),
+    transition(':leave', [
+      style({ position: 'fixed', width: '100%' }),
+      animate('0.23s', style({ transform: 'translateX(100%)' }))
+    ])
+  ]);

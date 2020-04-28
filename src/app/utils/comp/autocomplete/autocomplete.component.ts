@@ -83,6 +83,7 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterViewInit {
       this.getListAsync.emit(val);
       this.shouldShowList = true;
     });
+    this.ref.nativeElement.focus();
   }
 
   ngOnDestroy() {

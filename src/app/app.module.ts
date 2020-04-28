@@ -5,12 +5,14 @@ import {
   faCoffee,
   faSearch,
   faEllipsisV,
+  faEllipsisH,
   faUserCircle,
   faPaperPlane,
   faMapMarkerAlt,
   faFileImage,
   faEye,
   faClone,
+  faTimes,
   faArrowRight,
   faArrowLeft,
   faTrashAlt,
@@ -21,6 +23,7 @@ import { HAMMER_GESTURE_CONFIG, HammerGestureConfig, HammerModule } from '@angul
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
@@ -29,6 +32,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NotifyComponent } from './common/notify/notify.component';
 import { PullToRefreshModule } from '@util/npmPullref/pull-to-refresh.module';
+import { AutocompleteModule } from '@util/autocomplete/autocomplete.module';
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = {
@@ -39,11 +43,13 @@ export class MyHammerConfig extends HammerGestureConfig {
 }
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, NotifyComponent /* PullRefComponent, PullrefDirective */],
+  declarations: [AppComponent, HeaderComponent, NotifyComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
+    AutocompleteModule,
+    BsDropdownModule.forRoot(),
     PullToRefreshModule,
     AppRoutingModule,
     HammerModule,
@@ -70,7 +76,9 @@ export class AppModule {
       faFileImage,
       faCoffee,
       faSearch,
+      faTimes,
       faEllipsisV,
+      faEllipsisH,
       faUserCircle,
       faPaperPlane,
       faMapMarkerAlt,

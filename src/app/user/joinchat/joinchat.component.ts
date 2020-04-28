@@ -15,7 +15,6 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   loader;
   fetchRecent;
   userinput: string;
-  userListNew: Array<any> = [];
   recentContacts;
   errMsg;
   errTimeout = 4000;
@@ -29,20 +28,6 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     private chatService: ChatService,
     private apiService: ApiService
   ) {}
-
-  searchUserNew(text) {
-    console.log('innew outsear', text);
-    this.loader = true;
-    this.apiService
-      .getUsersList(text)
-      .pipe(map(r => r.data))
-      .subscribe(res => {
-        // this.userListNew = [...res];
-        this.userListNew = res;
-        this.loader = false;
-        console.log(res);
-      });
-  }
 
   ngOnInit() {
     this.userinput = this.errMsg = this.username = '';
@@ -130,18 +115,6 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     console.log('join destroyed');
     this.errSubscription.unsubscribe();
     this.roomSub.unsubscribe();
-  }
-
-  joinRoom(userObj) {
-    console.log('to', userObj.username);
-    // create or open existing room
-    this.apiService.findOrCreateRoom(this.username, [userObj.username]).subscribe(
-      res => {
-        console.log(res);
-        this.openChat(res.data);
-      },
-      err => console.error(err)
-    );
   }
 
   openChat(room) {

@@ -1,7 +1,22 @@
 .right-unav {
   display: flex;
   align-items: center;
-  .point {
+  div {
+    padding: 5px;
+    cursor: pointer;
+  }
+}
+
+.full-wide {
+  position: absolute;
+  width: calc(100% - 2rem);
+  height: 40px;
+  z-index: 10;
+  #close {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    padding: 5px;
     cursor: pointer;
   }
 }

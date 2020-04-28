@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PreloadModule } from '@app/shared/preload.module';
 import { RformModule } from '@app/shared/rform.module';
 import { SpinnerModule } from '@util/spinner/spinner.module';
 
@@ -11,6 +10,6 @@ const routes: Routes = [{ path: '', component: ForgotPasswordComponent }];
 
 @NgModule({
   declarations: [ForgotPasswordComponent],
-  imports: [CommonModule, RformModule, SpinnerModule, PreloadModule, RouterModule.forChild(routes)]
+  imports: [CommonModule, RformModule, SpinnerModule, RouterModule.forChild(routes)]
 })
 export class ForgotPasswordModule {}

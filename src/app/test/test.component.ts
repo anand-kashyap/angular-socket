@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { slideInOutAnimation } from '@app/animations/slideInOut';
 
 @Component({
@@ -7,11 +7,33 @@ import { slideInOutAnimation } from '@app/animations/slideInOut';
   styleUrls: ['./test.component.scss'],
   animations: [slideInOutAnimation]
 })
-export class TestComponent implements OnInit {
-  vals = ['one', 'two', 'three', 'four', 'fivee'];
+export class TestComponent implements OnInit, AfterViewInit {
+  vals = [
+    'one',
+    'two',
+    'three',
+    'four',
+    'fivee',
+    'one',
+    'two',
+    'three',
+    'four',
+    'fivee',
+    'one',
+    'two',
+    'three',
+    'four',
+    'fivee'
+  ];
+  bottom = false;
+  @ViewChild('t') t: ElementRef;
   constructor() {}
 
   ngOnInit() {}
+
+  ngAfterViewInit() {
+    this.t.nativeElement.scrollTop = this.t.nativeElement.scrollHeight;
+  }
 
   swit() {
     const rem = this.vals.splice(2, 1);
