@@ -61,6 +61,8 @@ export class ApiService {
     this.setNotify(false);
     this.chatService.clearUser();
     this.socketService.loggedIn$.next(false);
+    this.socketService.rooms$.next({});
+    this.socketService.roomCalled = false;
     this.recentUsers = null;
     this.router.navigate(['/']);
   }

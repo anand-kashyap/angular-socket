@@ -18,7 +18,7 @@
           aria-labelledby="button-basic">
           <li role="menuitem">
             <a class="dropdown-item" routerLink="/user/update-profile">
-              <fa-icon icon="user-circle" class="fa-lg"></fa-icon> Profile
+              <fa-icon icon="user-circle" class="fa-lg"></fa-icon> {{chatService.getUserInfo().username}}
             </a>
           </li>
           <li class="divider dropdown-divider"></li>

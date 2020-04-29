@@ -3,8 +3,6 @@
 </alert>
 <div class="row">
   <div class="col-md-6 mx-auto mt-2 joinbox">
-    <!-- <h2>Join Chat</h2> -->
-    <p>Hi <strong>{{username}}</strong>!</p>
 
     <div class="row" *ngIf="fetchRecent">
       <div class="col-md-12 text-center">
@@ -12,7 +10,7 @@
       </div>
     </div>
 
-    <div class="row" *ngIf="recentContacts.length > 0">
+    <div class="row" *ngIf="recentContacts.length > 0; else nomsg">
       <div class="col-md-12 recent-container noselect" *ngFor="let contact of recentContacts">
         <div class="recent-contact" (click)="openChat(contact)">
           <div class="top d-flex justify-content-between">
@@ -39,5 +37,9 @@
         </div>
       </div>
     </div>
+    <ng-template #nomsg>
+      No recent chats found
+    </ng-template>
+
   </div>
 </div>
