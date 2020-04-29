@@ -5,6 +5,7 @@ import { environment } from '@env/environment';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { slidelrAnimation } from '@app/animations/slideInOut';
+import { SocketService } from '@app/user/socket.service';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +18,12 @@ export class HeaderComponent implements OnInit {
   loader = false;
   search = false;
   userListNew: Array<any> = [];
-  constructor(public chatService: ChatService, private apiService: ApiService, private router: Router) {}
+  constructor(
+    public chatService: ChatService,
+    private sService: SocketService,
+    private apiService: ApiService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.prod = environment.production;
@@ -37,19 +43,27 @@ export class HeaderComponent implements OnInit {
       });
   }
 
-  joinRoom(userObj) {
-    console.log('to', userObj.username);
+  joinRoom({ username: toUserName }) {
+    console.log('to', toUserName);
     const { username } = this.chatService.getUserInfo();
 
     // create or open existing room
-    this.apiService.findOrCreateRoom(username, [userObj.username]).subscribe(
-      res => {
-        console.log(res);
-        this.search = false;
-        this.router.navigateByUrl(`/user/chat/${res.data.id}`);
-      },
-      err => console.error(err)
-    );
+    const eroomObj = this.sService.rooms$.getValue();
+    const erooms = Object.values(eroomObj);
+    const f: any = erooms.find((r: any) => r.directMessage && r.members[0] === toUserName);
+    if (f) {
+      this.search = false;
+      this.router.navigateByUrl(`/user/chat/${f.id}`);
+    } else {
+      this.apiService.findOrCreateRoom(username, [toUserName]).subscribe(
+        res => {
+          console.log(res);
+          this.search = false;
+          this.router.navigateByUrl(`/user/chat/${res.data.id}`);
+        },
+        err => console.error(err)
+      );
+    }
   }
 
   logout() {

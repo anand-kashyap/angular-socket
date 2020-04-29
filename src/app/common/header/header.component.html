@@ -9,7 +9,7 @@
   <ng-container *ngIf="chatService.isLoggedIn">
     <div class="right-unav">
       <div class="search-box">
-        <fa-icon icon="search" (click)="search = true"></fa-icon>
+        <fa-icon icon="search" class="fa-lg" (click)="search = true"></fa-icon>
       </div>
       <div class="btn-group" dropdown>
         <fa-icon icon="ellipsis-h" id="button-basic" dropdownToggle aria-controls="dropdown-basic">
@@ -18,12 +18,15 @@
           aria-labelledby="button-basic">
           <li role="menuitem">
             <a class="dropdown-item" routerLink="/user/update-profile">
-              <fa-icon icon="user-circle" class="fa-lg pr-2"></fa-icon>
+              <fa-icon icon="user-circle" class="fa-lg"></fa-icon> Profile
             </a>
           </li>
           <li class="divider dropdown-divider"></li>
           <li role="menuitem">
-            <button class="dropdown-item" (click)="logout()">Logout</button>
+            <button style="color: red;" class="dropdown-item" (click)="logout()">
+              <fa-icon icon="sign-out-alt"></fa-icon>
+              Logout
+            </button>
           </li>
         </ul>
       </div>

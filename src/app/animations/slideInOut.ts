@@ -27,6 +27,6 @@ export const slidelrAnimation =
     ]),
     transition(':leave', [
       style({ position: 'fixed', width: '100%' }),
-      animate('0.23s', style({ transform: 'translateX(100%)' }))
+      animate('0.15s', style({ transform: 'translateX(100%)' }))
     ])
   ]);
