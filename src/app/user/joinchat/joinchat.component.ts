@@ -47,7 +47,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
       }
       this.recentContacts = arRooms;
     });
-    if (this.recentContacts.length < 2) {
+    if (!this.sService.roomCalled) {
       this.fetchRecent = true;
       this.getRecentChats();
     }
@@ -70,6 +70,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
             return json;
           }, {});
           this.sService.rooms$.next(resJs);
+          this.sService.roomCalled = true;
           // console.log(this.recentContacts);
         })
       )

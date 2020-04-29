@@ -14,6 +14,7 @@ import { Events, Room, Message } from '@app/models/main';
 export class SocketService {
   socket: SocketIOClient.Socket;
   user;
+  roomCalled = false;
   latRoomIndex: number;
   socketUrl = environment.socketUrl;
   rooms$ = new BehaviorSubject<any>({});
