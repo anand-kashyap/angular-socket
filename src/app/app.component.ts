@@ -66,18 +66,16 @@ export class AppComponent implements OnInit {
         }),
         filter(v => v instanceof RoutesRecognized),
         pairwise(),
-        map(([prev, curr]) => {
+        map(([prev, curr]: any) => {
           // start and end
-          const prevA = prev as any;
-          const currA = curr as any;
-          const preDep = prevA.urlAfterRedirects === '/' ? 0 : prevA.urlAfterRedirects.split('/').length - 1;
-          const curDep = currA.urlAfterRedirects === '/' ? 0 : currA.url.split('/').length - 1;
-          let dep = curDep > preDep ? 100 : -100;
+          const preDep = prev.urlAfterRedirects === '/' ? 0 : prev.urlAfterRedirects.split('/').length - 1;
+          const curDep = curr.urlAfterRedirects === '/' ? 0 : curr.url.split('/').length - 1;
+          let dep = curDep >= preDep ? 100 : -100;
           if (dep === this.animationState) {
             dep = Math.sign(dep) === 1 ? dep + 1 : dep - 1;
           }
           this.animationState = dep;
-          console.log('prev, curr', prevA.urlAfterRedirects, currA.urlAfterRedirects, this.animationState);
+          console.log('prev, curr', prev.urlAfterRedirects, curr.urlAfterRedirects, this.animationState);
           return {
             oldvalue: prev,
             newvalue: curr,

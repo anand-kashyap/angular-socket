@@ -23,7 +23,7 @@ export class CustomReuse implements RouteReuseStrategy {
   }
 
   shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
-    console.log('future, curr', future, curr);
-    return !!future.data.state || !!curr.data.state;
+    // console.log('future, curr', future, curr.component);
+    return curr.data.state;
   }
 }
