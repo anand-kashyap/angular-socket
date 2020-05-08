@@ -1,16 +1,17 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChatroomComponent } from './chatroom.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { RformModule } from '@app/shared/rform.module';
-import { Routes, RouterModule } from '@angular/router';
+import { ScrollTrackerDirective } from '@directives/scrollTracker.directive';
+import { RecentDateModule } from '@pipes/recent-date.pipe';
+import { ProgressBarModule } from '@util/progress-bar/progress-bar.module';
+import { SlideupModule } from '@util/slideup/slideup.module';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { RecentDateModule } from '@pipes/recent-date.pipe';
-import { SendComponent } from './send/send.component';
-import { ScrollTrackerDirective } from '@directives/scrollTracker.directive';
+import { ChatroomComponent } from './chatroom.component';
 import { MessagesContainerComponent } from './messages-container/messages-container.component';
-import { SlideupModule } from '@util/slideup/slideup.module';
-import { ProgressBarModule } from '@util/progress-bar/progress-bar.module';
+import { SendComponent } from './send/send.component';
 
 const routes: Routes = [{ path: '', component: ChatroomComponent }];
 
@@ -19,6 +20,7 @@ const routes: Routes = [{ path: '', component: ChatroomComponent }];
   exports: [MessagesContainerComponent],
   imports: [
     CommonModule,
+    LazyLoadImageModule,
     RecentDateModule,
     RouterModule.forChild(routes),
     ModalModule.forRoot(),

@@ -3,12 +3,22 @@
   display: flex;
   padding: 0;
   max-height: 60vh;
-  overflow-y: auto;
+  overflow-x: hidden;
   flex-direction: column;
   li {
-    padding: 5px;
     border-radius: 5px;
     margin: 5px 0;
-    background-color: cadetblue;
+    div {
+      padding: 5px;
+      background-color: cadetblue;
+    }
   }
+}
+
+.delete {
+  background-color: red;
+}
+
+.archive {
+  background-color: green;
 }

@@ -5757,6 +5757,11 @@ neo-async@^2.5.0, neo-async@^2.6.1:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
 
+ng-lazyload-image@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/ng-lazyload-image/-/ng-lazyload-image-7.1.0.tgz#8e3428300506e541fb1f4befe7d62cbaffbd2235"
+  integrity sha512-1fip2FdPBDRnjGyBokI/DupBxOnrKh2lbtT8X8N1oPbE3KBZXXl82VIKcK2Sx+XQD67/+VtFzlISmrgsatzYuw==
+
 ngx-bootstrap@^5.3.2:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-5.5.0.tgz#29646053a7ff8c4b1d51704c841f926d74e3a7ea"

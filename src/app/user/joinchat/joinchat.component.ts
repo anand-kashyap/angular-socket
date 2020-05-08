@@ -118,6 +118,15 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     this.roomSub.unsubscribe();
   }
 
+  archiveConv(e) {
+    console.log('archive', e);
+  }
+
+  deleteConv(index) {
+    console.log('delete', index);
+    this.recentContacts.splice(index, 1);
+  }
+
   openChat(room) {
     // this.chatService.room = room;
     this.router.navigateByUrl(`/user/chat/${room.id}`);

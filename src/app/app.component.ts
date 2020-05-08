@@ -48,12 +48,12 @@ export class AppComponent implements OnInit {
         tap(v => {
           if (v instanceof NavigationEnd) {
             const { url } = this.router;
-            this.noPull = url.startsWith('/user/join');
+            /* this.noPull = url.startsWith('/user/join');
             if (this.noPull) {
               this.renderer.addClass(this.document.body, 'scrollbe');
             } else {
               this.renderer.removeClass(this.document.body, 'scrollbe');
-            }
+            } */
             const isMobile = window.screen.width < 600;
             const ischat = url.startsWith('/user/chat');
             if (isMobile && ischat) {

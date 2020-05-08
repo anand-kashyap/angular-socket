@@ -1,6 +1,12 @@
 :host {
   display: flex;
   flex-direction: column;
+  .contain {
+    width: 100%;
+    &:active {
+      background-color: rgb(199, 199, 199);
+    }
+  }
   .new-day {
     text-align: center;
     &::before,
@@ -46,6 +52,17 @@
         display: inline-block;
       }
     }
+    .prev-image.ng-lazyloaded {
+      animation: fadein 0.5s;
+    }
+    @keyframes fadein {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
     .prev-image {
       padding: 0.25rem;
       border-radius: 0.25rem;
@@ -67,6 +84,7 @@
     box-shadow: -1px 1px 3px 0px #212121;
   }
   .current-user {
+    float: right;
     background: #77c889;
     align-self: flex-end;
     box-shadow: 1px 1px 3px 0px #212121;

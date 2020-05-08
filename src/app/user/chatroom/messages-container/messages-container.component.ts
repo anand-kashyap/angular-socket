@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { StateChange } from 'ng-lazyload-image';
 
 @Component({
   selector: 'app-messages-container',
@@ -84,13 +85,15 @@ export class MessagesContainerComponent implements OnInit {
     this.open = false;
   }
 
+  onImgErr(e: StateChange, msg) {
+    if (e.reason !== 'loading-failed') {
+      return;
+    }
+    msg.noimg = true;
+  }
+
   openModal(template: TemplateRef<any>, imgPath: string) {
     this.imgPath = imgPath;
     this.modalRef = this.modalService.show(template);
-  }
-
-  showDefImg(imageEl, msg) {
-    imageEl.src = '/assets/images/notfoundre.png';
-    msg.noimg = true;
   }
 }

@@ -1,5 +1,10 @@
-<ul class="test" #t>
-  <li *ngFor="let v of vals">{{v}}</li>
-</ul>
+<button (click)="swit()">Delete</button>
+<button (click)="arch()">Archive</button>
+<br>
+<button (click)="ngOnInit()">Reset</button>
 
-<button (click)="swit()">Switch</button>
+<ul class="test" #t>
+  <li @parentIf [ngClass]="{'delete': toDel, 'archive': !toDel}" *ngFor="let v of vals">
+    <div @msgSlideAnimation>{{v}}</div>
+  </li>
+</ul>

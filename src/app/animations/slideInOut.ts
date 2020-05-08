@@ -30,3 +30,13 @@ export const slidelrAnimation =
       animate('0.15s', style({ transform: 'translateX(100%)' }))
     ])
   ]);
+
+export const msgSlideAnimation =
+  // trigger name for attaching this animation to an element using the [@triggerName] syntax
+  trigger('msgSlideAnimation', [
+    // end state styles for route container (host)
+    transition(':leave', [
+      // style({ position: 'fixed', width: '100%' }),
+      animate('0.35s 100ms ease-in-out', style({ transform: 'translateX(100%)' }))
+    ])
+  ]);
