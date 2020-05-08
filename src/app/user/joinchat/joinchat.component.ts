@@ -1,14 +1,17 @@
-import { ChatService } from '../../chat.service';
+import { ChatService } from '@app/chat.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, noop, pipe } from 'rxjs';
+import { Subscription, noop } from 'rxjs';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
-import { map, tap, delay } from 'rxjs/operators';
+import { tap, delay } from 'rxjs/operators';
 import { SocketService } from '../socket.service';
+import { msgSlideAnimation, parentIf } from '@app/animations/slideInOut';
+
 @Component({
   selector: 'app-joinchat',
   templateUrl: './joinchat.component.html',
-  styleUrls: ['./joinchat.component.scss']
+  styleUrls: ['./joinchat.component.scss'],
+  animations: [msgSlideAnimation, parentIf]
 })
 export class JoinchatComponent implements OnInit, OnDestroy {
   error;

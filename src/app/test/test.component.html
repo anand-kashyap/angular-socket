@@ -5,6 +5,6 @@
 
 <ul class="test" #t>
   <li @parentIf [ngClass]="{'delete': toDel, 'archive': !toDel}" *ngFor="let v of vals">
-    <div @msgSlideAnimation>{{v}}</div>
+    <div [@msgSlideAnimation]>{{v}}</div>
   </li>
 </ul>

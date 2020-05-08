@@ -11,9 +11,8 @@
     </div>
 
     <div class="row" *ngIf="recentContacts.length > 0; else nomsg">
-      <div class="col-md-12 recent-container noselect" *ngFor="let contact of recentContacts; let i=index">
-        <div class="recent-contact" (swipeleft)="archiveConv($event)" (swiperight)="deleteConv(i)"
-          (click)="openChat(contact)">
+      <div @parentIf class="col-md-12 recent-container noselect" *ngFor="let contact of recentContacts; let i=index">
+        <div @msgSlideAnimation class="recent-contact" (swiperight)="deleteConv(i)" (click)="openChat(contact)">
           <div class="top d-flex justify-content-between">
             <strong>
               <ng-container *ngIf="contact.directMessage; else Room">
