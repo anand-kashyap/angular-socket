@@ -90,6 +90,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       },
       err => {
         console.error('err occured: ', err);
+        this.lastSeen = '';
       }
     );
   }

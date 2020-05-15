@@ -68,8 +68,8 @@ export class JoinchatComponent implements OnInit, OnDestroy {
         tap((res: Array<any>) => {
           console.log('recent usersList', res);
           const resJs = res.reduce((json, v) => {
-            json[v.id] = v;
-            json[v.id].count = v.messages.length;
+            json[v._id] = v;
+            json[v._id].count = v.messages.length;
             return json;
           }, {});
           this.sService.rooms$.next(resJs);
@@ -132,6 +132,6 @@ export class JoinchatComponent implements OnInit, OnDestroy {
 
   openChat(room) {
     // this.chatService.room = room;
-    this.router.navigateByUrl(`/user/chat/${room.id}`);
+    this.router.navigateByUrl(`/user/chat/${room._id}`);
   }
 }
