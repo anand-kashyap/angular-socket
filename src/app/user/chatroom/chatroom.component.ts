@@ -108,7 +108,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }, 0);
     // this.cdRef.detectChanges();
     console.log('curRoom', this.room);
-    this.socketService.joinRoom(this.user.username, this.room.id, this.room.members);
+    this.socketService.joinRoom(this.user.username, this.room._id, this.room.members);
     this.subscribeSocketEvents();
   }
 

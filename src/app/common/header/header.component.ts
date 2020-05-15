@@ -53,13 +53,13 @@ export class HeaderComponent implements OnInit {
     const f: any = erooms.find((r: any) => r.directMessage && r.members[0] === toUserName);
     if (f) {
       this.search = false;
-      this.router.navigateByUrl(`/user/chat/${f.id}`);
+      this.router.navigateByUrl(`/user/chat/${f._id}`);
     } else {
       this.apiService.findOrCreateRoom(username, [toUserName]).subscribe(
         res => {
           console.log(res);
           this.search = false;
-          this.router.navigateByUrl(`/user/chat/${res.data.id}`);
+          this.router.navigateByUrl(`/user/chat/${res.data._id}`);
         },
         err => console.error(err)
       );
