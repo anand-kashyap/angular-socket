@@ -10,7 +10,7 @@
     "ngs": "ngsw-config dist/angular-socket ngsw-config.json /",
     "http": "http-server -p 8080 -c-1 dist/angular-socket",
     "dev:sw": "ng b --prod && http-server -p 8080 -c-1 dist/angular-socket",
-    "exbuild": "ng b --prod=false --outputPath=../node-socket/public",
+    "exbuild": "ng b --prod --outputPath=../node-socket/public",
     "aws": "ng b --configuration aws --outputPath=../node-socket/public",
     "start": "node server.js",
     "pretty": "prettier --write \"./**/*.ts\"",
