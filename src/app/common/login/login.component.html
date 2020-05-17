@@ -11,9 +11,9 @@
         <div class="card-body">
           <form [formGroup]="loginForm" (ngSubmit)="login()">
             <div class="form-group">
-              <label>Username or Email</label>
+              <label>Username/Email</label>
               <input class="form-control" [ngClass]="{'is-invalid': getInvalidCondition('email')}"
-                formControlName="email" placeholder="Your Login Username or Email" autocomplete="email">
+                formControlName="email" placeholder="Username or Email" autocomplete="email">
               <div class="invalid-feedback" *ngIf="getInvalidCondition('email')">
                 {{getErrors('email')}}
               </div>
