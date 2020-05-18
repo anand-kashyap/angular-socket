@@ -21,7 +21,7 @@
   "dataGroups": [
     {
       "name": "uploads",
-      "urls": ["https://node-socket-pwa.herokuapp.com/uploads/*.*"],
+      "urls": ["https://ng-socket.jsclub.dev/uploads/*.*"],
       "cacheConfig": {
         "maxSize": 20,
         "maxAge": "30d",
@@ -31,7 +31,7 @@
     },
     {
       "name": "api",
-      "urls": ["https://node-socket-pwa.herokuapp.com/user/**", "https://node-socket-pwa.herokuapp.com/room/**"],
+      "urls": ["https://ng-socket.jsclub.dev/user/**", "https://ng-socket.jsclub.dev/room/**"],
       "cacheConfig": {
         "maxSize": 50,
         "maxAge": "1d",
