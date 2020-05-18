@@ -1,6 +1,6 @@
 {
   "name": "angular-socket",
-  "short_name": "angular-socket",
+  "short_name": "ng-socket",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
