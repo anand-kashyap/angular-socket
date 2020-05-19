@@ -31,7 +31,7 @@ export class SocketService {
 
   connectSocket() {
     return new Observable(obs => {
-      this.socket = io.connect(this.socketUrl);
+      this.socket = io.connect(this.socketUrl, { query: { 'ngsw-bypass': true } });
       this.socket.emit('active', this.chatService.getUserInfo().username);
       this.onSEvent(Events.events.ACTIVE).subscribe(
         online => {
