@@ -1,4 +1,4 @@
-<button (click)="ngOnInit() && ngAfterViewInit()">Reset</button>
+<button (click)="ngOnInit()">Reset</button>
 <br>
 <ul class="test" #t>
   <li [@convSlideup] [ngClass]="{'delete': v.del, 'archive': !v.del}" *ngFor="let v of vals; let i=index">

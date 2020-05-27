@@ -14,13 +14,9 @@
 }
 .recent-contact {
   padding: 5px 10px;
-  // border-bottom: 1px solid #000;
+  background: #fff;
   &:hover {
     cursor: pointer;
-  }
-  &:focus,
-  &:active {
-    transform: scale(0.96);
   }
   .top {
     margin-bottom: 5px;

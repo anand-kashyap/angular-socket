@@ -3,7 +3,7 @@ import { convSlideup } from '@app/animations/slideInOut';
 
 import { fromEvent } from 'rxjs';
 import * as Hammer from 'hammerjs';
-import { takeUntil, map, tap, concatMap } from 'rxjs/operators';
+import { takeUntil, tap, concatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-test',

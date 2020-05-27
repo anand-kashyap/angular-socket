@@ -5,13 +5,19 @@ import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
 import { tap, delay } from 'rxjs/operators';
 import { SocketService } from '../socket.service';
-import { msgSlideAnimation, parentIf } from '@app/animations/slideInOut';
+import { msgSlideAnimation, parentIf, convSlideup } from '@app/animations/slideInOut';
+
+const enum Actions {
+  LEFT,
+  RIGHT,
+  CANCEL
+}
 
 @Component({
   selector: 'app-joinchat',
   templateUrl: './joinchat.component.html',
   styleUrls: ['./joinchat.component.scss'],
-  animations: [msgSlideAnimation, parentIf]
+  animations: [msgSlideAnimation, parentIf, convSlideup]
 })
 export class JoinchatComponent implements OnInit, OnDestroy {
   error;
@@ -119,6 +125,22 @@ export class JoinchatComponent implements OnInit, OnDestroy {
     console.log('join destroyed');
     this.errSubscription.unsubscribe();
     this.roomSub.unsubscribe();
+  }
+
+  onSwipe(actionType: Actions, index: number) {
+    switch (actionType) {
+      case Actions.LEFT:
+        this.recentContacts.splice(index, 1);
+        break;
+
+      case Actions.RIGHT:
+        this.recentContacts.splice(index, 1);
+        break;
+
+      case Actions.CANCEL:
+        break;
+    }
+    console.log('actionType', actionType);
   }
 
   archiveConv(e) {
