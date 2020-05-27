@@ -40,3 +40,10 @@ export const msgSlideAnimation =
       animate('0.35s 100ms ease-in-out', style({ transform: 'translateX(100%)' }))
     ])
   ]);
+
+export const convSlideup = trigger('convSlideup', [
+  transition(':leave', [
+    style({ 'transform-origin': '100% 0' }),
+    animate('0.3s 50ms ease-out', style({ transform: 'scaleY(0)' }))
+  ])
+]);

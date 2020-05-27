@@ -15,6 +15,7 @@ import {
   faClone,
   faTimes,
   faArrowRight,
+  faArrowAltCircleDown,
   faArrowLeft,
   faTrashAlt,
   faCircleNotch
@@ -82,6 +83,7 @@ export class AppModule {
       faSignOutAlt,
       faEllipsisH,
       faUserCircle,
+      faArrowAltCircleDown,
       faPaperPlane,
       faMapMarkerAlt,
       faEye,

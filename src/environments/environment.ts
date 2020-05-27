@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   hmr: false,
-  socketUrl: 'http://localhost:3000',
+  socketUrl: 'http://localhost:3000/api',
   baseUrl: 'http://localhost:4200',
   vapid: {
     publicKey: 'BMQ1_Pf4rKfR668iDD4trSMujq1hTBX4GhAkPhZ_CvWaZDY_ImMmMQ159g60w6XmbMt1X56MueyKxto3Kj9n1NU',

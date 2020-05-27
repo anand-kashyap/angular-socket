@@ -1,13 +1,25 @@
-.test {
+.test,
+.arch-test {
   list-style-type: none;
   display: flex;
   padding: 0;
   max-height: 60vh;
   overflow-x: hidden;
   flex-direction: column;
+  width: 50%;
   li {
     border-radius: 5px;
     margin: 5px 0;
+    position: relative;
+    .del-icon,
+    .archive-icon {
+      color: #fff;
+      position: absolute;
+      padding: 2px 10px;
+    }
+    .archive-icon {
+      right: 0;
+    }
     div {
       padding: 5px;
       background-color: cadetblue;
@@ -15,6 +27,9 @@
   }
 }
 
+.arch-test > li > div {
+  background-color: yellowgreen;
+}
 .delete {
   background-color: red;
 }
