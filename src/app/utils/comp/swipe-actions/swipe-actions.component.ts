@@ -1,8 +1,7 @@
 import { Component, OnInit, AfterViewInit, ContentChild, ElementRef, Output, EventEmitter, Input } from '@angular/core';
 import * as Hammer from 'hammerjs';
 import { fromEvent } from 'rxjs';
-import { concatMap, takeUntil, tap, throttleTime } from 'rxjs/operators';
-import { convSlideup } from '@app/animations/slideInOut';
+import { concatMap, takeUntil, tap } from 'rxjs/operators';
 
 export const enum Actions {
   LEFT,
@@ -13,13 +12,12 @@ export const enum Actions {
 @Component({
   selector: 'app-swipe-actions',
   templateUrl: './swipe-actions.component.html',
-  styleUrls: ['./swipe-actions.component.scss'],
-  animations: [convSlideup]
+  styleUrls: ['./swipe-actions.component.scss']
 })
 export class SwipeActionsComponent implements OnInit, AfterViewInit {
   @ContentChild('sbox') sbox: ElementRef;
   @Output() swiped = new EventEmitter<Actions>();
-  @Input() threshold = 200;
+  @Input() threshold = 150;
   del = false;
   trans = 0;
   constructor() {}
@@ -34,7 +32,6 @@ export class SwipeActionsComponent implements OnInit, AfterViewInit {
       .pipe(
         tap(() => {
           el.style['pointer-events'] = 'none';
-          // el.style.transition = 'transform 1.0s linear 0s';
         }),
         concatMap((stEv: any) => this.onPanmove(hammerPan, stEv, el))
       )
@@ -47,14 +44,14 @@ export class SwipeActionsComponent implements OnInit, AfterViewInit {
         fromEvent(hammerPan, 'panend').pipe(
           tap(eEvt => {
             el.style['pointer-events'] = 'auto';
-            const { deltaX: eX } = eEvt;
+            const { deltaX: eX, overallVelocityX: oX } = eEvt;
             const { deltaX: sX, additionalEvent: sN } = stEv;
             const finDif = Math.round(eX - sX);
             // console.log('TestComponent -> ngAfterViewInit -> finDif', finDif, eEvt, stEv);
-            if (sN === 'panright' && finDif >= this.threshold) {
+            if (sN === 'panright' && (finDif >= this.threshold || oX >= 0.2)) {
               console.log('right swipe', 'delete');
               return this.swiped.emit(Actions.RIGHT);
-            } else if (sN === 'panleft' && finDif <= -this.threshold) {
+            } else if (sN === 'panleft' && (finDif <= -this.threshold || oX >= 0.2)) {
               console.log('left swipe');
               return this.swiped.emit(Actions.LEFT);
             }

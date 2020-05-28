@@ -1,6 +1,6 @@
-<div class="swipeBox" [@convSlideup] [ngClass]="{'delete': del, 'archive': !del}">
-  <fa-icon icon="trash-alt" class="del-icon"></fa-icon>
-  <fa-icon icon="arrow-alt-circle-down" class="archive-icon"></fa-icon>
+<div class="swipeBox" [ngClass]="{'delete': del, 'archive': !del}">
+  <fa-icon *ngIf="del" icon="trash-alt" class="del-icon"></fa-icon>
+  <fa-icon *ngIf="!del" icon="arrow-alt-circle-down" class="archive-icon"></fa-icon>
   <div class="mainSwipe" [style.transform]="'translateX('+(trans || 0)+'px)'">
     <ng-content></ng-content>
   </div>

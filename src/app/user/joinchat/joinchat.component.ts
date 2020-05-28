@@ -21,6 +21,7 @@ const enum Actions {
 })
 export class JoinchatComponent implements OnInit, OnDestroy {
   error;
+  animObj = { value: ':leave', params: { dir: 120 } };
   loader;
   fetchRecent;
   userinput: string;
@@ -130,10 +131,12 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   onSwipe(actionType: Actions, index: number) {
     switch (actionType) {
       case Actions.LEFT:
+        this.animObj.params.dir = -120;
         this.recentContacts.splice(index, 1);
         break;
 
       case Actions.RIGHT:
+        this.animObj.params.dir = 120;
         this.recentContacts.splice(index, 1);
         break;
 

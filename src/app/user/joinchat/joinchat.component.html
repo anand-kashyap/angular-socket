@@ -12,7 +12,7 @@
 
     <div class="row" *ngIf="recentContacts.length > 0; else nomsg">
       <div [@parentIf] class="col-md-12 recent-container noselect" *ngFor="let contact of recentContacts; let i=index">
-        <app-swipe-actions [@convSlideup] (swiped)="onSwipe($event, i)">
+        <app-swipe-actions [@convSlideup]="animObj" (swiped)="onSwipe($event, i)">
           <div #sbox class="recent-contact" (click)="openChat(contact)">
             <div class="top d-flex justify-content-between">
               <strong>{{contact.directMessage? contact.members[0]: contact.roomName}}

@@ -1,5 +1,5 @@
 // import the required animation functions from the angular animations module
-import { trigger, query, animateChild, animate, transition, style } from '@angular/animations';
+import { trigger, query, animateChild, animate, transition, style, state } from '@angular/animations';
 
 export const parentIf = trigger('parentIf', [
   transition(':enter', [query('@*', [animateChild()], { optional: true })]),
@@ -43,6 +43,10 @@ export const msgSlideAnimation =
 
 export const convSlideup = trigger('convSlideup', [
   transition(':leave', [
+    query('.mainSwipe', [
+      // style({ 'transform-origin': '100% 0' }),
+      animate('0.3s 0ms ease-out', style({ transform: 'translateX({{dir}}%)' }))
+    ]),
     style({ 'transform-origin': '100% 0' }),
     animate('0.3s 100ms ease-out', style({ transform: 'scaleY(0)' }))
   ])
