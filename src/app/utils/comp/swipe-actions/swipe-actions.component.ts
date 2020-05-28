@@ -47,11 +47,11 @@ export class SwipeActionsComponent implements OnInit, AfterViewInit {
             const { deltaX: eX, overallVelocityX: oX } = eEvt;
             const { deltaX: sX, additionalEvent: sN } = stEv;
             const finDif = Math.round(eX - sX);
-            // console.log('TestComponent -> ngAfterViewInit -> finDif', finDif, eEvt, stEv);
+            console.log('TestComponent -> ngAfterViewInit -> finDif', finDif, eEvt, stEv);
             if (sN === 'panright' && (finDif >= this.threshold || oX >= 0.2)) {
               console.log('right swipe', 'delete');
               return this.swiped.emit(Actions.RIGHT);
-            } else if (sN === 'panleft' && (finDif <= -this.threshold || oX >= 0.2)) {
+            } else if (sN === 'panleft' && (finDif <= -this.threshold || oX <= -0.2)) {
               console.log('left swipe');
               return this.swiped.emit(Actions.LEFT);
             }
