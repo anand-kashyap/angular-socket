@@ -22,9 +22,10 @@ export class SocketService {
   rooms$ = new BehaviorSubject<any>({});
   typing$ = new BehaviorSubject<any>({});
   onlineSub = new BehaviorSubject<any>([]);
-  loggedIn$ = new Subject<any>();
+  loggedIn$: BehaviorSubject<boolean>;
   constructor(private chatService: ChatService) {
     this.user = chatService.getUserInfo();
+    this.loggedIn$ = new BehaviorSubject<boolean>(this.isLoggedIn());
     // this.nPr = this.checkNotifPr();
   }
 

@@ -13,35 +13,23 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const loggedIn = this.chatService.isLoggedIn;
-    if (loggedIn) {
-      if (next.data.checkVerified) {
-        const { isVerified } = this.chatService.getUserInfo();
-        if (isVerified) {
-          return this.router.parseUrl('/user');
-        }
+    const { isLoggedIn } = this.chatService,
+      { checkVerified, checkjoin, checkUsername, checkloggedIn } = next.data;
+    let url = '/';
+    if (isLoggedIn) {
+      const { isVerified, username = '' } = this.chatService.getUserInfo();
+      if ((checkVerified && isVerified) || checkloggedIn) {
+        url = '/user';
       }
-      if (next.data.checkjoin) {
-        const { isVerified } = this.chatService.getUserInfo();
-        if (!isVerified) {
-          return this.router.parseUrl('/verify');
-        }
+      if (checkjoin && !isVerified) {
+        url = '/verify';
       }
-      if (next.data.checkUsername) {
-        const { username = '' } = this.chatService.getUserInfo();
-        if (username === '') {
-          return this.router.parseUrl('/user/update-profile');
-        }
+      if (checkUsername && !Boolean(username)) {
+        url = '/user/update-profile';
       }
-      if (next.data.checkloggedIn) {
-        return this.router.parseUrl('/user');
-      }
-      return true;
+      return url === '/' || this.router.parseUrl(url);
     } else {
-      if (next.data.checkloggedIn) {
-        return true;
-      }
-      return this.router.parseUrl('/');
+      return checkloggedIn || this.router.parseUrl(url);
     }
   }
 }

@@ -34,28 +34,19 @@ export class AppComponent implements OnInit {
       if (isActive && !this.connected) {
         this.connected = this.sService.connectSocket().subscribe();
         // console.log('set active');
-      } else {
+      } else if (this.connected) {
         this.connected.unsubscribe();
         this.connected = null;
         // console.log('remove active');
       }
     });
-    if (this.sService.isLoggedIn()) {
-      this.sService.loggedIn$.next(true);
-    }
     this.router.events
       .pipe(
         tap(v => {
           if (v instanceof NavigationEnd) {
-            const { url } = this.router;
-            /* this.noPull = url.startsWith('/user/join');
-            if (this.noPull) {
-              this.renderer.addClass(this.document.body, 'scrollbe');
-            } else {
-              this.renderer.removeClass(this.document.body, 'scrollbe');
-            } */
-            const isMobile = window.screen.width < 600;
-            const ischat = url.startsWith('/user/chat');
+            const { url } = this.router,
+              isMobile = window.screen.width < 600,
+              ischat = url.startsWith('/user/chat');
             if (isMobile && ischat) {
               this.renderer.setAttribute(this.document.body, 'oncontextmenu', 'return false;');
             } else {
@@ -68,8 +59,8 @@ export class AppComponent implements OnInit {
         pairwise(),
         map(([prev, curr]: any) => {
           // start and end
-          const preDep = prev.urlAfterRedirects === '/' ? 0 : prev.urlAfterRedirects.split('/').length - 1;
-          const curDep = curr.urlAfterRedirects === '/' ? 0 : curr.url.split('/').length - 1;
+          const preDep = prev.urlAfterRedirects === '/' ? 0 : prev.urlAfterRedirects.split('/').length - 1,
+            curDep = curr.urlAfterRedirects === '/' ? 0 : curr.url.split('/').length - 1;
           let dep = curDep >= preDep ? 100 : -100;
           if (dep === this.animationState) {
             dep = Math.sign(dep) === 1 ? dep + 1 : dep - 1;
