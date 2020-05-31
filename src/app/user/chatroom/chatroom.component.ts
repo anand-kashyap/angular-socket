@@ -191,7 +191,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   deleteMessage(message) {
     console.log('message to be del', message);
     this.socketService.sendMessage(Events.events.DEL_MESSAGE, message);
-    // this.bottom = false;
+    this.bottom = false;
   }
 
   sendMessage() {
