@@ -10,18 +10,19 @@ import { Observable, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { map, catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
+import { environment } from '@env/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private apiService: ApiService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = this.apiService.getToken();
+    const token = this.apiService.getToken(),
+      reqObj: any = { url: environment.socketUrl + req.url };
     if (token) {
-      req = req.clone({
-        headers: req.headers.set('x-access-token', token)
-      });
+      reqObj.headers = req.headers.set('x-access-token', token);
     }
+    req = req.clone(reqObj);
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
