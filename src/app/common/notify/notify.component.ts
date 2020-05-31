@@ -67,8 +67,7 @@ export class NotifyComponent implements OnInit {
 
   subscribeNotify() {
     if (!this.apiService.isLoggedIn()) {
-      this.notify(false, false);
-      return;
+      return this.notify(false, false);
     }
     this.swPush
       .requestSubscription({

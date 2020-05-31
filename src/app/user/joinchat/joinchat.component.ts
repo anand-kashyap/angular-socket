@@ -41,6 +41,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userinput = this.errMsg = this.username = '';
+    document.body.style.overflowX = 'hidden'; // for animation on slide x
     this.error = this.loader = false;
     this.recentContacts = []; // todo typing fix
     this.errSubscription = null;
@@ -124,6 +125,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     console.log('join destroyed');
+    document.body.style.overflowX = 'auto'; // for animation on slide x
     this.errSubscription.unsubscribe();
     this.roomSub.unsubscribe();
   }

@@ -8,7 +8,8 @@
     }
   }
   .new-day {
-    text-align: center;
+    // text-align: center;
+    margin-left: 22vw;
     &::before,
     &::after {
       content: '';

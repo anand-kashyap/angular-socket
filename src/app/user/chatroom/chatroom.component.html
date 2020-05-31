@@ -18,12 +18,11 @@
   </div>
 
   <!-- start message container -->
-  <div #scrollbox [scrollTop]="bottom ? scrollbox.scrollHeight : null" appScrollTracker
-    (loadOld)="loadOlderMsgs($event)" class="msg-container">
+  <div #scrollbox appScrollTracker (loadOld)="loadOlderMsgs($event)" class="msg-container">
     <span *ngIf="msgLoading">Loading more...</span>
 
-    <app-messages-container [fileRoot]="fileRoot" [progress]="progress" [messages]="messages" [user]="user"
-      (deleteMsg)="deleteMessage($event)">
+    <app-messages-container [bottom]="bottom" [fileRoot]="fileRoot" [progress]="progress" [messages]="messages"
+      [user]="user" (deleteMsg)="deleteMessage($event)">
     </app-messages-container>
   </div>
   <!-- end message container -->

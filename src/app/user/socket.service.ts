@@ -13,7 +13,9 @@ import { Events, Room, Message } from '@app/models/main';
 })
 export class SocketService {
   socket: SocketIOClient.Socket;
+  openedRoomId: string;
   user;
+  nPr: boolean;
   roomCalled = false;
   latRoomIndex: number;
   socketUrl = environment.socketUrl;
@@ -23,6 +25,7 @@ export class SocketService {
   loggedIn$ = new Subject<any>();
   constructor(private chatService: ChatService) {
     this.user = chatService.getUserInfo();
+    // this.nPr = this.checkNotifPr();
   }
 
   getAllRooms() {
@@ -85,8 +88,29 @@ export class SocketService {
     }
   }
 
+  createBNotification(msg: any, roomId: string) {
+    console.log('SocketService -> createBNotification -> nP', this.nPr);
+  }
+
+  checkNotifPr() {
+    try {
+      Notification.requestPermission().then();
+    } catch (e) {
+      console.log('SocketService -> checkNotificationPromise -> e', e);
+      return false;
+    }
+
+    return true;
+  }
   onNewMessage() {
     this.onSEvent(Events.events.NEW_MESSAGE).subscribe(({ message, roomId }) => {
+      console.log('SocketService -> openedRoomId', this.openedRoomId);
+      if (this.openedRoomId === roomId) {
+        // same room opened; show unread message or msg count if need
+      } else {
+        // create notification obj
+        this.createBNotification(message, roomId);
+      }
       console.log(message, roomId);
       const allRooms = this.rooms$.value;
       let firstTime = false;

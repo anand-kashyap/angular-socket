@@ -1,7 +1,20 @@
 import { SocketService } from '../socket.service';
 import { Events } from '@app/models/main';
 import { ChatService } from '@app/chat.service';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
+  QueryList,
+  ViewChildren,
+  ContentChildren,
+  AfterViewInit,
+  ContentChild,
+  AfterContentInit
+} from '@angular/core';
 import { formatDate } from '@angular/common';
 
 import { ApiService } from '@app/api.service';
@@ -19,7 +32,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   status = 'away';
   fileRoot = environment.socketUrl + '/uploads/';
   progress = 0;
-  @ViewChild('scrollbox', { static: true }) box: ElementRef<any>;
+  @ViewChild('scrollbox', { static: true }) box: ElementRef;
   loading = false;
   eom = false;
   mobile = false;
@@ -69,13 +82,14 @@ export class ChatroomComponent implements OnInit, OnDestroy {
         this.room = data;
         this.socketService.addRoom(roomId, this.room);
       }
+      this.socketService.openedRoomId = this.room._id;
       console.log('room messages: ', this.room);
+      // new Notification('To do list', { body: 'HEY! Your task is now overdue.' });
       this.inits();
     } else {
       return this.chatService.gotoJoin();
     }
   }
-
   getLastSeen(first = false) {
     // will use more details in future
     if (first && this.status === 'active') {
@@ -94,7 +108,6 @@ export class ChatroomComponent implements OnInit, OnDestroy {
       }
     );
   }
-
   inits() {
     if (this.room.directMessage) {
       const { members } = this.room;
@@ -103,9 +116,9 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     }
     this.socketService.addDates(this.room);
     this.messages = this.room.messages;
-    setTimeout(() => {
-      this.bottom = true;
-    }, 0);
+    // setTimeout(() => {
+    this.bottom = true;
+    // }, 0);
     // this.cdRef.detectChanges();
     console.log('curRoom', this.room);
     this.socketService.joinRoom(this.user.username, this.room._id, this.room.members);

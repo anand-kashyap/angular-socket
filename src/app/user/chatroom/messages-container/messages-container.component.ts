@@ -1,4 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  TemplateRef,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+  ViewChildren,
+  QueryList
+} from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { StateChange } from 'ng-lazyload-image';
 
@@ -7,9 +19,12 @@ import { StateChange } from 'ng-lazyload-image';
   templateUrl: './messages-container.component.html',
   styleUrls: ['./messages-container.component.scss']
 })
-export class MessagesContainerComponent implements OnInit {
+export class MessagesContainerComponent implements OnInit, AfterViewInit {
   @Input() messages;
   @Input() fileRoot;
+  @Input() bottom = true;
+  // @ViewChild('msgC', { read: ElementRef }) msgC: ElementRef;
+  @ViewChildren('msgC', { read: ElementRef }) msgC: QueryList<ElementRef>;
   @Input() progress = 0;
   @Input() user;
   @Output() deleteMsg = new EventEmitter();
@@ -40,6 +55,20 @@ export class MessagesContainerComponent implements OnInit {
 
   ngOnInit() {
     this.isMobile = window.screen.width < 768;
+  }
+
+  scrollToLast(last) {
+    if (last && this.bottom) {
+      last.nativeElement.scrollIntoView();
+    }
+  }
+
+  ngAfterViewInit() {
+    const { last } = this.msgC;
+    this.scrollToLast(last);
+    this.msgC.changes.subscribe(v => {
+      this.scrollToLast(v.last);
+    });
   }
 
   deleteMessage(message) {
