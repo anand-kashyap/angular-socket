@@ -1,20 +1,7 @@
 import { SocketService } from '../socket.service';
 import { Events } from '@app/models/main';
 import { ChatService } from '@app/chat.service';
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ChangeDetectorRef,
-  ViewChild,
-  ElementRef,
-  QueryList,
-  ViewChildren,
-  ContentChildren,
-  AfterViewInit,
-  ContentChild,
-  AfterContentInit
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { formatDate } from '@angular/common';
 
 import { ApiService } from '@app/api.service';
@@ -110,8 +97,10 @@ export class ChatroomComponent implements OnInit, OnDestroy {
   }
   inits() {
     if (this.room.directMessage) {
-      const { members } = this.room;
-      this.title = members[0];
+      const {
+        members: [title]
+      } = this.room;
+      this.title = title;
       this.getLastSeen(true);
     }
     this.socketService.addDates(this.room);

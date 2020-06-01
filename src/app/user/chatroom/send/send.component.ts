@@ -54,12 +54,7 @@ export class SendComponent implements OnInit {
     }
   }
 
-  checkValid() {
-    if (!this.messageForm.valid || this.messageForm.get('message').value.trim() === '') {
-      return true;
-    }
-    return false;
-  }
+  checkValid = () => !!(!this.messageForm.valid || this.messageForm.get('message').value.trim() === '');
 
   sendLocation() {
     if (!navigator.geolocation) {
