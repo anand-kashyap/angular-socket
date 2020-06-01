@@ -6,7 +6,6 @@ import {
   EventEmitter,
   TemplateRef,
   ElementRef,
-  ViewChild,
   AfterViewInit,
   ViewChildren,
   QueryList
@@ -23,7 +22,6 @@ export class MessagesContainerComponent implements OnInit, AfterViewInit {
   @Input() messages;
   @Input() fileRoot;
   @Input() bottom = true;
-  // @ViewChild('msgC', { read: ElementRef }) msgC: ElementRef;
   @ViewChildren('msgC', { read: ElementRef }) msgC: QueryList<ElementRef>;
   @Input() progress = 0;
   @Input() user;
@@ -77,8 +75,8 @@ export class MessagesContainerComponent implements OnInit, AfterViewInit {
 
   copy(str: string) {
     const listener = (e: ClipboardEvent) => {
-      const win = window as any;
-      const clipboard = e.clipboardData || win.clipboardData;
+      const win = window as any,
+        clipboard = e.clipboardData || win.clipboardData;
       clipboard.setData('text', str.toString());
       e.preventDefault();
     };

@@ -1,8 +1,8 @@
-<div #msgC *ngFor="let message of messages; let i=index">
+<div #msgC class="contain" *ngFor="let message of messages; let i=index">
   <span *ngIf="message.datechange && i !== messages.length-1" class="new-day">{{
       message.datechange | date: 'mediumDate' | recentDate
     }}</span>
-  <div *ngIf="message.username" class="contain" [id]="message._id" (press)="longPress(i, message)">
+  <div *ngIf="message.username" [id]="message._id" (press)="longPress(i, message)">
     <div dropdown class="user" [ngClass]="
   {'current-user': message.username === user.username,
   'other-user': message.username !== user.username,
@@ -26,7 +26,7 @@
     </div>
   </div>
 </div>
-<app-progress-bar [progress]="progress"></app-progress-bar>
+<app-progress-bar class="pBar" [progress]="progress"></app-progress-bar>
 
 <!-- *for mobile -->
 <app-slideup [open]="open" [opts]="opts" (closed)="closeSlideup($event)">

@@ -32,9 +32,8 @@ export class SendComponent implements OnInit {
 
   sendImage(ev, el) {
     console.log(ev.target.files);
-    let file = ev.target.files;
-    if (file.length > 0) {
-      file = file[0];
+    const [file] = ev.target.files;
+    if (file) {
       console.log(file);
       const img = new FormData();
       img.append('file', file, file.name);
@@ -46,13 +45,12 @@ export class SendComponent implements OnInit {
   sendMessage() {
     if (this.messageForm.valid && !this.loading) {
       this.loading = true;
-      const message = this.messageForm.get('message').value;
-      console.log(message);
-      this.socketService.sendMessage(Events.events.NEW_MESSAGE, { msg: message });
+      const msg = this.messageForm.get('message').value;
+      console.log(msg);
+      this.socketService.sendMessage(Events.events.NEW_MESSAGE, { msg });
       this.send.emit();
       this.messageForm.reset();
-      this.loading = false;
-      this.showSend = false;
+      this.loading = this.showSend = false;
     }
   }
 
@@ -69,8 +67,7 @@ export class SendComponent implements OnInit {
     }
     this.loading = true;
     navigator.geolocation.getCurrentPosition(position => {
-      const lat = position.coords.latitude;
-      const long = position.coords.longitude;
+      const { latitude: lat, longitude: long } = position.coords;
       console.log(position);
       this.socketService.sendMessage(Events.events.LOCATION, { lat, long });
       this.loading = false;

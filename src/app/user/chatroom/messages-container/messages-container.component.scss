@@ -1,12 +1,7 @@
 :host {
   display: flex;
   flex-direction: column;
-  .contain {
-    width: 100%;
-    &:active {
-      background-color: rgb(199, 199, 199);
-    }
-  }
+
   .new-day {
     // text-align: center;
     margin-left: 22vw;
@@ -97,6 +92,11 @@
     padding: 0;
   }
 }
+.pBar {
+  position: fixed;
+  left: 22vw;
+  width: 55vw;
+}
 .zoomed-img {
   max-width: 100%;
   display: block;
@@ -106,6 +106,12 @@
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
   :host {
+    .contain {
+      width: 100%;
+      &:active {
+        background-color: rgb(199, 199, 199);
+      }
+    }
     .user {
       &:hover {
         .sticky-more {
