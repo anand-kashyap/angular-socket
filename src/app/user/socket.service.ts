@@ -1,12 +1,13 @@
 import { ChatService } from '../chat.service';
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import * as io from 'socket.io-client';
 import { formatDate } from '@angular/common';
-import { Observable, Subject, fromEvent, BehaviorSubject } from 'rxjs';
+import { Observable, fromEvent, BehaviorSubject } from 'rxjs';
 
 import { environment } from '@env/environment';
 import { filter, tap, debounceTime, map } from 'rxjs/operators';
 import { Events, Room, Message } from '@app/models/main';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class SocketService {
   typing$ = new BehaviorSubject<any>({});
   onlineSub = new BehaviorSubject<any>([]);
   loggedIn$: BehaviorSubject<boolean>;
-  constructor(private chatService: ChatService) {
+  constructor(private chatService: ChatService, private router: Router, private ngz: NgZone) {
     this.user = chatService.getUserInfo();
     this.loggedIn$ = new BehaviorSubject<boolean>(this.isLoggedIn());
     // this.nPr = this.checkNotifPr();
@@ -91,6 +92,16 @@ export class SocketService {
 
   createBNotification(msg: any, roomId: string) {
     console.log('SocketService -> createBNotification -> nP', this.nPr);
+    const notif = new Notification(msg.username, {
+      icon: '../assets/icons/badge-72x72.png',
+      body: msg.msg,
+      vibrate: [200, 100, 200]
+    });
+
+    notif.onclick = () => {
+      notif.close();
+      this.ngz.run(() => this.router.navigateByUrl(`/user/chat/${roomId}`));
+    };
   }
 
   checkNotifPr() {

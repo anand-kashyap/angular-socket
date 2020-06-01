@@ -113,10 +113,9 @@ export class MessagesContainerComponent implements OnInit, AfterViewInit {
   }
 
   onImgErr(e: StateChange, msg) {
-    if (e.reason !== 'loading-failed') {
-      return;
+    if (e.reason === 'loading-failed') {
+      msg.noimg = true;
     }
-    msg.noimg = true;
   }
 
   openModal(template: TemplateRef<any>, imgPath: string) {

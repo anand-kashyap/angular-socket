@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { environment } from '@env/environment';
+import { skip } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chatroom',
@@ -42,7 +43,13 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     private socketService: SocketService,
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.route.params.pipe(skip(1)).subscribe(params => {
+      // params.roomId;
+      console.log('ChatroomComponent -> params.roomId', params.roomId);
+      this.ngOnInit();
+    });
+  }
 
   async ngOnInit() {
     this.user = this.chatService.getUserInfo();
