@@ -1,5 +1,5 @@
 <nav class="navbar navbar-light bg-light">
-  <a class="navbar-brand" [routerLink]="['/']">Angular Socket</a>
+  <a class="navbar-brand" [routerLink]="chatService.isLoggedIn ? '/user/join' : '/'">Angular Socket</a>
   <div *ngIf="search" @slidelrAnimation class="full-wide">
     <app-autocomplete [dropList]="userListNew" (selectedOption)="joinRoom($event)"
       (getListAsync)="searchUserNew($event)">

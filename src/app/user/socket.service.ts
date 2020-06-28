@@ -27,7 +27,7 @@ export class SocketService {
   constructor(private chatService: ChatService, private router: Router, private ngz: NgZone) {
     this.user = chatService.getUserInfo();
     this.loggedIn$ = new BehaviorSubject<boolean>(this.isLoggedIn());
-    // this.nPr = this.checkNotifPr();
+    this.nPr = this.checkNotifPr();
   }
 
   getAllRooms() {
