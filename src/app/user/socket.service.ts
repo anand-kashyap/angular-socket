@@ -125,7 +125,15 @@ export class SocketService {
       console.log(message, roomId);
       const allRooms = this.rooms$.value;
       let firstTime = false;
-      const curRoom = allRooms[roomId] || { _id: roomId, directMessage, members };
+      const [m1, ...m2] = members;
+      if (this.chatService.getUserInfo().username === m1) {
+        members = [...m2, m1];
+      }
+      const curRoom = allRooms[roomId] || {
+        _id: roomId,
+        directMessage,
+        members
+      };
       if (!curRoom.fullDates) {
         firstTime = true;
       }
