@@ -1,12 +1,10 @@
-import { ChatService } from './chat.service';
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { environment } from '@env/environment';
-
+import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ChatService } from './chat.service';
 import { SocketService } from './user/socket.service';
 
 @Injectable({
@@ -87,6 +85,8 @@ export class ApiService {
 
   findOrCreateRoom = (currentUser: string, userNameArr: string[]) =>
     this.httpClient.put<any>('/room', { currentUser, userNameArr });
+
+  delRoom = (roomId: string) => this.httpClient.delete<any>(`/room/${roomId}`);
 
   getRoomById(roomId: string, currentUser = null) {
     let params = {};

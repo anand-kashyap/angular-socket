@@ -1,7 +1,7 @@
-import { ApiService } from '../../api.service';
-import { Router } from '@angular/router';
 import { Component, OnInit /* Renderer2, ElementRef, ViewChild */ } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ApiService } from '../../api.service';
 import { ChatService } from '../../chat.service';
 
 @Component({
@@ -35,7 +35,8 @@ export class VerifyAccountComponent implements OnInit {
   constructor(
     private chatService: ChatService,
     private apiService: ApiService,
-    /* private renderer: Renderer2, */ private router: Router
+    /* private renderer: Renderer2, */
+    private router: Router
   ) {}
 
   ngOnInit() {

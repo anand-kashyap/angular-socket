@@ -1,17 +1,17 @@
 import {
-  Component,
-  OnInit,
-  Input,
-  ViewChild,
-  ElementRef,
   AfterViewInit,
-  OnDestroy,
-  Output,
+  Component,
+  ElementRef,
   EventEmitter,
-  HostListener
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
 } from '@angular/core';
-import { Subscription, fromEvent } from 'rxjs';
-import { map, debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
+import { fromEvent, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 export interface ACOptions {
   // apiTocall: Observable<any>;
@@ -51,11 +51,8 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterViewInit {
       map(event => {
         const { key } = event;
         if (this.dropList.length > 0) {
-          // tslint:disable-next-line
           key === 'ArrowDown' && this.selected < this.dropList.length && this.selected++;
-          // tslint:disable-next-line
           key === 'ArrowUp' && this.selected > 1 && this.selected--;
-          // tslint:disable-next-line
           if (key === 'Enter' && this.selected > 0) {
             this.selectedOption.emit(this.dropList[this.selected - 1]);
             this.selected = 0;

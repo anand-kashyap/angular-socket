@@ -1,13 +1,12 @@
-import { ChatService } from '../chat.service';
-import { Injectable, NgZone } from '@angular/core';
-import * as io from 'socket.io-client';
 import { formatDate } from '@angular/common';
-import { Observable, fromEvent, BehaviorSubject } from 'rxjs';
-
-import { environment } from '@env/environment';
-import { filter, tap, debounceTime, map } from 'rxjs/operators';
-import { Events, Room, Message } from '@app/models/main';
+import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
+import { Events } from '@app/models/main';
+import { environment } from '@env/environment';
+import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
+import { debounceTime, filter, map, tap } from 'rxjs/operators';
+import * as io from 'socket.io-client';
+import { ChatService } from '../chat.service';
 
 @Injectable({
   providedIn: 'root'
@@ -115,7 +114,7 @@ export class SocketService {
     return true;
   }
   onNewMessage() {
-    this.onSEvent(Events.events.NEW_MESSAGE).subscribe(({ message, roomId }) => {
+    this.onSEvent(Events.events.NEW_MESSAGE).subscribe(({ message, roomId, directMessage, members }) => {
       console.log('SocketService -> openedRoomId', this.openedRoomId);
       if (this.openedRoomId === roomId) {
         // same room opened; show unread message or msg count if need
@@ -126,7 +125,7 @@ export class SocketService {
       console.log(message, roomId);
       const allRooms = this.rooms$.value;
       let firstTime = false;
-      const curRoom = allRooms[roomId] || {};
+      const curRoom = allRooms[roomId] || { _id: roomId, directMessage, members };
       if (!curRoom.fullDates) {
         firstTime = true;
       }

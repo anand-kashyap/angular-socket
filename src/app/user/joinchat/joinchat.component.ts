@@ -1,11 +1,11 @@
-import { ChatService } from '@app/chat.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, noop } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { convSlideup, msgSlideAnimation, parentIf } from '@app/animations/slideInOut';
+import { ChatService } from '@app/chat.service';
+import { noop, Subscription } from 'rxjs';
+import { delay, tap } from 'rxjs/operators';
 import { ApiService } from 'src/app/api.service';
-import { tap, delay } from 'rxjs/operators';
 import { SocketService } from '../socket.service';
-import { msgSlideAnimation, parentIf, convSlideup } from '@app/animations/slideInOut';
 
 const enum Actions {
   LEFT,
@@ -50,10 +50,10 @@ export class JoinchatComponent implements OnInit, OnDestroy {
       const index = this.sService.latRoomIndex;
       const arRooms = Object.values(rooms);
       if (index) {
-        const lat = arRooms.splice(index, 1);
+        const [lat] = arRooms.splice(index, 1);
         console.log('lat', lat, index, arRooms);
         this.sService.latRoomIndex = null;
-        this.recentContacts = [lat[0], ...arRooms];
+        this.recentContacts = [lat, ...arRooms];
         return;
       }
       this.recentContacts = arRooms;
@@ -158,6 +158,7 @@ export class JoinchatComponent implements OnInit, OnDestroy {
   }
 
   openChat(room) {
+    console.log('JoinchatComponent -> openChat -> room', room);
     // this.chatService.room = room;
     this.router.navigateByUrl(`/user/chat/${room._id}`);
   }

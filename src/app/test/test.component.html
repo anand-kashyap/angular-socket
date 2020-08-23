@@ -1,14 +1,2 @@
-<button (click)="ngOnInit()">Reset</button>
-<br>
-<ul class="test" #t>
-  <li [@convSlideup] [ngClass]="{'delete': v.del, 'archive': !v.del}" *ngFor="let v of vals; let i=index">
-    <fa-icon icon="trash-alt" class="del-icon"></fa-icon>
-    <fa-icon icon="arrow-alt-circle-down" class="archive-icon"></fa-icon>
-    <div [style.transform]="'translateX('+(v.trans || 0)+'px)'" [id]="i">{{v.label}}</div>
-  </li>
-</ul>
-<ul class="arch-test">
-  <li *ngFor="let v of archs">
-    <div>{{v.label}}</div>
-  </li>
-</ul>
+<input type="text" [(ngModel)]="roomId">
+<button class="btn btn-primary" (click)="delRoom()">Delete</button>
