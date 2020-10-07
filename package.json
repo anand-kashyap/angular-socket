@@ -5,6 +5,7 @@
     "ng": "ng",
     "hmr": "ng serve --configuration hmr",
     "dev": "ng serve",
+    "deploy:netlify": "ng build --prod && netlify deploy -p --dir=dist/angular-socket",
     "dev:prod": "ng serve --prod",
     "deploy": "ng b --prod --outputPath=./public && b4a deploy",
     "aws": "ng b --configuration aws",
